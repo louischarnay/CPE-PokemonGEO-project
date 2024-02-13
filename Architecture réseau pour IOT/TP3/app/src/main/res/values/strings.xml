@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="top_message">Un petit pas pour l\'homme, un grand pas pour ma compréhension d\'Android.</string>
+    <string name="first_column">Premier</string>
+    <string name="second_column">Deuxième</string>
+    <string name="third_column">Troisième</string>
+    <string name="main_button">Ceci est un bouton :)</string>
+</resources>
