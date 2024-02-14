@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
+import fr.cpe.pokemon_geo.ui.screen.pokedex.PokedexViewModel
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import timber.log.Timber
 

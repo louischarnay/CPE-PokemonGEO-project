@@ -11,10 +11,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Preview(showBackground = true)
 @Composable
 fun Pokedex(pokedexViewModel: PokedexViewModel = viewModel()) {
+    val pokemons = pokedexViewModel.getPokemons()
+
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(pokedexViewModel.pokemons.size) { index ->
-                PokedexItem(pokedexViewModel.pokemons[index])
+            items(pokemons.size) { index ->
+                PokedexItem(pokemons[index])
             }
         }
     }
