@@ -1,4 +1,4 @@
-package com.example.pokemon_geo.model
+package fr.cpe.pokemon_geo.model
 
 import android.R
 

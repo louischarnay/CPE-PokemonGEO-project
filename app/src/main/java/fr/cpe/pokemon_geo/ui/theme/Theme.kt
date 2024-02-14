@@ -1,4 +1,4 @@
-package com.example.pokemon_geo.ui.theme
+package fr.cpe.pokemon_geo.ui.theme
 
 import android.app.Activity
 import android.os.Build

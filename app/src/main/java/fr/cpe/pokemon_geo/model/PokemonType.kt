@@ -1,4 +1,4 @@
-package com.example.pokemon_geo.model
+package fr.cpe.pokemon_geo.model
 
 
 enum class POKEMON_TYPE {

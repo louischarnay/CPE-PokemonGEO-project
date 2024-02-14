@@ -1,4 +1,4 @@
-package com.example.pokemon_geo
+package fr.cpe.pokemon_geo
 
 import org.junit.Test
 

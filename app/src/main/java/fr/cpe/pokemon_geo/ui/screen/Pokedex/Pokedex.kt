@@ -1,4 +1,4 @@
-package com.example.pokemon_geo.ui.screen
+package fr.cpe.pokemon_geo.ui.screen.Pokedex
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.pokemon_geo.R
-import com.example.pokemon_geo.model.POKEMON_TYPE
-import com.example.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.model.POKEMON_TYPE
+import fr.cpe.pokemon_geo.model.Pokemon
 
 @Composable
 fun Pokedex(pokemons: List<Pokemon>) {

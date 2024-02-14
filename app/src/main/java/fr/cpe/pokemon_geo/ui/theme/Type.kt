@@ -1,4 +1,4 @@
-package com.example.pokemon_geo.ui.theme
+package fr.cpe.pokemon_geo.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

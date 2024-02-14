@@ -1,4 +1,4 @@
-package com.example.pokemon_geo
+package fr.cpe.pokemon_geo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,14 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.pokemon_geo.model.POKEMON_TYPE
-import com.example.pokemon_geo.model.Pokemon
-import com.example.pokemon_geo.ui.screen.Pokedex
-import com.example.pokemon_geo.ui.theme.PokemongeoTheme
+import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.model.POKEMON_TYPE
+import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.ui.screen.Pokedex.Pokedex
+import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import org.json.JSONArray
 
 class MainActivity : ComponentActivity() {

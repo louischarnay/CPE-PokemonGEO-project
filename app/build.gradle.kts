@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pokemon_geo"
+    namespace = "fr.cpe.pokemon_geo"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.pokemon_geo"
+        applicationId = "fr.cpe.pokemon_geo"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
