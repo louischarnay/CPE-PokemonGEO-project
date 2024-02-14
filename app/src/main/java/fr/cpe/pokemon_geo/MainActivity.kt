@@ -1,6 +1,7 @@
 package fr.cpe.pokemon_geo
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapView
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
+import org.osmdroid.config.Configuration
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Pokedex()
+                    //OsmdroidMapView()
                     //AppNavigation()
                 }
             }
