@@ -9,32 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.POKEMON_TYPE
-import fr.cpe.pokemon_geo.model.Pokemon
-import fr.cpe.pokemon_geo.ui.screen.Pokedex.Pokedex
+import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
-import org.json.JSONArray
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val res = resources.openRawResource(R.raw.pokemons)
-        val pokemonsJson = JSONArray(res.bufferedReader().use { it.readText() })
-        val pokemons = mutableListOf<Pokemon>()
-
-        for (i in 0 until pokemonsJson.length()) {
-            val json = pokemonsJson.getJSONObject(i)
-            val id = json.getInt("id")
-            val name = json.getString("name")
-            val image = json.getInt("image")
-            val type1= enumValueOf<POKEMON_TYPE>(json.getString("type1"))
-            val type2 = if (json.has("type2")) enumValueOf<POKEMON_TYPE>(json.getString("type2")) else null
-
-            val pokemon = Pokemon(id, name, image, type1, type2)
-            pokemons.add(pokemon)
-        }
+        Timber.plant(Timber.DebugTree())
 
         setContent {
             PokemongeoTheme {
@@ -43,7 +25,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Pokedex(pokemons)
+                    Pokedex()
+                    //AppNavigation()
                 }
             }
         }
@@ -53,5 +36,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-        PokemongeoTheme {}
+    PokemongeoTheme {}
 }

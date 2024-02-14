@@ -1,6 +1,0 @@
-[
-    {"id": 1, "name":"Bulbizarre", "image":1, "type1":"Plante", "type2":"Poison"},
-    {"id": 2, "name":"Herbizarre", "image":2, "type1":"Plante", "type2":"Poison"},
-    {"id": 3, "name":"Florizarre", "image":3, "type1":"Plante", "type2":"Poison"},
-    {"id": 4, "name":"Salamèche", "image":4, "type1":"Feu"}
-]
