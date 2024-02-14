@@ -49,7 +49,7 @@ fun PokemonType(type: POKEMON_TYPE?) {
     if (type == null) return
     Row {
         Image(
-            painter = painterResource(id = R.drawable.feu),
+            painter = painterResource(id = type.image),
             contentDescription = null,
             modifier = Modifier.size(20.dp)
         )
