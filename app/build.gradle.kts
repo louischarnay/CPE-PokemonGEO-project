@@ -53,6 +53,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.preference:preference:1.2.1")
 
     // COMPOSE
     implementation("androidx.activity:activity-compose:1.8.2")
