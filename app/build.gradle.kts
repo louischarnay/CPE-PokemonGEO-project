@@ -76,7 +76,6 @@ dependencies {
 
     // MAP
     implementation("org.osmdroid:osmdroid-android:6.1.18")
-    implementation("com.google.android.gms:play-services-location:21.1.0")
 
     // TEST
     implementation("com.jakewharton.timber:timber:5.0.1")
