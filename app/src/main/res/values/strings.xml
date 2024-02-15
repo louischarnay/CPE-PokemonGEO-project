@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">pokemon-geo</string>
+    <string name="location_permission_not_present">La permission de localisation est nécessaire</string>
 </resources>
