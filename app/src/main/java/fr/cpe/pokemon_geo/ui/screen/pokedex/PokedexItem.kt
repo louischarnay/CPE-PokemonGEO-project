@@ -13,9 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.POKEMON_TYPE
 import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.PokemonType
 
 @Composable
 fun PokedexItem(pokemon: Pokemon) {
@@ -25,34 +24,34 @@ fun PokedexItem(pokemon: Pokemon) {
             modifier = Modifier.weight(1f).fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(pokemon.name)
+            Text(pokemon.getName())
             Row {
                 PokemonType(pokemon.getType1())
                 PokemonType(pokemon.getType2())
             }
         }
-        Text("#${pokemon.order}")
+        Text("#${pokemon.getOrder()}")
     }
 }
 
 @Composable
 fun PokemonImage(pokemon: Pokemon) {
     Image(
-        painter = painterResource(id = pokemon.frontResource),
+        painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,
         modifier = Modifier.padding(5.dp).size(60.dp)
     )
 }
 
 @Composable
-fun PokemonType(type: POKEMON_TYPE?) {
+fun PokemonType(type: PokemonType?) {
     if (type == null) return
     Row {
         Image(
-            painter = painterResource(id = R.drawable.feu),
+            painter = painterResource(id = type.getFrontResource()),
             contentDescription = null,
             modifier = Modifier.size(20.dp)
         )
-        Text(type.name)
+        Text(type.getName())
     }
 }
