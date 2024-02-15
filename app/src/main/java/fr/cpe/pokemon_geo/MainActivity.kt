@@ -1,36 +1,33 @@
 package fr.cpe.pokemon_geo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapView
-import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
+import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
-import org.osmdroid.config.Configuration
-import timber.log.Timber
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.plant(Timber.DebugTree())
 
         setContent {
+            val navController = rememberNavController()
+
             PokemongeoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Pokedex()
-                    //OsmdroidMapView()
-                    //AppNavigation()
+                Scaffold(
+                    bottomBar = { BottomNavigationBar(navController = navController) }
+                ) { _ ->
+                    AppNavigation(navController = navController)
                 }
             }
         }
