@@ -1,11 +1,17 @@
 package fr.cpe.pokemon_geo.ui.screen.pokedex
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.POKEMON_TYPE
 import fr.cpe.pokemon_geo.model.Pokemon
+import javax.inject.Inject
 
-class PokedexViewModel: ViewModel() {
+@HiltViewModel
+class PokedexViewModel @Inject constructor(
+    private val application: Application
+): ViewModel() {
 
     val pokemons = mutableListOf(
         Pokemon(1, "Bulbizarre", R.drawable.p1, POKEMON_TYPE.Plante, POKEMON_TYPE.Poison),
