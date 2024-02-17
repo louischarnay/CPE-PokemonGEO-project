@@ -1,31 +1,31 @@
 package fr.cpe.pokemon_geo.ui.screen.pokedex
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
-import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.POKEMON_TYPE
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.model.Pokemon
-import org.json.JSONArray
+import javax.inject.Inject
 
-class PokedexViewModel: ViewModel() {
-    fun getPokemons(): List<Pokemon> {
-        //get resources
-        val res = resources.openRawResource(R.raw.pokemons)
-        val pokemonsJson = JSONArray(res.bufferedReader().use { it.readText() })
-        val pokemons = mutableListOf<Pokemon>()
+@HiltViewModel
+class PokedexViewModel @Inject constructor(
+    private val application: Application
+): ViewModel() {
 
-        for (i in 0 until pokemonsJson.length()) {
-            val json = pokemonsJson.getJSONObject(i)
-            val id = json.getInt("id")
-            val name = json.getString("name")
-            val image = json.getInt("image")
-            val type1 = enumValueOf<POKEMON_TYPE>(json.getString("type1"))
-            val type2 =
-                if (json.has("type2")) enumValueOf<POKEMON_TYPE>(json.getString("type2")) else null
-
-            val pokemon = Pokemon(id, name, image, type1, type2)
-            pokemons.add(pokemon)
-        }
-
-        return pokemons
-    }
+    val pokemons = mutableListOf(
+        Pokemon(1, "Bulbizarre", "p1", "Grass", "Poison"),
+        Pokemon(2, "Herbizarre", "p2", "Grass", "Poison"),
+        Pokemon(3, "Florizarre", "p3", "Grass", "Poison"),
+        Pokemon(4, "Salamèche", "p4", "Fire"),
+        Pokemon(5, "Reptincel", "p5", "Fire"),
+        Pokemon(6, "Dracaufeu", "p6", "Fire", "Flying"),
+        Pokemon(7, "Carapuce", "p7", "Water"),
+        Pokemon(8, "Carabaffe", "p8", "Water"),
+        Pokemon(9, "Tortank", "p9", "Water"),
+        Pokemon(10, "Chenipan", "p10", "Bug"),
+        Pokemon(11, "Chrysacier", "p11", "Bug"),
+        Pokemon(12, "Papilusion", "p12", "Bug", "Flying"),
+        Pokemon(13, "Aspicot", "p13", "Bug", "Poison"),
+        Pokemon(14, "Coconfort", "p14", "Bug", "Poison"),
+        Pokemon(15, "Dardargnan", "p15", "Bug", "Poison"),
+    )
 }

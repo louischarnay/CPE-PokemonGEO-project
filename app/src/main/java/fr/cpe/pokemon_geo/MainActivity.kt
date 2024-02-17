@@ -1,36 +1,93 @@
 package fr.cpe.pokemon_geo
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import androidx.preference.PreferenceManager
+import dagger.hilt.android.AndroidEntryPoint
+import fr.cpe.pokemon_geo.service.location.LocationService
+import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
+import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.pokedex.PokedexViewModel
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
-import timber.log.Timber
+import fr.cpe.pokemon_geo.utils.hasLocationPermission
+import org.osmdroid.config.Configuration
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                startLocationService()
+            } else {
+                Toast.makeText(this, getString(R.string.location_permission_not_present),
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            }
+        }
+
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.plant(Timber.DebugTree())
+
+        // INIT LOCATION PERMISSION
+        if (hasLocationPermission()) startLocationService()
+        else requestLocationPermissions()
+
+        // SETUP MAP
+        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
+        Configuration.getInstance().userAgentValue = this.packageName
 
         setContent {
+            val navController = rememberNavController()
+
             PokemongeoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Pokedex()
-                    //AppNavigation()
+                Scaffold(
+                    bottomBar = { BottomNavigationBar(navController = navController) }
+                ) { padding ->
+                    AppNavigation(navController = navController, modifier = Modifier.padding(padding))
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        stopLocationService()
+        super.onDestroy()
+    }
+
+    private fun startLocationService() {
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            startService(this)
+        }
+    }
+
+    private fun stopLocationService() {
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_STOP
+            startService(this)
+        }
+    }
+
+    private fun requestLocationPermissions() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
 
