@@ -1,19 +1,43 @@
 package fr.cpe.pokemon_geo.model
 
+import fr.cpe.pokemon_geo.R
+
 class Pokemon(
-    var order: Int,
-    var name: String,
-    var frontResource: Int,
-    private var type1: POKEMON_TYPE,
-    private var type2: POKEMON_TYPE? = null,
-    var height: Int = 0,
-    var weight: Int = 0
+    private var order: Int,
+    private var name: String,
+    imageName: String,
+    type1: String,
+    type2: String? = null
 ) {
-    fun getType1(): POKEMON_TYPE {
+    private var frontResource = 0
+    private var type1: PokemonType
+    private var type2: PokemonType? = null
+    private var height = 0
+    private var weight = 0
+
+    init {
+        this.frontResource = R.drawable::class.java.getField(imageName).getInt(null)
+        this.type1 = SearchPokemonType.byName(type1)
+        if (type2 != null) this.type2 = SearchPokemonType.byName(type2)
+    }
+
+    fun getOrder(): Int {
+        return order
+    }
+
+    fun getName(): String {
+        return name
+    }
+
+    fun getFrontResource(): Int {
+        return frontResource
+    }
+
+    fun getType1(): PokemonType {
         return type1
     }
 
-    fun getType2(): POKEMON_TYPE? {
+    fun getType2(): PokemonType? {
         return type2
     }
 }

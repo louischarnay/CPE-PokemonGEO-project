@@ -22,6 +22,7 @@ import androidx.compose.ui.window.Popup
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.POKEMON_TYPE
 import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.PokemonType
 import fr.cpe.pokemon_geo.ui.screen.pokemon_card.PokemonCard
 import timber.log.Timber
 
@@ -45,13 +46,13 @@ fun PokedexItem(pokemon: Pokemon) {
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(pokemon.name)
+            Text(pokemon.getName())
             Row {
                 PokemonType(pokemon.getType1())
                 PokemonType(pokemon.getType2())
             }
         }
-        Text("#${pokemon.order}")
+        Text("#${pokemon.getOrder()}")
     }
     if(showPokemonDetails) PokemonDetails(pokemon = pokemon , onClose = { setShowPokemonDetails(false) })
 }
@@ -59,7 +60,7 @@ fun PokedexItem(pokemon: Pokemon) {
 @Composable
 fun PokemonImage(pokemon: Pokemon) {
     Image(
-        painter = painterResource(id = pokemon.frontResource),
+        painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,
         modifier = Modifier
             .padding(5.dp)
@@ -68,16 +69,31 @@ fun PokemonImage(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonType(type: POKEMON_TYPE?) {
+fun PokemonType(type: PokemonType?) {
     if (type == null) return
     Row {
         Image(
-            painter = painterResource(id = R.drawable.feu),
+            painter = painterResource(id = type.getFrontResource()),
             contentDescription = null,
             modifier = Modifier.size(20.dp)
         )
-        Text(type.name)
+        Text(type.getName())
     }
+}
+
+@Composable
+fun PokemonDetails(pokemon: Pokemon, onClose: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onClose,
+        confirmButton = {
+            Button(onClick = onClose) {
+                Text(text = "Close")
+            }
+        },
+        text = {
+            PokemonCard(pokemon)
+        }
+    )
 }
 
 @Composable
