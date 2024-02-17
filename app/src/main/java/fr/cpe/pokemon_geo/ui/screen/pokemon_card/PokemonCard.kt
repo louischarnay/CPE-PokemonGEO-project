@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.POKEMON_TYPE
 import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.PokemonType
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
@@ -31,7 +32,7 @@ fun PokemonCard(pokemon: Pokemon) {
     ) {
         PokemonImage(pokemon)
         Text(
-            text = pokemon.name + " #" + pokemon.order,
+            text = pokemon.getName() + " #" + pokemon.getOrder(),
             style = MaterialTheme.typography.titleMedium,
             fontSize = 25.sp,
             modifier = Modifier.padding(15.dp)
@@ -46,7 +47,7 @@ fun PokemonCard(pokemon: Pokemon) {
 @Composable
 fun PokemonImage(pokemon: Pokemon) {
     Image(
-        painter = painterResource(id = pokemon.frontResource),
+        painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,
         modifier = Modifier
             .size(380.dp)
@@ -55,18 +56,18 @@ fun PokemonImage(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonType(type: POKEMON_TYPE?) {
+fun PokemonType(type: PokemonType?) {
     if (type == null) return
     Row (
         modifier = Modifier.padding(5.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.feu),
+            painter = painterResource(id = type.getFrontResource()),
             contentDescription = null,
             modifier = Modifier
                 .size(20.dp)
         )
-        Text(type.name)
+        Text(type.getName())
     }
 
 }

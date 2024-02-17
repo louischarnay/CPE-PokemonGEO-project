@@ -35,7 +35,7 @@ fun PokedexItem(pokemon: Pokemon) {
             .fillMaxSize()
             .padding(horizontal = 15.dp, vertical = 2.dp)
             .clickable {
-                Timber.d("Pokemon clicked: ${pokemon.name}")
+                Timber.d("Pokemon clicked: ${pokemon.getName()}")
                 setShowPokemonDetails(true)
             }
     ) {
@@ -79,21 +79,6 @@ fun PokemonType(type: PokemonType?) {
         )
         Text(type.getName())
     }
-}
-
-@Composable
-fun PokemonDetails(pokemon: Pokemon, onClose: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onClose,
-        confirmButton = {
-            Button(onClick = onClose) {
-                Text(text = "Close")
-            }
-        },
-        text = {
-            PokemonCard(pokemon)
-        }
-    )
 }
 
 @Composable
