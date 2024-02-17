@@ -1,22 +1,22 @@
 package fr.cpe.pokemon_geo.model
 
 enum class POKEMON_TYPE {
-    Bug,
-    Dark,
-    Dragon,
-    Electric,
-    Fairy,
-    Fighting,
-    Fire,
-    Flying,
-    Ghost,
-    Grass,
-    Ground,
-    Ice,
+    Plante,
+    Feu,
+    Eau,
+    Insecte,
     Normal,
+    Electrique,
+    Vol,
     Poison,
-    Psychic,
-    Rock,
-    Steel,
-    Water
+    Fee,
+    Combat,
+    Psy,
+    Spectre,
+    Acier,
+    Roche,
+    Sol,
+    Glace,
+    Dragon,
+    Ténèbres
 }
