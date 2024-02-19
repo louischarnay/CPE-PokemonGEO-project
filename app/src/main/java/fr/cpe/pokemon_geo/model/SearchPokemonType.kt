@@ -8,46 +8,47 @@ object SearchPokemonType {
     private val bugType = PokemonType(
         name = Bug,
         frontResource = R.drawable.type_bug,
-        superEffective = listOf(Dark, Grass, Psychic),
-        inefficient = listOf(Fairy, Fire, Fighting, Flying, Ghost, Poison, Steel),
+        superEffective = listOf(Dark, Grass, Psychic, Ghost, Flying),
+        inefficient = listOf(Fighting, Fire, Fairy, Rock),
     )
 
     private val darkType = PokemonType(
         name = Dark,
         frontResource = R.drawable.type_dark,
         superEffective = listOf(Ghost, Psychic),
-        inefficient = listOf(Dark, Fairy, Fighting),
+        inefficient = listOf(Fighting, Bug, Fairy),
+        ineffective = listOf(Dark),
     )
 
     private val dragonType = PokemonType(
         name = Dragon,
         frontResource = R.drawable.type_dragon,
         superEffective = listOf(Dragon),
-        inefficient = listOf(Steel),
-        ineffective = listOf(Fairy),
+        inefficient = listOf(Steel, Fairy, Ice),
     )
 
     private val electricType = PokemonType(
         name = Electric,
         frontResource = R.drawable.type_electric,
-        superEffective = listOf(Flying, Water),
+        superEffective = listOf(Water, Flying),
         inefficient = listOf(Dragon, Electric, Grass),
-        ineffective = listOf(Ground),
+        ineffective = listOf(Steel),
     )
 
     private val fairyType = PokemonType(
         name = Fairy,
         frontResource = R.drawable.type_fairy,
-        superEffective = listOf(Dark, Dragon, Fighting),
-        inefficient = listOf(Fire, Poison, Steel),
+        superEffective = listOf(Fighting, Dragon, Dark),
+        inefficient = listOf(Steel, Fire, Poison),
+        ineffective = listOf(Bug),
     )
 
     private val fightingType = PokemonType(
         name = Fighting,
         frontResource = R.drawable.type_fighting,
-        superEffective = listOf(Dark, Ice, Normal, Rock, Steel),
-        inefficient = listOf(Bug, Fairy, Flying, Poison, Psychic),
-        ineffective = listOf(Ghost),
+        superEffective = listOf(Ice, Normal, Rock, Dark, Steel),
+        inefficient = listOf(Bug, Psychic, Ghost, Flying),
+        ineffective = listOf(Fairy),
     )
 
     private val fireType = PokemonType(
@@ -62,21 +63,22 @@ object SearchPokemonType {
         frontResource = R.drawable.type_flying,
         superEffective = listOf(Bug, Fighting, Grass),
         inefficient = listOf(Electric, Rock, Steel),
+        ineffective = listOf(Ground),
     )
 
     private val ghostType = PokemonType(
         name = Ghost,
         frontResource = R.drawable.type_ghost,
         superEffective = listOf(Ghost, Psychic),
-        inefficient = listOf(Dark),
+        inefficient = listOf(Steel, Dark),
         ineffective = listOf(Normal),
     )
 
     private val grassType = PokemonType(
         name = Grass,
         frontResource = R.drawable.type_grass,
-        superEffective = listOf(Ground, Rock, Water),
-        inefficient = listOf(Bug, Dragon, Fire, Flying, Grass, Poison, Steel),
+        superEffective = listOf(Water, Ground, Rock),
+        inefficient = listOf(Fire, Grass, Flying, Bug, Poison),
     )
 
     private val groundType = PokemonType(
@@ -90,15 +92,15 @@ object SearchPokemonType {
     private val iceType = PokemonType(
         name = Ice,
         frontResource = R.drawable.type_ice,
-        superEffective = listOf(Dragon, Flying, Grass, Ground),
-        inefficient = listOf(Fire, Ice, Steel, Water),
+        superEffective = listOf(Dragon, Grass, Flying, Ground),
+        inefficient = listOf(Ice),
     )
 
     private val normalType = PokemonType(
         name = Normal,
         frontResource = R.drawable.type_normal,
         superEffective = emptyList(),
-        inefficient = listOf(Rock, Steel),
+        inefficient = listOf(Steel, Rock),
         ineffective = listOf(Ghost),
     )
 
@@ -106,7 +108,7 @@ object SearchPokemonType {
         name = Poison,
         frontResource = R.drawable.type_poison,
         superEffective = listOf(Fairy, Grass),
-        inefficient = listOf(Ghost, Ground, Poison, Rock),
+        inefficient = listOf(Poison, Ground, Rock, Ghost),
         ineffective = listOf(Steel),
     )
 
@@ -114,7 +116,7 @@ object SearchPokemonType {
         name = Psychic,
         frontResource = R.drawable.type_psychic,
         superEffective = listOf(Fighting, Poison),
-        inefficient = listOf(Psychic, Steel),
+        inefficient = listOf(Steel, Psychic),
         ineffective = listOf(Dark),
     )
 
@@ -129,36 +131,36 @@ object SearchPokemonType {
         name = Steel,
         frontResource = R.drawable.type_steel,
         superEffective = listOf(Fairy, Ice, Rock),
-        inefficient = listOf(Electric, Fire, Steel, Water),
+        inefficient = listOf(Steel, Dragon, Fire),
     )
 
     private val waterType = PokemonType(
         name = Water,
         frontResource = R.drawable.type_water,
         superEffective = listOf(Fire, Ground, Rock),
-        inefficient = listOf(Dragon, Grass, Water),
+        inefficient = listOf(Dragon, Water, Grass),
     )
 
     fun byName(name: String): PokemonType {
         return when (name.lowercase(Locale.ROOT)) {
-            "bug" -> bugType
-            "dark" -> darkType
+            "insecte" -> bugType
+            "ténèbres" -> darkType
             "dragon" -> dragonType
-            "electric" -> electricType
-            "fairy" -> fairyType
-            "fighting" -> fightingType
-            "fire" -> fireType
-            "flying" -> flyingType
-            "ghost" -> ghostType
-            "grass" -> grassType
-            "ground" -> groundType
-            "ice" -> iceType
+            "electrique" -> electricType
+            "fee" -> fairyType
+            "combat" -> fightingType
+            "feu" -> fireType
+            "vol" -> flyingType
+            "spectre" -> ghostType
+            "plante" -> grassType
+            "sol" -> groundType
+            "glace" -> iceType
             "normal" -> normalType
             "poison" -> poisonType
-            "psychic" -> psychicType
-            "rock" -> rockType
-            "steel" -> steelType
-            "water" -> waterType
+            "psy" -> psychicType
+            "roche" -> rockType
+            "acier" -> steelType
+            "eau" -> waterType
             else -> throw IllegalArgumentException("Unknown Pokemon type: $name")
         }
     }
