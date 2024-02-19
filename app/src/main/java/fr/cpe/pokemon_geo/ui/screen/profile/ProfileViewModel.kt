@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
-import fr.cpe.pokemon_geo.database.profile.Profile
+import fr.cpe.pokemon_geo.database.profile.ProfileEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,34 +17,29 @@ class ProfileViewModel @Inject constructor(
     private val repository: PokemonGeoRepository,
 ): ViewModel() {
 
-    private val _profileLiveData = MutableLiveData<Profile?>()
-    val profileLiveData: LiveData<Profile?> = _profileLiveData
+    private val _profileLiveData = MutableLiveData<ProfileEntity?>()
+    val profileLiveData: LiveData<ProfileEntity?> = _profileLiveData
 
     init {
+        createDefaultProfile()
         fetchProfile()
     }
 
     private fun fetchProfile() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val profile = repository.getProfile()
-            if (profile == null) {
-                val newProfile = createDefaultProfile()
-                _profileLiveData.value = newProfile
-            } else {
+
+            withContext(Dispatchers.Main) {
                 _profileLiveData.value = profile
             }
         }
     }
 
-    private fun createDefaultProfile(): Profile {
-        val newProfile = Profile(
-            id = "louis-charnay",
-            pseudo = "Dark Louis",
-        )
-        viewModelScope.launch {
+    private fun createDefaultProfile() {
+        val newProfile = ProfileEntity(pseudo = "Dresseur")
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insertProfile(newProfile)
         }
-        return newProfile
     }
 
 }

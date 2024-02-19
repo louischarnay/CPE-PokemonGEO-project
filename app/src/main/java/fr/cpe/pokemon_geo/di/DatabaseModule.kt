@@ -25,10 +25,7 @@ class DatabaseModule {
             context,
             PokemonGeoDatabase::class.java,
             POKEMON_GEO_DATABASE_NAME
-        )
-            .allowMainThreadQueries()
-            .fallbackToDestructiveMigration()
-            .build()
+        ).build()
     }
 
     @Provides

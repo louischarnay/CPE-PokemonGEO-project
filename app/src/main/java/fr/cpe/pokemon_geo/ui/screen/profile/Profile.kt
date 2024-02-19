@@ -7,17 +7,33 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.database.profile.ProfileEntity
 
 @Composable
 fun Profile(profileViewModel: ProfileViewModel = hiltViewModel()) {
-    val profile = profileViewModel.profileLiveData.value
+    // Create a mutable state for the profile
+    val profile = remember { mutableStateOf<ProfileEntity?>(null) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Run coroutine when the profileViewModel changes
+    LaunchedEffect(key1 = profileViewModel) {
+        // Observe the LiveData from the ViewModel
+        profileViewModel.profileLiveData.observe(lifecycleOwner) { observedProfile ->
+            profile.value = observedProfile
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -29,7 +45,7 @@ fun Profile(profileViewModel: ProfileViewModel = hiltViewModel()) {
             contentDescription = "Profil",
             modifier = Modifier.size(150.dp)
         )
-        Text(text = profile?.pseudo ?: "", fontSize = 30.sp)
-        Text(text = "${profile?.experience} EXP")
+        Text(text = profile.value?.pseudo ?: "", fontSize = 30.sp)
+        Text(text = "${profile.value?.experience ?: ""} EXP")
     }
 }

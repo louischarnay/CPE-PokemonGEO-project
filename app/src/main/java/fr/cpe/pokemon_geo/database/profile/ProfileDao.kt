@@ -8,8 +8,8 @@ import androidx.room.Query
 @Dao
 interface ProfileDao {
     @Query("SELECT * FROM $PROFILE_TABLE_NAME LIMIT 1")
-    fun getProfile(): Profile?
+    suspend fun getProfile(): ProfileEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(profile: Profile)
+    suspend fun insert(profile: ProfileEntity)
 }
