@@ -18,5 +18,5 @@ enum class POKEMON_TYPE {
     Psychic,
     Rock,
     Steel,
-    Water
+    Water,
 }
