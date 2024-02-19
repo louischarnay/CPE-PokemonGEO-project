@@ -20,6 +20,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {
@@ -79,6 +84,11 @@ dependencies {
     implementation("org.osmdroid:osmdroid-android:6.1.18")
     implementation("com.google.android.gms:play-services-location:21.1.0")
 
+    //ROOM
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
     // TEST
     implementation("com.jakewharton.timber:timber:5.0.1")
     testImplementation("junit:junit:4.13.2")
@@ -92,4 +102,5 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+    useBuildCache = true
 }

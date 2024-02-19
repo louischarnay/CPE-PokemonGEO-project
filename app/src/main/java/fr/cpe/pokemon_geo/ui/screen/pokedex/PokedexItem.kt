@@ -18,9 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.POKEMON_TYPE
 import fr.cpe.pokemon_geo.model.Pokemon
 import fr.cpe.pokemon_geo.model.PokemonType
 import fr.cpe.pokemon_geo.ui.screen.pokemon_card.PokemonCard

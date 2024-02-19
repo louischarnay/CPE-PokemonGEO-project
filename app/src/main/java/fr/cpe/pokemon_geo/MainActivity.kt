@@ -19,8 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.cpe.pokemon_geo.service.location.LocationService
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
-import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
-import fr.cpe.pokemon_geo.ui.screen.pokedex.PokedexViewModel
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import fr.cpe.pokemon_geo.utils.hasLocationPermission
 import org.osmdroid.config.Configuration
@@ -57,7 +55,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            PokemongeoTheme {
+            PokemongeoTheme(darkTheme = false) {
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navController = navController) }
                 ) { padding ->
