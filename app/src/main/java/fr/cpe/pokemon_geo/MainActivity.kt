@@ -1,7 +1,6 @@
 package fr.cpe.pokemon_geo
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,7 +35,6 @@ class MainActivity : ComponentActivity() {
         }
 
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +44,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            PokemongeoTheme {
+            PokemongeoTheme(darkTheme = false) {
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navController = navController) }
                 ) { padding ->
