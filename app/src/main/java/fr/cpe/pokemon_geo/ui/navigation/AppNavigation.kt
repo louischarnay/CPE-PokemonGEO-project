@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapView
+import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
 
@@ -26,7 +26,7 @@ fun AppNavigation(navController: NavController, modifier: Modifier) {
         }
 
         composable(route = Routes.MAP) {
-            OsmdroidMapView()
+            OsmdroidMap()
         }
     }
 }

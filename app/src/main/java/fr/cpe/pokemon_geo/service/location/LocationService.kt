@@ -1,74 +1,56 @@
 package fr.cpe.pokemon_geo.service.location
 
-import android.app.Service
-import android.content.Intent
-import android.location.Location
-import android.os.IBinder
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Looper
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.LatLng
+import fr.cpe.pokemon_geo.utils.hasLocationPermission
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import javax.inject.Inject
 
-class LocationService: Service() {
+// Inspired by https://medium.com/@alrodiaz15/google-maps-location-jetpack-compose-36cd3fa617a4
+class LocationService @Inject constructor(
+    private val context: Context,
+    private val locationClient: FusedLocationProviderClient
+): ILocationService {
 
-    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private lateinit var locationClient: LocationClient
+    @SuppressLint("MissingPermission")
+    override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
 
-    companion object {
-
-        const val ACTION_START = "ACTION_START"
-        const val ACTION_STOP = "ACTION_STOP"
-
-        const val TIME_INTERVAL = 5000L // 5 seconds
-
-        var lastLocation: Location? = null
-    }
-
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        locationClient = DefaultLocationClient(
-            applicationContext,
-            LocationServices.getFusedLocationProviderClient(applicationContext)
-        )
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when(intent?.action) {
-            ACTION_START -> start()
-            ACTION_STOP -> stop()
+        if (!context.hasLocationPermission()) {
+            trySend(null)
+            return@callbackFlow
         }
-        return super.onStartCommand(intent, flags, startId)
-    }
 
-    private fun start() {
-        Timber.d("Location start")
-        locationClient
-            .getLocationUpdates(TIME_INTERVAL)
-            .catch { e -> e.printStackTrace() }
-            .onEach { location ->
-                lastLocation = location
+        val request = LocationRequest.Builder(5_000L)
+            .setIntervalMillis(5_000L)
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .build()
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult.locations.lastOrNull()?.let {
+                    trySend(LatLng(it.latitude, it.longitude))
+                }
             }
-            .launchIn(serviceScope)
+        }
 
+        locationClient.requestLocationUpdates(
+            request,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+
+        awaitClose {
+            locationClient.removeLocationUpdates(locationCallback)
+        }
     }
 
-    private fun stop() {
-        Timber.d("Location stop")
-        stopForeground(STOP_FOREGROUND_DETACH)
-        stopSelf()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        serviceScope.cancel()
-    }
 }
