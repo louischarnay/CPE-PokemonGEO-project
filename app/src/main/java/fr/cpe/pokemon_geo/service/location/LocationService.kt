@@ -8,11 +8,11 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.model.LatLng
 import fr.cpe.pokemon_geo.utils.hasLocationPermission
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 // Inspired by https://medium.com/@alrodiaz15/google-maps-location-jetpack-compose-36cd3fa617a4
@@ -22,7 +22,7 @@ class LocationService @Inject constructor(
 ): ILocationService {
 
     @SuppressLint("MissingPermission")
-    override fun requestLocationUpdates(): Flow<LatLng?> = callbackFlow {
+    override fun requestLocationUpdates(): Flow<GeoPoint?> = callbackFlow {
 
         if (!context.hasLocationPermission()) {
             trySend(null)
@@ -37,7 +37,7 @@ class LocationService @Inject constructor(
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.locations.lastOrNull()?.let {
-                    trySend(LatLng(it.latitude, it.longitude))
+                    trySend(GeoPoint(it.latitude, it.longitude))
                 }
             }
         }

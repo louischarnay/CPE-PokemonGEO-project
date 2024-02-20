@@ -37,8 +37,7 @@ class OsmdoidMapViewModel @Inject constructor(
 
     private suspend fun getLocation() {
         getLocationUseCase.invoke().collect { location ->
-            val geoPoint = location?.let { GeoPoint(it.latitude, it.longitude) }
-            _currentLocation.value = geoPoint ?: lyon
+            _currentLocation.value = location
         }
     }
 }
