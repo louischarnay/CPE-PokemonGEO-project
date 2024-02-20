@@ -3,8 +3,8 @@ package fr.cpe.pokemon_geo.ui.screen.pokemon_card
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -16,14 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.model.Pokemon
-import fr.cpe.pokemon_geo.model.PokemonType
+import fr.cpe.pokemon_geo.ui.screen.pokedex.PokemonTypes
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(15.dp),
+        modifier = Modifier.padding(15.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -32,12 +30,9 @@ fun PokemonCard(pokemon: Pokemon) {
             text = pokemon.getName() + " #" + pokemon.getOrder(),
             style = MaterialTheme.typography.titleMedium,
             fontSize = 25.sp,
-            modifier = Modifier.padding(15.dp)
         )
-        Row {
-            PokemonType(pokemon.getType1())
-            PokemonType(pokemon.getType2())
-        }
+        Spacer(modifier = Modifier.height(10.dp))
+        PokemonTypes(pokemon)
     }
 }
 
@@ -46,25 +41,6 @@ fun PokemonImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,
-        modifier = Modifier
-            .size(380.dp)
-            .padding(5.dp)
+        modifier = Modifier.size(300.dp)
     )
-}
-
-@Composable
-fun PokemonType(type: PokemonType?) {
-    if (type == null) return
-    Row (
-        modifier = Modifier.padding(5.dp)
-    ) {
-        Image(
-            painter = painterResource(id = type.getFrontResource()),
-            contentDescription = null,
-            modifier = Modifier
-                .size(20.dp)
-        )
-        Text(type.getName())
-    }
-
 }
