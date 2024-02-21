@@ -13,7 +13,7 @@ import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
-class OsmdoidMapViewModel @Inject constructor(
+class OsmdroidMapViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase
 ) : ViewModel() {
 
@@ -29,13 +29,13 @@ class OsmdoidMapViewModel @Inject constructor(
     private fun fetchCurrentLocationPeriodically() {
         viewModelScope.launch {
             while (true) {
-                getLocation()
+                getCurrentLocation()
                 delay(5_000)
             }
         }
     }
 
-    private suspend fun getLocation() {
+    private suspend fun getCurrentLocation() {
         getLocationUseCase.invoke().collect { location ->
             _currentLocation.value = location
         }

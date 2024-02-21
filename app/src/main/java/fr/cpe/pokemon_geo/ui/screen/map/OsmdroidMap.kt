@@ -15,7 +15,7 @@ import org.osmdroid.views.overlay.Marker
 
 
 @Composable
-fun OsmdroidMap(osmdoidMapViewModel: OsmdoidMapViewModel = hiltViewModel()) {
+fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     var isMyMarkerAdded = false
@@ -30,14 +30,14 @@ fun OsmdroidMap(osmdoidMapViewModel: OsmdoidMapViewModel = hiltViewModel()) {
             // SET MAP CENTER AND ZOOM
             val mapController: IMapController = mapView.controller
             mapController.setZoom(16.0)
-            val center = osmdoidMapViewModel.currentLocation.value ?: osmdoidMapViewModel.lyon
+            val center = osmdroidMapViewModel.currentLocation.value ?: osmdroidMapViewModel.lyon
             mapController.setCenter(center)
 
             // ADD USER MARKER
             val marker = Marker(mapView)
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            if (osmdoidMapViewModel.currentLocation.value != null) {
-                marker.position = osmdoidMapViewModel.currentLocation.value
+            if (osmdroidMapViewModel.currentLocation.value != null) {
+                marker.position = osmdroidMapViewModel.currentLocation.value
                 mapView.overlays.add(marker)
                 isMyMarkerAdded = true
             }
@@ -46,7 +46,7 @@ fun OsmdroidMap(osmdoidMapViewModel: OsmdoidMapViewModel = hiltViewModel()) {
                 while (true) {
                     delay(3_000)
 
-                    val newLocation = osmdoidMapViewModel.currentLocation.value ?: continue
+                    val newLocation = osmdroidMapViewModel.currentLocation.value ?: continue
 
                     marker.position = newLocation
 
