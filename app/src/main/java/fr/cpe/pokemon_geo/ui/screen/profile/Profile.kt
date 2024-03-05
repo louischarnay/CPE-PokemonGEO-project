@@ -22,8 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
-import fr.cpe.pokemon_geo.ui.screen.pokemon.PokemonList
-import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemon
 
 @Composable
 fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
