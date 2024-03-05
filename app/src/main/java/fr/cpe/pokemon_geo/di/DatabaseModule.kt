@@ -12,6 +12,7 @@ import fr.cpe.pokemon_geo.database.PokemonGeoDatabase
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonDao
 import fr.cpe.pokemon_geo.database.profile.ProfileDao
+import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonDao
 import javax.inject.Singleton
 
 
@@ -37,6 +38,12 @@ class DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideUserPokemonDao(database: PokemonGeoDatabase): UserPokemonDao {
+        return database.userPokemonDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideGeneratedPokemonDao(database: PokemonGeoDatabase): GeneratedPokemonDao {
         return database.generatedPokemonDao()
     }
@@ -45,8 +52,9 @@ class DatabaseModule {
     @Singleton
     fun provideRepository(
         profileDao: ProfileDao,
+        userPokemonDao: UserPokemonDao,
         generatedPokemonDao: GeneratedPokemonDao
     ): PokemonGeoRepository {
-        return PokemonGeoRepository(profileDao, generatedPokemonDao)
+        return PokemonGeoRepository(profileDao, userPokemonDao, generatedPokemonDao)
     }
 }

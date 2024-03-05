@@ -1,20 +1,58 @@
 package fr.cpe.pokemon_geo.ui.screen.user_pokemon
 
+import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.database.PokemonGeoRepository
+import fr.cpe.pokemon_geo.database.profile.ProfileEntity
+import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
 import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.utils.loadPokemonFromId
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import java.sql.Date
 import javax.inject.Inject
 
-class UserPokemonViewModel @Inject constructor(): ViewModel(){
+@HiltViewModel
+class UserPokemonViewModel @Inject constructor(
+    private val application: Application,
+    private val repository: PokemonGeoRepository
+): ViewModel(){
 
-    val pokemons: MutableList<Pokemon> by lazy {
-        loadPokemonsFromResources()
+    private val _userPokemonLiveData = MutableLiveData<List<Pokemon>>()
+    val userPokemonLiveData: LiveData<List<Pokemon>> = _userPokemonLiveData
+
+    init {
+        createDefaultList()
+        fetchUserPokemons()
     }
 
-    private fun loadPokemonsFromResources(): MutableList<Pokemon> {
-        val pokemons = mutableListOf<Pokemon>()
+    private fun createDefaultList() {
+        val userPokemonEntity = UserPokemonEntity(pokemonId = 12, createdAt = System.currentTimeMillis())
+        viewModelScope.launch {
+            repository.insertUserPokemon(userPokemonEntity)
+        }
+    }
 
-        pokemons.add(Pokemon(1, "Bulbizarre", "p1", "plante", "poison"))
+    private fun fetchUserPokemons() {
+        viewModelScope.launch {
+            val pokemonList = mutableListOf<Pokemon>()
+            val userPokemons = repository.getAllUserPokemon()
 
-        return pokemons
+            userPokemons.forEach {
+                pokemonList.add(loadPokemonFromId(application.resources.openRawResource(R.raw.pokemons), it.pokemonId))
+            }
+
+            withContext(Dispatchers.Main) {
+                _userPokemonLiveData.value = pokemonList
+            }
+        }
     }
 }
