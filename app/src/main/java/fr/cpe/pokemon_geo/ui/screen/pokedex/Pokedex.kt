@@ -5,12 +5,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import fr.cpe.pokemon_geo.model.Pokemon
 
 @Composable
-fun Pokedex(pokedexViewModel: PokedexViewModel = hiltViewModel()) {
-    val pokemons = pokedexViewModel.pokemons
-
+fun Pokedex(pokemons: List<Pokemon>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(pokemons) { _, pokemon ->
             PokedexItem(pokemon)

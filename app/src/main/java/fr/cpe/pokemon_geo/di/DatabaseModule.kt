@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import fr.cpe.pokemon_geo.database.POKEMON_GEO_DATABASE_NAME
 import fr.cpe.pokemon_geo.database.PokemonGeoDatabase
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
+import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonDao
 import fr.cpe.pokemon_geo.database.profile.ProfileDao
 import javax.inject.Singleton
 
@@ -36,7 +37,16 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRepository(profileDao: ProfileDao): PokemonGeoRepository {
-        return PokemonGeoRepository(profileDao)
+    fun provideGeneratedPokemonDao(database: PokemonGeoDatabase): GeneratedPokemonDao {
+        return database.generatedPokemonDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+        profileDao: ProfileDao,
+        generatedPokemonDao: GeneratedPokemonDao
+    ): PokemonGeoRepository {
+        return PokemonGeoRepository(profileDao, generatedPokemonDao)
     }
 }

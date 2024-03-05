@@ -6,12 +6,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import fr.cpe.pokemon_geo.model.Pokemon
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
 
 @Composable
-fun AppNavigation(navController: NavController, modifier: Modifier) {
+fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifier: Modifier) {
     NavHost(
         navController = navController as NavHostController,
         startDestination = Routes.PROFILE,
@@ -22,7 +23,7 @@ fun AppNavigation(navController: NavController, modifier: Modifier) {
         }
 
         composable(route = Routes.POKEDEX) {
-            Pokedex()
+            Pokedex(pokemons)
         }
 
         composable(route = Routes.MAP) {

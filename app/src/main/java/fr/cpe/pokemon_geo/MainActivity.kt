@@ -16,18 +16,28 @@ import dagger.hilt.android.AndroidEntryPoint
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
+import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.hasLocationPermission
+import fr.cpe.pokemon_geo.utils.loadPokemonsFromResources
 import org.osmdroid.config.Configuration
+import javax.inject.Inject
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    @Inject
+    lateinit var generatePokemonsUseCase: GeneratePokemonsUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeMap()
+
+        val pokemons = loadPokemonsFromResources(resources.openRawResource(R.raw.pokemons))
+
+        generatePokemonsUseCase.generatePokemons(pokemons)
 
         setContent {
             val navController = rememberNavController()
@@ -46,7 +56,11 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(!hasLocationPermission()) {
                         permissionState.launchMultiplePermissionRequest()
                     }
-                    AppNavigation(navController = navController, modifier = Modifier.padding(padding))
+                    AppNavigation(
+                        navController = navController,
+                        pokemons = pokemons,
+                        modifier = Modifier.padding(padding)
+                    )
                 }
             }
         }
