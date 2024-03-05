@@ -2,8 +2,10 @@ package fr.cpe.pokemon_geo.ui.screen.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,5 +49,13 @@ fun Profile(profileViewModel: ProfileViewModel = hiltViewModel()) {
         )
         Text(text = profile.value?.pseudo ?: "", fontSize = 30.sp)
         Text(text = "${profile.value?.experience ?: ""} EXP")
+        Row {
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Inventaire")
+            }
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Pokémons")
+            }
+        }
     }
 }

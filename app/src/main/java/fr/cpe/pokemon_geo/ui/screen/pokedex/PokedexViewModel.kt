@@ -18,7 +18,7 @@ class PokedexViewModel @Inject constructor(
     }
 
     private fun loadPokemonsFromResources(): MutableList<Pokemon> {
-        val inputStream = application.resources.openRawResource(R.raw.pokemon)
+        val inputStream = application.resources.openRawResource(R.raw.pokemons)
         val jsonString = inputStream.bufferedReader().use { it.readText() }
         val jsonArray = JSONArray(jsonString)
 

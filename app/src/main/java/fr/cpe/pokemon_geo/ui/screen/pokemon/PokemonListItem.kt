@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokedex
+package fr.cpe.pokemon_geo.ui.screen.pokemon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,11 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.model.Pokemon
 import fr.cpe.pokemon_geo.model.PokemonType
-import fr.cpe.pokemon_geo.ui.screen.pokemon_card.PokemonCard
 import timber.log.Timber
 
 @Composable
-fun PokedexItem(pokemon: Pokemon) {
+fun PokedexListItem(pokemon: Pokemon) {
     val (showPokemonDetails, setShowPokemonDetails) = remember { mutableStateOf(false) }
 
     Row(
@@ -43,7 +42,7 @@ fun PokedexItem(pokemon: Pokemon) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        PokemonImage(pokemon)
+        PokemonListImage(pokemon)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -63,7 +62,7 @@ fun PokedexItem(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonImage(pokemon: Pokemon) {
+fun PokemonListImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,

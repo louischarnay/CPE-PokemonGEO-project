@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokemon_card
+package fr.cpe.pokemon_geo.ui.screen.pokemon
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.model.Pokemon
-import fr.cpe.pokemon_geo.ui.screen.pokedex.PokemonTypes
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {
@@ -25,7 +24,7 @@ fun PokemonCard(pokemon: Pokemon) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PokemonImage(pokemon)
+        PokemonCardImage(pokemon)
         Text(
             text = pokemon.getName() + " #" + pokemon.getOrder(),
             style = MaterialTheme.typography.titleMedium,
@@ -37,7 +36,7 @@ fun PokemonCard(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonImage(pokemon: Pokemon) {
+fun PokemonCardImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = null,
