@@ -29,7 +29,7 @@ fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
 
             // SET MAP CENTER AND ZOOM
             val mapController: IMapController = mapView.controller
-            mapController.setZoom(16.0)
+            mapController.setZoom(17.0)
             val center = osmdroidMapViewModel.currentLocation.value ?: osmdroidMapViewModel.lyon
             mapController.setCenter(center)
 
