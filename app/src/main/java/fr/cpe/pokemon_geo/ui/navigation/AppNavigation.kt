@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
+import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemon
 
 @Composable
 fun AppNavigation(navController: NavController, modifier: Modifier) {
@@ -18,7 +19,7 @@ fun AppNavigation(navController: NavController, modifier: Modifier) {
         modifier = modifier
     ) {
         composable(route = Routes.PROFILE) {
-            Profile()
+            Profile(navController)
         }
 
         composable(route = Routes.POKEDEX) {
@@ -27,6 +28,10 @@ fun AppNavigation(navController: NavController, modifier: Modifier) {
 
         composable(route = Routes.MAP) {
             OsmdroidMap()
+        }
+
+        composable(route = Routes.USER_POKEMON) {
+            UserPokemon()
         }
     }
 }

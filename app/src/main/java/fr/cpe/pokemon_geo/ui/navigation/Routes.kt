@@ -4,4 +4,5 @@ object Routes {
     const val PROFILE = "profile"
     const val POKEDEX = "pokedex"
     const val MAP = "map"
+    const val USER_POKEMON = "user_pokemon"
 }

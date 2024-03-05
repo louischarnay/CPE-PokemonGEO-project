@@ -19,11 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
+import fr.cpe.pokemon_geo.ui.screen.pokemon.PokemonList
+import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemon
 
 @Composable
-fun Profile(profileViewModel: ProfileViewModel = hiltViewModel()) {
+fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
     // Create a mutable state for the profile
     val profile = remember { mutableStateOf<ProfileEntity?>(null) }
 
@@ -53,7 +56,7 @@ fun Profile(profileViewModel: ProfileViewModel = hiltViewModel()) {
             Button(onClick = { /*TODO*/ }) {
                 Text(text = "Inventaire")
             }
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { navController.navigate("pokemons") }) {
                 Text(text = "Pokémons")
             }
         }
