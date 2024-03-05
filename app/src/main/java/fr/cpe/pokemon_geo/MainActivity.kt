@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
         val pokemons = loadPokemonsFromResources(resources.openRawResource(R.raw.pokemons))
 
-        generatePokemonsUseCase.handle(pokemons)
+        generatePokemonsUseCase.run(pokemons)
 
         setContent {
             val navController = rememberNavController()

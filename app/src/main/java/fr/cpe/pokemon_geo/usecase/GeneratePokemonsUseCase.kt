@@ -27,13 +27,14 @@ class GeneratePokemonsUseCase @Inject constructor(
         private const val DISAPPEARANCE_DELAY = 3 * ONE_MINUTE_IN_MILLIS
     }
 
-    fun handle(pokemons: List<Pokemon>) {
+    fun run(pokemons: List<Pokemon>) {
         coroutineScope.launch {
             while (true) {
                 getLocationUseCase.invoke().collect { location ->
+                    val generatedPokemons = repository.getAllGeneratedPokemon()
+                    handlePokemonRemoval(generatedPokemons, location)
+
                     if (location != null) {
-                        val generatedPokemons = repository.getAllGeneratedPokemon()
-                        handlePokemonRemoval(generatedPokemons, location)
                         handlePokemonGeneration(pokemons, generatedPokemons, location)
                     }
                 }
@@ -71,13 +72,13 @@ class GeneratePokemonsUseCase @Inject constructor(
 
     private suspend fun handlePokemonRemoval(
         generatedPokemons: List<GeneratedPokemonEntity>,
-        location: GeoPoint
+        location: GeoPoint?
     ) {
         generatedPokemons.forEach { pokemon ->
             val pokemonLocation = GeoPoint(pokemon.latitude, pokemon.longitude)
-            val distance = location.distanceToAsDouble(pokemonLocation)
+            val distance = location?.distanceToAsDouble(pokemonLocation)
 
-            if (distance > AREA_RADIUS_IN_METERS) {
+            if (distance !== null && distance > AREA_RADIUS_IN_METERS) {
                 repository.removeGeneratedPokemon(pokemon)
                 Log.d("POKEMON", "Pokemon removed(distance): ${pokemon.pokemonId}")
             } else {
