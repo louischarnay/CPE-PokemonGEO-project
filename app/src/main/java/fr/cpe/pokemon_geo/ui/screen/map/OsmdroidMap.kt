@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -7,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.utils.ONE_SECOND_IN_MILLIS
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
@@ -27,11 +29,12 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
         factory = { context ->
             val mapView = MapView(context)
             mapView.setTileSource(TileSourceFactory.MAPNIK)
-            mapView.setMultiTouchControls(true)
+            mapView.setMultiTouchControls(false)
+            mapView.setOnTouchListener { view, motionEvent -> true  }
 
             // SET MAP CENTER AND ZOOM
             val mapController: IMapController = mapView.controller
-            mapController.setZoom(17.0)
+            mapController.setZoom(18.0)
             val center = osmdroidMapViewModel.currentLocation.value ?: osmdroidMapViewModel.lyon
             mapController.setCenter(center)
 
@@ -46,15 +49,15 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
 
             coroutineScope.launch {
                 while (true) {
-                    delay(3_000)
+                    delay(ONE_SECOND_IN_MILLIS)
 
                     val newLocation = osmdroidMapViewModel.currentLocation.value ?: continue
                     marker.position = newLocation
+                    mapController.animateTo(newLocation)
 
                     if (!isMyMarkerAdded) {
                         mapView.overlays.add(marker)
                         isMyMarkerAdded = true
-                        mapController.animateTo(newLocation)
                     }
 
                     osmdroidMapViewModel.generatedPokemons.value.forEach { generatedPokemon ->
@@ -62,8 +65,10 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
                         val pokemonAlreadyOnMap = mapView.overlays.any {
                             it is Marker && it.position.latitude == generatedPokemon.latitude && it.position.longitude == generatedPokemon.longitude
                         }
+                        Log.e("OsmdroidMap", "Pokemon already on map: $pokemonAlreadyOnMap")
                         if (pokemonAlreadyOnMap) return@forEach
 
+                        Log.e("OsmdroidMap", "Adding pokemon on the map")
                         val pokemonData = pokemons.find { it.getOrder() == generatedPokemon.pokemonId }
                         if (pokemonData != null) {
                             val pokemonMarker = Marker(mapView)
