@@ -10,15 +10,20 @@ import fr.cpe.pokemon_geo.model.Pokemon
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
+import fr.cpe.pokemon_geo.ui.screen.starter.Starter
 import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemon
 
 @Composable
 fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifier: Modifier) {
     NavHost(
         navController = navController as NavHostController,
-        startDestination = Routes.PROFILE,
+        startDestination = Routes.STARTER,
         modifier = modifier
     ) {
+        composable(route = Routes.STARTER) {
+            Starter(pokemons)
+        }
+
         composable(route = Routes.PROFILE) {
             Profile(navController)
         }

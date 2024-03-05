@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokemon
+package fr.cpe.pokemon_geo.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

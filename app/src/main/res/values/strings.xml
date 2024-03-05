@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">pokemon-geo</string>
     <string name="location_permission_not_present">La permission de localisation est nécessaire</string>
+    <string name="choose_starter_title">Choisis ton premier Pokémon</string>
 </resources>

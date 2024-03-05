@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.model.Pokemon
-import fr.cpe.pokemon_geo.ui.screen.pokemon.PokemonList
+import fr.cpe.pokemon_geo.ui.component.PokemonList
 
 @Composable
 fun UserPokemon(userPokemonViewModel: UserPokemonViewModel = hiltViewModel()) {
