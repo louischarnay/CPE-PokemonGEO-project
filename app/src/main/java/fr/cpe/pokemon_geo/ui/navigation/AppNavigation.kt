@@ -21,7 +21,7 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
         modifier = modifier
     ) {
         composable(route = Routes.STARTER) {
-            Starter(pokemons)
+            Starter(pokemons, navController)
         }
 
         composable(route = Routes.PROFILE) {
