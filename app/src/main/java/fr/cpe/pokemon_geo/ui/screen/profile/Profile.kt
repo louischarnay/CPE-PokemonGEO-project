@@ -56,7 +56,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
             Button(onClick = { /*TODO*/ }) {
                 Text(text = "Inventaire")
             }
-            Button(onClick = { navController.navigate("pokemons") }) {
+            Button(onClick = { navController.navigate("user_pokemon") }) {
                 Text(text = "Pokémons")
             }
         }
