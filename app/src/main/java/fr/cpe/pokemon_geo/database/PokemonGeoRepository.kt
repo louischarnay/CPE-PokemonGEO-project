@@ -15,5 +15,5 @@ class PokemonGeoRepository(
 
     suspend fun getAllGeneratedPokemon() = generatedPokemonDao.getAll()
     suspend fun insertGeneratedPokemon(generatedPokemonEntity: GeneratedPokemonEntity) = generatedPokemonDao.insert(generatedPokemonEntity)
-    suspend fun deleteGeneratedPokemon(generatedPokemonEntity: GeneratedPokemonEntity) = generatedPokemonDao.delete(generatedPokemonEntity)
+    suspend fun removeGeneratedPokemon(generatedPokemonEntity: GeneratedPokemonEntity) = generatedPokemonDao.delete(generatedPokemonEntity)
 }
