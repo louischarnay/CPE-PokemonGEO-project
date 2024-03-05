@@ -6,16 +6,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import fr.cpe.pokemon_geo.model.Pokemon
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 
 @Composable
-fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
+fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     var isMyMarkerAdded = false
@@ -47,13 +49,28 @@ fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
                     delay(3_000)
 
                     val newLocation = osmdroidMapViewModel.currentLocation.value ?: continue
-
                     marker.position = newLocation
 
                     if (!isMyMarkerAdded) {
                         mapView.overlays.add(marker)
                         isMyMarkerAdded = true
                         mapController.animateTo(newLocation)
+                    }
+
+                    osmdroidMapViewModel.generatedPokemons.value.forEach { generatedPokemon ->
+                        // check if the pokemon is already on the map
+                        val pokemonAlreadyOnMap = mapView.overlays.any {
+                            it is Marker && it.position.latitude == generatedPokemon.latitude && it.position.longitude == generatedPokemon.longitude
+                        }
+                        if (pokemonAlreadyOnMap) return@forEach
+
+                        val pokemonData = pokemons.find { it.getOrder() == generatedPokemon.pokemonId }
+                        if (pokemonData != null) {
+                            val pokemonMarker = Marker(mapView)
+                            pokemonMarker.icon = context.getDrawable(pokemonData.getFrontResource())
+                            pokemonMarker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
+                            mapView.overlays.add(pokemonMarker)
+                        }
                     }
 
                     mapView.invalidate() // Invalidate the map view to redraw

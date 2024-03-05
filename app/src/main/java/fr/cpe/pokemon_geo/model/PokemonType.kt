@@ -1,7 +1,5 @@
 package fr.cpe.pokemon_geo.model
 
-import java.util.Locale
-
 class PokemonType(
     private var name: POKEMON_TYPE,
     private var frontResource: Int,
