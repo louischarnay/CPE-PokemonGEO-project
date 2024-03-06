@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokemon
+package fr.cpe.pokemon_geo.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,7 @@ fun PokemonCard(pokemon: Pokemon) {
 fun PokemonCardImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
-        contentDescription = null,
+        contentDescription = "Pokemon image",
         modifier = Modifier.size(300.dp)
     )
 }

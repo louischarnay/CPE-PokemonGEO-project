@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokemon
+package fr.cpe.pokemon_geo.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

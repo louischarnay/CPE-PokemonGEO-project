@@ -38,3 +38,7 @@ fun loadPokemonFromId(resources: InputStream, id: Int): Pokemon {
     }
     throw IllegalArgumentException("No pokemon with id $id")
 }
+
+fun findPokemonById(pokemons: List<Pokemon>, id: Int): Pokemon {
+    return pokemons.find { it.getOrder() == id } ?: throw IllegalArgumentException("No pokemon with id $id")
+}

@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.pokemon
+package fr.cpe.pokemon_geo.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -65,7 +65,7 @@ fun PokedexListItem(pokemon: Pokemon) {
 fun PokemonListImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
-        contentDescription = null,
+        contentDescription = "Pokemon image",
         modifier = Modifier
             .padding(5.dp)
             .size(60.dp)
@@ -89,7 +89,7 @@ fun PokemonType(type: PokemonType?) {
     ) {
         Image(
             painter = painterResource(id = type.getFrontResource()),
-            contentDescription = null,
+            contentDescription = "Pokemon type logo",
             modifier = Modifier.size(20.dp)
         )
         Text(
