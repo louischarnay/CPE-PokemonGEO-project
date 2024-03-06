@@ -1,33 +1,28 @@
 package fr.cpe.pokemon_geo.ui.screen.user_pokemon
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
-import fr.cpe.pokemon_geo.database.profile.ProfileEntity
-import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
 import fr.cpe.pokemon_geo.model.Pokemon
 import fr.cpe.pokemon_geo.utils.loadPokemonFromId
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import java.sql.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class UserPokemonViewModel @Inject constructor(
+class UserPokemonsViewModel @Inject constructor(
     private val application: Application,
     private val repository: PokemonGeoRepository
 ): ViewModel(){
 
-    private val _userPokemonsLiveData = MutableLiveData<List<Pokemon>>()
-    val userPokemonsLiveData: LiveData<List<Pokemon>> = _userPokemonsLiveData
+    private val _userPokemons = MutableStateFlow<List<Pokemon>>(mutableListOf())
+    val userPokemons: StateFlow<List<Pokemon>> = _userPokemons
 
     init {
         fetchUserPokemons()
@@ -43,7 +38,7 @@ class UserPokemonViewModel @Inject constructor(
             }
 
             withContext(Dispatchers.Main) {
-                _userPokemonsLiveData.value = pokemonList
+                _userPokemons.value = pokemonList
             }
         }
     }

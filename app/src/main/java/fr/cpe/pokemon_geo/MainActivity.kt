@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo
 
-import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,8 +18,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
-import fr.cpe.pokemon_geo.ui.screen.starter.Starter
-import fr.cpe.pokemon_geo.ui.screen.starter.StarterViewModel
+import fr.cpe.pokemon_geo.ui.screen.starter.Welcome
+import fr.cpe.pokemon_geo.ui.screen.starter.WelcomeViewModel
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.LOCATION_PERMISSIONS
@@ -37,7 +36,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var generatePokemonsUseCase: GeneratePokemonsUseCase
 
-    private val starterViewModel: StarterViewModel by viewModels()
+    private val welcomeViewModel: WelcomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +65,9 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                val showStarterPage by starterViewModel.showStarterPage.collectAsState()
-                if (showStarterPage) {
-                    Starter(pokemons = pokemons, starterViewModel = starterViewModel)
+                val showWelcomeScreen by welcomeViewModel.showWelcomeSreen.collectAsState()
+                if (showWelcomeScreen) {
+                    Welcome(pokemons = pokemons, welcomeViewModel = welcomeViewModel)
                 }
             }
         }
