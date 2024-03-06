@@ -1,7 +1,7 @@
-package fr.cpe.pokemon_geo.model
+package fr.cpe.pokemon_geo.model.pokemon
 
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.POKEMON_TYPE.*
+import fr.cpe.pokemon_geo.model.pokemon.POKEMON_TYPE.*
 import java.util.Locale
 
 object SearchPokemonType {

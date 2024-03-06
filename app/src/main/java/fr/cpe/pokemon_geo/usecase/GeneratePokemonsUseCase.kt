@@ -3,7 +3,7 @@ package fr.cpe.pokemon_geo.usecase
 import android.util.Log
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.utils.ONE_MINUTE_IN_MILLIS
 import fr.cpe.pokemon_geo.utils.ONE_SECOND_IN_MILLIS
 import kotlinx.coroutines.CoroutineScope

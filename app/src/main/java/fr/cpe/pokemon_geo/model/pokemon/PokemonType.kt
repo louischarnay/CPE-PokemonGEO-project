@@ -1,6 +1,4 @@
-package fr.cpe.pokemon_geo.model
-
-import java.util.Locale
+package fr.cpe.pokemon_geo.model.pokemon
 
 class PokemonType(
     private var name: POKEMON_TYPE,
