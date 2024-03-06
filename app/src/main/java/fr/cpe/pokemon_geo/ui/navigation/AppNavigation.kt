@@ -17,13 +17,9 @@ import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemon
 fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifier: Modifier) {
     NavHost(
         navController = navController as NavHostController,
-        startDestination = Routes.STARTER,
+        startDestination = Routes.PROFILE,
         modifier = modifier
     ) {
-        composable(route = Routes.STARTER) {
-            Starter(pokemons, navController)
-        }
-
         composable(route = Routes.PROFILE) {
             Profile(navController)
         }

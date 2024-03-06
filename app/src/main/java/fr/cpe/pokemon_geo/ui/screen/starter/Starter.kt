@@ -62,11 +62,11 @@ fun StarterButton(pokemon: Pokemon, starterViewModel: StarterViewModel, navContr
         Image(
             painter = painterResource(id = pokemon.getFrontResource()),
             contentDescription = null,
-            modifier = Modifier.size(140.dp)
+            modifier = Modifier.size(120.dp)
         )
         Text(
             text = pokemon.getName(),
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold
         )
     }
