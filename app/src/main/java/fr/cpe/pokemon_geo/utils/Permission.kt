@@ -5,6 +5,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 
+val LOCATION_PERMISSIONS = listOf(
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION
+)
+
 fun Context.hasPermission(permission: String): Boolean {
     return ContextCompat.checkSelfPermission(
         this,
@@ -13,6 +18,5 @@ fun Context.hasPermission(permission: String): Boolean {
 }
 
 fun Context.hasLocationPermission(): Boolean {
-    return this.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) &&
-            this.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    return LOCATION_PERMISSIONS.all { hasPermission(it) }
 }

@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.ui.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -21,14 +22,17 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
         modifier = modifier
     ) {
         composable(route = Routes.PROFILE) {
+            BackHandler(true) {}
             Profile(navController)
         }
 
         composable(route = Routes.POKEDEX) {
+            BackHandler(true) {}
             Pokedex(pokemons)
         }
 
         composable(route = Routes.MAP) {
+            BackHandler(true) {}
             OsmdroidMap()
         }
 
