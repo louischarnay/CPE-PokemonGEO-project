@@ -26,19 +26,11 @@ class UserPokemonViewModel @Inject constructor(
     private val repository: PokemonGeoRepository
 ): ViewModel(){
 
-    private val _userPokemonLiveData = MutableLiveData<List<Pokemon>>()
-    val userPokemonLiveData: LiveData<List<Pokemon>> = _userPokemonLiveData
+    private val _userPokemonsLiveData = MutableLiveData<List<Pokemon>>()
+    val userPokemonsLiveData: LiveData<List<Pokemon>> = _userPokemonsLiveData
 
     init {
-        createDefaultList()
         fetchUserPokemons()
-    }
-
-    private fun createDefaultList() {
-        val userPokemonEntity = UserPokemonEntity(pokemonId = 12, createdAt = System.currentTimeMillis())
-        viewModelScope.launch {
-            repository.insertUserPokemon(userPokemonEntity)
-        }
     }
 
     private fun fetchUserPokemons() {
@@ -51,7 +43,7 @@ class UserPokemonViewModel @Inject constructor(
             }
 
             withContext(Dispatchers.Main) {
-                _userPokemonLiveData.value = pokemonList
+                _userPokemonsLiveData.value = pokemonList
             }
         }
     }

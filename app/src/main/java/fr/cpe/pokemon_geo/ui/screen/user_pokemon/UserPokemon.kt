@@ -19,7 +19,7 @@ fun UserPokemon(userPokemonViewModel: UserPokemonViewModel = hiltViewModel()) {
     // Run coroutine when the profileViewModel changes
     LaunchedEffect(key1 = userPokemonViewModel) {
         // Observe the LiveData from the ViewModel
-        userPokemonViewModel.userPokemonLiveData.observe(lifecycleOwner) { observedPokemons ->
+        userPokemonViewModel.userPokemonsLiveData.observe(lifecycleOwner) { observedPokemons ->
             pokemons.value = observedPokemons
         }
     }
