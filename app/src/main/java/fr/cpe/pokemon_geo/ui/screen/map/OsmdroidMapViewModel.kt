@@ -74,7 +74,8 @@ class OsmdroidMapViewModel @Inject constructor(
                     interestPointMarkers = interestPoints.associateWith { interestPoint ->
                         val marker = Marker(mapView)
                         marker.position = GeoPoint(interestPoint.getLatitude(), interestPoint.getLongitude())
-                        marker.icon = application.getDrawable(R.drawable.ic_pokestop)
+                        marker.title = interestPoint.getName()
+                        marker.icon = application.getDrawable(R.drawable.pokecenter)
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
                         marker
