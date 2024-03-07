@@ -42,7 +42,7 @@ class OsmdroidMapViewModel @Inject constructor(
 
     private fun collectInterestPoints() {
         viewModelScope.launch {
-            getInterestPointUseCase.run()?.collect { interestPoints ->
+            getInterestPointUseCase.invoke()?.collect { interestPoints ->
                 //TODO: Display interest points on the map
             }
         }

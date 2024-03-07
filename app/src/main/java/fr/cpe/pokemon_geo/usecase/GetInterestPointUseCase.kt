@@ -25,7 +25,10 @@ class GetInterestPointUseCase @Inject constructor(
 
     private var lastGeoPoint = GeoPoint(lastLatitude, lastLongitude)
 
-    fun run(): Flow<InterestPoint>? {
+    operator fun invoke(): Flow<InterestPoint>? {
+        return run()
+    }
+    private fun run(): Flow<InterestPoint>? {
         coroutineScope.launch(){
             while (true) {
                 Timber.d("GetInterestPointUseCase.run")
@@ -49,16 +52,16 @@ class GetInterestPointUseCase @Inject constructor(
 
     private suspend fun getInterestPoint() {
         //Call the API to get the interest point
-        val call = ApiClient.apiService.getPokeCenterAround(lastLatitude, lastLongitude)
+        Timber.tag("InterestPoint").d("getInterestPoint")
+        val call = ApiClient.apiService.getPokeCenterAround()
         call.enqueue(object : Callback<InterestPoint> {
             override fun onResponse(call: Call<InterestPoint>, response: Response<InterestPoint>) {
                 if (response.isSuccessful) {
-                    val interestPoint = response.body()
-                    Log.d("InterestPoint", interestPoint.toString())
+                    Timber.tag("InterestPoint").d(response.body().toString())
                 }
             }
             override fun onFailure(call: Call<InterestPoint>, t: Throwable) {
-                println("Error")
+                Timber.tag("InterestPoint").d(t.message.toString())
             }
         })
     }
