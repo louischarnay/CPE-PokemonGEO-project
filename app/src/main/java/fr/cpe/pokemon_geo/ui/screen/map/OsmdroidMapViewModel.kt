@@ -34,22 +34,24 @@ class OsmdroidMapViewModel @Inject constructor(
     }
 
     private fun fetchMapDataPeriodically() {
+        collectCurrentLocation()
+        collectGeneratedPokemons()
+    }
+
+    private fun collectCurrentLocation() {
         viewModelScope.launch {
-            while (true) {
-                fetchCurrentLocation()
-                fetchGeneratedPokemons()
-                delay(5 * ONE_SECOND_IN_MILLIS)
+            getLocationUseCase.invoke().collect { location ->
+                _currentLocation.value = location
             }
         }
     }
 
-    private suspend fun fetchCurrentLocation() {
-        getLocationUseCase.invoke().collect { location ->
-            _currentLocation.value = location
+    private fun collectGeneratedPokemons() {
+        viewModelScope.launch {
+            while (true) {
+                delay(ONE_SECOND_IN_MILLIS)
+                _generatedPokemons.value = repository.getAllGeneratedPokemon()
+            }
         }
-    }
-
-    private suspend fun fetchGeneratedPokemons() {
-        _generatedPokemons.value = repository.getAllGeneratedPokemon()
     }
 }
