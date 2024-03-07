@@ -39,7 +39,7 @@ fun PokemonCard(pokemon: Pokemon) {
 fun PokemonCardImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
-        contentDescription = null,
+        contentDescription = "Pokemon image",
         modifier = Modifier.size(300.dp)
     )
 }

@@ -1,13 +1,13 @@
 package fr.cpe.pokemon_geo.ui.screen.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,11 +17,10 @@ class ProfileViewModel @Inject constructor(
     private val repository: PokemonGeoRepository,
 ): ViewModel() {
 
-    private val _profileLiveData = MutableLiveData<ProfileEntity?>()
-    val profileLiveData: LiveData<ProfileEntity?> = _profileLiveData
+    private val _profile = MutableStateFlow<ProfileEntity?>(null)
+    val profile: StateFlow<ProfileEntity?> = _profile
 
     init {
-        createDefaultProfile()
         fetchProfile()
     }
 
@@ -30,16 +29,8 @@ class ProfileViewModel @Inject constructor(
             val profile = repository.getProfile()
 
             withContext(Dispatchers.Main) {
-                _profileLiveData.value = profile
+                _profile.value = profile
             }
         }
     }
-
-    private fun createDefaultProfile() {
-        val newProfile = ProfileEntity(pseudo = "Dresseur")
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insertProfile(newProfile)
-        }
-    }
-
 }

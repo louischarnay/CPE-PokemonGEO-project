@@ -16,24 +16,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.Pokemon
-import fr.cpe.pokemon_geo.ui.component.PokemonCardImage
-import fr.cpe.pokemon_geo.ui.navigation.Routes
 import fr.cpe.pokemon_geo.utils.findPokemonById
 
 @Composable
-fun Starter(pokemons: List<Pokemon>, navController: NavController, starterViewModel: StarterViewModel = hiltViewModel()) {
+fun StarterChoice(pokemons: List<Pokemon>, welcomeViewModel: WelcomeViewModel) {
     val grassStarter = findPokemonById(pokemons, 1)
     val fireStarter = findPokemonById(pokemons, 4)
     val waterStart = findPokemonById(pokemons, 7)
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(15.dp),
+        modifier = Modifier.padding(15.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(40.dp),
     ) {
@@ -42,18 +36,17 @@ fun Starter(pokemons: List<Pokemon>, navController: NavController, starterViewMo
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
-        StarterButton(grassStarter, starterViewModel, navController)
-        StarterButton(fireStarter, starterViewModel, navController)
-        StarterButton(waterStart, starterViewModel, navController)
+        StarterButton(grassStarter, welcomeViewModel)
+        StarterButton(fireStarter, welcomeViewModel)
+        StarterButton(waterStart, welcomeViewModel)
     }
 }
 
 @Composable
-fun StarterButton(pokemon: Pokemon, starterViewModel: StarterViewModel, navController: NavController) {
+fun StarterButton(pokemon: Pokemon, welcomeViewModel: WelcomeViewModel) {
     Column(
         modifier = Modifier.clickable {
-            starterViewModel.chooseStarter(pokemon)
-            navController.navigate(Routes.PROFILE)
+            welcomeViewModel.chooseStarter(pokemon)
         },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -61,12 +54,12 @@ fun StarterButton(pokemon: Pokemon, starterViewModel: StarterViewModel, navContr
 
         Image(
             painter = painterResource(id = pokemon.getFrontResource()),
-            contentDescription = null,
-            modifier = Modifier.size(140.dp)
+            contentDescription = "Pokemon starter image",
+            modifier = Modifier.size(120.dp)
         )
         Text(
             text = pokemon.getName(),
-            fontSize = 20.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold
         )
     }
