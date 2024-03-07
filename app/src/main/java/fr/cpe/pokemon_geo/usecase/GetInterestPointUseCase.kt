@@ -3,6 +3,7 @@ package fr.cpe.pokemon_geo.usecase
 import android.util.Log
 import fr.cpe.pokemon_geo.api.ApiClient
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
+import fr.cpe.pokemon_geo.model.interest_point.InterestPointResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -50,19 +51,31 @@ class GetInterestPointUseCase @Inject constructor(
         return null
     }
 
-    private suspend fun getInterestPoint() {
+    private suspend fun getInterestPoint(): List<InterestPoint> {
         //Call the API to get the interest point
-        Timber.tag("InterestPoint").d("getInterestPoint")
-        val call = ApiClient.apiService.getPokeCenterAround()
-        call.enqueue(object : Callback<InterestPoint> {
-            override fun onResponse(call: Call<InterestPoint>, response: Response<InterestPoint>) {
-                if (response.isSuccessful) {
-                    Timber.tag("InterestPoint").d(response.body().toString())
+        val url = "[out:json];\n" + "\n" + "node(around:1000,${lastLatitude},${lastLongitude})[amenity=pharmacy];\n" + "\n" + "out;"
+        val response = ApiClient.apiService.getPokeCenterAround(url)
+        Log.d("InterestPoint", "Response: $response")
+
+        if (response.isSuccessful) {
+            Log.d("InterestPoint", "Response: ${response.body()}")
+            val elements = response.body()?.elements
+            val interestPoints = mutableListOf<InterestPoint>()
+            if (elements != null) {
+                for (element in elements) {
+                    val interestPoint = InterestPoint(
+                        element.tags.name,
+                        element.lat,
+                        element.lon
+                    )
+                    Log.d("InterestPoint", "InterestPoint: $interestPoint")
+                    interestPoints.add(interestPoint)
                 }
             }
-            override fun onFailure(call: Call<InterestPoint>, t: Throwable) {
-                Timber.tag("InterestPoint").d(t.message.toString())
-            }
-        })
+            return interestPoints
+        } else {
+            Log.e("InterestPoint", "Error: ${response.message()}")
+        }
+        return emptyList()
     }
 }
