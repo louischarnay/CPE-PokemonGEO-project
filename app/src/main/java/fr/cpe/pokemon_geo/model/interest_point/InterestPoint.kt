@@ -5,15 +5,12 @@ class InterestPoint(
     private var latitude: Double,
     private var longitude: Double
 ) {
-
     fun getName(): String {
         return name
     }
-
     fun getLatitude(): Double {
         return latitude
     }
-
     fun getLongitude(): Double {
         return longitude
     }
