@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,24 +28,23 @@ class OsmdroidMapViewModel @Inject constructor(
     }
 
     private fun fetchCurrentLocationPeriodically() {
+        collectCurrentLocation()
+        collectInterestPoints()
+    }
+
+    private fun collectCurrentLocation() {
         viewModelScope.launch {
-            while (true) {
-                getCurrentLocation()
-                getInterestPoints()
-                delay(5_000)
+            getLocationUseCase.invoke().collect { location ->
+                _currentLocation.value = location
             }
         }
     }
 
-    private suspend fun getCurrentLocation() {
-        getLocationUseCase.invoke().collect { location ->
-            _currentLocation.value = location
-        }
-    }
-
-    private suspend fun getInterestPoints() {
-        getInterestPointUseCase.run()?.collect { interestPoints ->
-            //TODO: Display interest points on the map
+    private fun collectInterestPoints() {
+        viewModelScope.launch {
+            getInterestPointUseCase.run()?.collect { interestPoints ->
+                //TODO: Display interest points on the map
+            }
         }
     }
 }

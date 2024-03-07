@@ -6,7 +6,6 @@ import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
