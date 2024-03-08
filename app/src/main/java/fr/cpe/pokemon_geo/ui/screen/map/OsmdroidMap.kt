@@ -13,7 +13,7 @@ import org.osmdroid.views.MapView
 
 @SuppressLint("ClickableViewAccessibility")
 @Composable
-fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
+fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -34,7 +34,7 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
             mapView.maxZoomLevel = zoomLevel
             mapView.controller.setZoom(zoomLevel)
 
-            osmdroidMapViewModel.fetchMapDataPeriodically(mapView, pokemons)
+            osmdroidMapViewModel.setMapView(mapView)
 
             mapView
         }

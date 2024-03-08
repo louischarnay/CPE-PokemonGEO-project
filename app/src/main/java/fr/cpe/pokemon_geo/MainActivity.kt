@@ -18,6 +18,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
+import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapViewModel
 import fr.cpe.pokemon_geo.ui.screen.starter.Welcome
 import fr.cpe.pokemon_geo.ui.screen.starter.WelcomeViewModel
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
@@ -37,12 +38,14 @@ class MainActivity : ComponentActivity() {
     lateinit var generatePokemonsUseCase: GeneratePokemonsUseCase
 
     private val welcomeViewModel: WelcomeViewModel by viewModels()
+    private val osmdroidMapViewModel: OsmdroidMapViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeMap()
         val pokemons = loadPokemonsFromResources(resources.openRawResource(R.raw.pokemons))
+        osmdroidMapViewModel.fetchMapDataPeriodically(pokemons)
 
         setContent {
             val navController = rememberNavController()
@@ -61,7 +64,8 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(
                         navController = navController,
                         pokemons = pokemons,
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier.padding(padding),
+                        osmdroidMapViewModel = osmdroidMapViewModel,
                     )
                 }
 
