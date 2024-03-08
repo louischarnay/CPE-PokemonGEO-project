@@ -101,8 +101,7 @@ class OsmdroidMapViewModel @Inject constructor(
 
                     generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
                         val marker = Marker(mapView)
-                        marker.position =
-                            GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
+                        marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
                         val pokemonData = findPokemonById(pokemons, generatedPokemon.pokemonId)
                         marker.title = pokemonData.getName()
                         marker.icon = application.getDrawable(pokemonData.getFrontResource())
