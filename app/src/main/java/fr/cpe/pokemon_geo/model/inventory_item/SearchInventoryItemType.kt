@@ -1,22 +1,23 @@
 package fr.cpe.pokemon_geo.model.inventory_item
 
+import androidx.compose.ui.text.capitalize
 import fr.cpe.pokemon_geo.R
 
 object SearchInventoryItemType {
     private val pokeball = InventoryItemType(
-        name = OBJECT_TYPE.Pokeball.name,
+        name = INVENTORY_ITEM.pokeball.name.replaceFirstChar { it.uppercase() },
         frontResource = R.drawable.pokeball,
     )
 
     private val masterball = InventoryItemType(
-        name = OBJECT_TYPE.Masterball.name,
+        name = INVENTORY_ITEM.masterball.name.replaceFirstChar { it.uppercase() },
         frontResource = R.drawable.masterball,
     )
 
     fun byName(name: String): InventoryItemType {
         return when (name.lowercase()) {
-            "pokeball" -> pokeball
-            "masterball" -> masterball
+            INVENTORY_ITEM.pokeball.name -> pokeball
+            INVENTORY_ITEM.masterball.name -> masterball
             else -> throw IllegalArgumentException("Unknown object type: $name")
         }
     }

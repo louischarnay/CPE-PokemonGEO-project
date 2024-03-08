@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.ui.navigation.Routes
 
 @Composable
 fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
@@ -39,10 +40,10 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                 Text(text = "${profile.experience} XP", fontSize = 20.sp)
 
             Row {
-                Button(onClick = { navController.navigate("user_inventory") }) {
+                Button(onClick = { navController.navigate(Routes.USER_INVENTORY) }) {
                     Text(text = "Inventaire")
                 }
-                Button(onClick = { navController.navigate("user_pokemon") }) {
+                Button(onClick = { navController.navigate(Routes.USER_POKEMON) }) {
                     Text(text = "Pokémons")
                 }
             }
