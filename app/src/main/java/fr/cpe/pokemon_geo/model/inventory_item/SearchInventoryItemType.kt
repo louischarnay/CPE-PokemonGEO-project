@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.model.inventory_item
 
-import androidx.compose.ui.text.capitalize
 import fr.cpe.pokemon_geo.R
 
 object SearchInventoryItemType {

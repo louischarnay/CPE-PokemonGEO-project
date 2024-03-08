@@ -8,7 +8,6 @@ import fr.cpe.pokemon_geo.database.profile.ProfileEntity
 import fr.cpe.pokemon_geo.database.user_inventory.UserInventoryEntity
 import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
 import fr.cpe.pokemon_geo.model.inventory_item.INVENTORY_ITEM
-import fr.cpe.pokemon_geo.model.inventory_item.InventoryItemType
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
