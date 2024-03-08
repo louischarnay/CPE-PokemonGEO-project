@@ -3,22 +3,15 @@ package fr.cpe.pokemon_geo.usecase
 import android.util.Log
 import fr.cpe.pokemon_geo.api.ApiClient
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
-import fr.cpe.pokemon_geo.model.interest_point.InterestPointResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import timber.log.Timber
 
 class GetInterestPointUseCase @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase
@@ -52,9 +45,17 @@ class GetInterestPointUseCase @Inject constructor(
     }
 
     private suspend fun getInterestPoint(): List<InterestPoint> {
-        //Call the API to get the interest point
+        val interestPoints = mutableListOf<InterestPoint>()
+
+        interestPoints.addAll(getPokeCenterAround())
+        interestPoints.addAll(getPokeStopAround())
+
+        return interestPoints
+    }
+
+    private suspend fun getPokeCenterAround(): List<InterestPoint> {
         val url = "[out:json];\n" + "\n" + "node(around:1000,${lastLatitude},${lastLongitude})[amenity=pharmacy];\n" + "\n" + "out;"
-        val response = ApiClient.apiService.getPokeCenterAround(url)
+        val response = ApiClient.apiService.getInterestPoint(url)
 
         if (response.isSuccessful) {
             val elements = response.body()?.elements
@@ -64,7 +65,34 @@ class GetInterestPointUseCase @Inject constructor(
                     val interestPoint = InterestPoint(
                         element.tags.name,
                         element.lat,
-                        element.lon
+                        element.lon,
+                        true
+                    )
+                    interestPoints.add(interestPoint)
+                }
+            }
+            return interestPoints
+        } else {
+            Log.e("InterestPoint", "Error: ${response.message()}")
+        }
+        return emptyList()
+    }
+
+    private suspend fun getPokeStopAround(): List<InterestPoint> {
+        val url = "[out:json];\n" + "\n" + "node(around:1000,${lastLatitude},${lastLongitude})[shop];\n" + "\n" + "out;"
+        val response = ApiClient.apiService.getInterestPoint(url)
+
+        if (response.isSuccessful) {
+            val elements = response.body()?.elements
+            val interestPoints = mutableListOf<InterestPoint>()
+            if (elements != null) {
+                for (element in elements) {
+                    if (element.tags.name == null) continue
+                    val interestPoint = InterestPoint(
+                        element.tags.name,
+                        element.lat,
+                        element.lon,
+                        false
                     )
                     interestPoints.add(interestPoint)
                 }

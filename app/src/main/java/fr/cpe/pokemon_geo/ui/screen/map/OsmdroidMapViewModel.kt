@@ -1,7 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -75,7 +74,11 @@ class OsmdroidMapViewModel @Inject constructor(
                         val marker = Marker(mapView)
                         marker.position = GeoPoint(interestPoint.getLatitude(), interestPoint.getLongitude())
                         marker.title = interestPoint.getName()
-                        marker.icon = application.getDrawable(R.drawable.pokecenter)
+                        if (interestPoint.isPokeCenter()){
+                            marker.icon = application.getDrawable(R.drawable.pokecenter)
+                        } else {
+                            marker.icon = application.getDrawable(R.drawable.pokestop)
+                        }
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
                         marker
