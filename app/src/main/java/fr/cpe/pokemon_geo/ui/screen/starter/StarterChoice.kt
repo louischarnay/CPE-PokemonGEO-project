@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.utils.findPokemonById
 
 @Composable

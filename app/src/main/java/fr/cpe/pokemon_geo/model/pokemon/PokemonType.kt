@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.model
+package fr.cpe.pokemon_geo.model.pokemon
 
 class PokemonType(
     private var name: POKEMON_TYPE,

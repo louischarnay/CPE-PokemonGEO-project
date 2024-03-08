@@ -92,6 +92,15 @@ dependencies {
     // PERMISSION
     implementation("com.google.accompanist:accompanist-permissions:0.31.3-beta")
 
+    //API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // COROUTINE
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("com.google.firebase:firebase-components:17.1.5")
+
     // TEST
     implementation("com.jakewharton.timber:timber:5.0.1")
     testImplementation("junit:junit:4.13.2")

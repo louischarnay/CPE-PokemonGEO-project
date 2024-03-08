@@ -1,6 +1,6 @@
 package fr.cpe.pokemon_geo.utils
 
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import org.json.JSONArray
 import java.io.InputStream
 

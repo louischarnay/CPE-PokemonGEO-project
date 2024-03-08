@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 @Composable
 fun PokemonCard(pokemon: Pokemon) {

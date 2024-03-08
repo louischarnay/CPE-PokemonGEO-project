@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

@@ -37,7 +37,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
             )
             Text(text = profile.pseudo, fontSize = 30.sp)
                 Text(text = "${profile.experience} XP", fontSize = 20.sp)
-    
+
             Row {
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Inventaire")

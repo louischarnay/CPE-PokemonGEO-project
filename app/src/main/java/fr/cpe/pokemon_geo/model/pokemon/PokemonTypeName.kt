@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.model
+package fr.cpe.pokemon_geo.model.pokemon
 
 enum class POKEMON_TYPE {
     Bug,

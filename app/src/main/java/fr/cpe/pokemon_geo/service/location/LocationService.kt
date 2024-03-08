@@ -9,9 +9,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
 import fr.cpe.pokemon_geo.utils.hasLocationPermission
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
@@ -53,4 +56,13 @@ class LocationService @Inject constructor(
         }
     }
 
+    @SuppressLint("MissingPermission")
+    override suspend fun requestCurrentLocation(): GeoPoint? {
+        if (!context.hasLocationPermission()) {
+            return null
+        }
+
+        val lastLocation = locationClient.lastLocation.await()
+        return GeoPoint(lastLocation.latitude, lastLocation.longitude)
+    }
 }

@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.model
+package fr.cpe.pokemon_geo.model.pokemon
 
 import fr.cpe.pokemon_geo.R
 

@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
 import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
-import fr.cpe.pokemon_geo.model.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
