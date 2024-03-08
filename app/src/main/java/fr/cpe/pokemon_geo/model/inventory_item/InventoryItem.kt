@@ -3,7 +3,7 @@ package fr.cpe.pokemon_geo.model.inventory_item
 class InventoryItem(
     private var name: String,
     frontRessource: Int,
-    private var type: OBJECT_TYPE,
+    private var type: String,
     private var quantity: Int
 ) {
 private var frontResource = 0
@@ -21,7 +21,7 @@ private var frontResource = 0
     }
 
     fun getType(): String {
-        return type.name
+        return type
     }
 
     fun getQuantity(): Int {
