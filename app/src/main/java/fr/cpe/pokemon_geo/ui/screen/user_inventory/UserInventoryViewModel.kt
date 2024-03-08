@@ -31,7 +31,8 @@ class UserInventoryViewModel @Inject constructor(
             val userInventory = repository.getUserInventory()
 
             userInventory.forEach {
-                inventoryList.add(InventoryItem(SearchInventoryItemType.byName(it.type).getName(), SearchInventoryItemType.byName(it.type).getFrontResource(), it.type, it.quantity))
+                val inventoryItemType = SearchInventoryItemType.byName(it.type)
+                inventoryList.add(InventoryItem(inventoryItemType, it.quantity))
             }
 
             withContext(Dispatchers.Main) {

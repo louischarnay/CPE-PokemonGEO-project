@@ -32,7 +32,7 @@ fun InventoryListItem(inventory: InventoryItem) {
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = inventory.getName(),
+                text = inventory.getType().getName(),
                 fontWeight = FontWeight.Bold,
             )
             Text(
@@ -45,7 +45,7 @@ fun InventoryListItem(inventory: InventoryItem) {
 @Composable
 fun InventoryListImage(inventory: InventoryItem) {
     Image(
-        painter = painterResource(id = inventory.getFrontResource()),
+        painter = painterResource(id = inventory.getType().getFrontResource()),
         contentDescription = "Pokemon image",
         modifier = Modifier
             .padding(5.dp)
