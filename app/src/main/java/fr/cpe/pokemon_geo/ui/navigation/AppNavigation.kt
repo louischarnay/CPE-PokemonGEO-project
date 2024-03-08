@@ -11,6 +11,7 @@ import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
+import fr.cpe.pokemon_geo.ui.screen.user_inventory.UserInventory
 import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemons
 
 @Composable
@@ -33,6 +34,10 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
         composable(route = Routes.MAP) {
             BackHandler(true) {}
             OsmdroidMap()
+        }
+
+        composable(route = Routes.USER_INVENTORY) {
+            UserInventory()
         }
 
         composable(route = Routes.USER_POKEMON) {

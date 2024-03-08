@@ -39,7 +39,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                 Text(text = "${profile.experience} XP", fontSize = 20.sp)
 
             Row {
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { navController.navigate("user_inventory") }) {
                     Text(text = "Inventaire")
                 }
                 Button(onClick = { navController.navigate("user_pokemon") }) {

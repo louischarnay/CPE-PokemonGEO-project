@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
+import fr.cpe.pokemon_geo.database.user_inventory.UserInventoryEntity
 import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import kotlinx.coroutines.Dispatchers
@@ -38,8 +39,10 @@ class WelcomeViewModel @Inject constructor(
         if (pseudo.trim().isEmpty()) return
 
         val newProfile = ProfileEntity(pseudo = pseudo)
+        val newUserInventory = UserInventoryEntity(type = "pokeball", quantity = 5)
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertProfile(newProfile)
+            repository.insertUserInventory(newUserInventory)
         }
         _showProfileScreen.value = false
     }
