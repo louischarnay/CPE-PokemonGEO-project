@@ -8,7 +8,11 @@ import fr.cpe.pokemon_geo.utils.ONE_MINUTE_IN_MILLIS
 import fr.cpe.pokemon_geo.utils.ONE_SECOND_IN_MILLIS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
@@ -21,32 +25,41 @@ class GeneratePokemonsUseCase @Inject constructor(
 
     companion object {
         private const val UPDATE_DELAY = 5 * ONE_SECOND_IN_MILLIS
-        private const val MAX_PER_AREA = 5
-        private const val BASE_GENERATION_CHANCE = 0.05
-        private const val AREA_RADIUS_IN_METERS = 100.0
-        private const val DISAPPEARANCE_DELAY = 3 * ONE_MINUTE_IN_MILLIS
+        private const val MAX_PER_AREA = 6
+        private const val BASE_GENERATION_CHANCE = 0.1
+        private const val AREA_RADIUS_IN_METERS = 150.0
+        private const val GENERATION_COORDINATE_MULTIPLIER = 0.001 // 111 meters
+        private const val MAX_DISTANCE_COORDINATE_BETWEEN_POKEMON = 0.0002 // 22 meters
+        private const val DISAPPEARANCE_DELAY = 5 * ONE_MINUTE_IN_MILLIS
     }
 
-    fun run(pokemons: List<Pokemon>) {
+    fun invoke(pokemons: List<Pokemon>): Flow<List<GeneratedPokemonEntity>> = callbackFlow {
         coroutineScope.launch {
             while (true) {
-                getLocationUseCase.invoke().collect { location ->
-                    val generatedPokemons = repository.getAllGeneratedPokemon()
-                    handlePokemonRemoval(generatedPokemons, location)
+                val location = getLocationUseCase.getCurrentLocation()
 
-                    if (location != null) {
-                        handlePokemonGeneration(pokemons, generatedPokemons, location)
-                    }
+                val generatedPokemons = repository.getAllGeneratedPokemon()
+                handlePokemonRemoval(generatedPokemons, location)
+
+                if (location != null) {
+                    handlePokemonGeneration(pokemons, generatedPokemons, location)
                 }
+
+                trySend(repository.getAllGeneratedPokemon())
+
                 delay(UPDATE_DELAY)
             }
+        }
+
+        awaitClose {
+            coroutineScope.coroutineContext.cancel()
         }
     }
 
     private suspend fun handlePokemonGeneration(
         pokemons: List<Pokemon>,
         generatedPokemons: List<GeneratedPokemonEntity>,
-        location: GeoPoint
+        userLocation: GeoPoint
     ) {
         val generatedPokemonsCount = generatedPokemons.size
         if (generatedPokemonsCount < MAX_PER_AREA) {
@@ -55,19 +68,45 @@ class GeneratePokemonsUseCase @Inject constructor(
             if (random < BASE_GENERATION_CHANCE) {
                 val pokemon = pokemons.random()
 
-                val latitude = location.latitude + Math.random() * 0.0001
-                val longitude = location.longitude + Math.random() * 0.0001
+                val pokemonLocation = generatePokemonLocation(generatedPokemons, userLocation)
                 val generatedPokemon = GeneratedPokemonEntity(
                     pokemonId = pokemon.getOrder(),
                     level = 1,
-                    latitude = latitude,
-                    longitude = longitude,
+                    latitude = pokemonLocation.latitude,
+                    longitude = pokemonLocation.longitude,
                 )
 
                 repository.insertGeneratedPokemon(generatedPokemon)
-                Log.d("POKEMON", "Pokemon generated: ${pokemon.getName()}")
+                Log.d("POKEMON", "Pokemon generated: ${pokemon.getOrder()}-${pokemon.getName()}")
             }
         }
+    }
+
+    private fun generatePokemonLocation(generatedPokemons: List<GeneratedPokemonEntity>, userLocation: GeoPoint): GeoPoint {
+        var location: GeoPoint
+
+        do {
+            val newLatitude = userLocation.latitude + (Math.random() * 2 - 1) * GENERATION_COORDINATE_MULTIPLIER
+            val newLongitude = userLocation.longitude + (Math.random() * 2 - 1) * GENERATION_COORDINATE_MULTIPLIER
+            location = GeoPoint(newLatitude, newLongitude)
+        } while (isTooCloseToExistingPokemons(generatedPokemons, location))
+
+        return location
+    }
+
+    private fun isTooCloseToExistingPokemons(
+        generatedPokemons: List<GeneratedPokemonEntity>,
+        newLocation : GeoPoint,
+    ): Boolean {
+        generatedPokemons.forEach { pokemon ->
+            val pokemonLocation = GeoPoint(pokemon.latitude, pokemon.longitude)
+            val distance = newLocation.distanceToAsDouble(pokemonLocation)
+
+            if (distance < MAX_DISTANCE_COORDINATE_BETWEEN_POKEMON) {
+                return true
+            }
+        }
+        return false
     }
 
     private suspend fun handlePokemonRemoval(

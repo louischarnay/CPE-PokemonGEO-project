@@ -33,7 +33,7 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
 
         composable(route = Routes.MAP) {
             BackHandler(true) {}
-            OsmdroidMap()
+            OsmdroidMap(pokemons)
         }
 
         composable(route = Routes.USER_INVENTORY) {

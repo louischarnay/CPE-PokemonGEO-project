@@ -23,18 +23,16 @@ class GetInterestPointUseCase @Inject constructor(
 
     operator fun invoke(): Flow<List<InterestPoint>> = callbackFlow {
         coroutineScope.launch {
-            while (true) {
-                getLocationUseCase.invoke().collect { location ->
-                    if (location == null) return@collect
+            getLocationUseCase.invoke().collect { location ->
+                if (location == null) return@collect
 
-                    val lastGeoPoint = GeoPoint(lastLatitude, lastLongitude)
+                val lastGeoPoint = GeoPoint(lastLatitude, lastLongitude)
 
-                    if (location.distanceToAsDouble(lastGeoPoint) > 50.0) {
-                        lastLatitude = location.latitude
-                        lastLongitude = location.longitude
+                if (location.distanceToAsDouble(lastGeoPoint) > 50.0) {
+                    lastLatitude = location.latitude
+                    lastLongitude = location.longitude
 
-                        trySend(getInterestPoint())
-                    }
+                    trySend(getInterestPoint())
                 }
             }
         }

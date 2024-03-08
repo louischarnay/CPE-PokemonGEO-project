@@ -9,4 +9,5 @@ class GetLocationUseCase @Inject constructor(
     private val locationService: ILocationService
 ) {
     operator fun invoke(): Flow<GeoPoint?> = locationService.requestLocationUpdates()
+    suspend fun getCurrentLocation(): GeoPoint? = locationService.requestCurrentLocation()
 }
