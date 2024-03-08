@@ -99,7 +99,6 @@ dependencies {
     // COROUTINE
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    implementation("com.google.firebase:firebase-components:17.1.5")
 
     // TEST
     implementation("com.jakewharton.timber:timber:5.0.1")
