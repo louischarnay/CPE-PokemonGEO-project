@@ -106,19 +106,19 @@ fun Fight(
             ) {
                 FightSecondaryButton(
                     text = "Pokémons",
-                    onClick = { /*TODO*/ },
+                    onClick = { fightViewModel.showUserPokemons() },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 FightSecondaryButton(
                     text = "Capture",
-                    onClick = { /*TODO*/ },
+                    onClick = { fightViewModel.showInventory() },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 FightSecondaryButton(
                     text = "Fuite",
-                    onClick = { /*TODO*/ },
+                    onClick = { fightViewModel.escape() },
                     modifier = Modifier.weight(1f)
                 )
             }

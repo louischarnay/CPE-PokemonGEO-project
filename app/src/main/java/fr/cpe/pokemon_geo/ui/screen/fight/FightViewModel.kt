@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
@@ -22,11 +23,21 @@ class FightViewModel @Inject constructor(
     }
 
     fun attack() {
-        fight.attack()
-        fight.opponentAttack()
+        Log.e("FightViewModel", "attack")
+        //fight.attack()
+        //fight.opponentAttack()
     }
 
-    fun escape(): Boolean {
-        return fight.opponentEscape()
+    fun showUserPokemons() {
+        Log.e("FightViewModel", "showUserPokemons")
+    }
+
+    fun showInventory() {
+        Log.e("FightViewModel", "showInventory")
+    }
+
+    fun escape() {
+        Log.e("FightViewModel", "escape")
+        //return fight.opponentEscape()
     }
 }

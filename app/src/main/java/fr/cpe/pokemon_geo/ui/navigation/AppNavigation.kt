@@ -46,12 +46,12 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
         }
 
         composable(route = Routes.FIGHT) { backStackEntry ->
-            val opponentPokemonId = backStackEntry.arguments?.getInt("opponentPokemonId")
+            /*val opponentPokemonId = backStackEntry.arguments?.getInt("opponentPokemonId")
             if (opponentPokemonId == null) {
                 navController.popBackStack()
                 return@composable
-            }
-            Fight(opponentPokemonId)
+            }*/
+            Fight(0)
         }
     }
 }
