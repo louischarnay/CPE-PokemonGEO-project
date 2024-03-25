@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.starter
+package fr.cpe.pokemon_geo.ui.screen.welcome
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,14 +25,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.ui.navigation.Routes
 
 @Composable
-fun ProfileCreation(welcomeViewModel: WelcomeViewModel) {
+fun Welcome(navController: NavController, welcomeViewModel: WelcomeViewModel = hiltViewModel()) {
+
     var pseudo by remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.padding(20.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(40.dp),
     ) {
@@ -58,8 +64,13 @@ fun ProfileCreation(welcomeViewModel: WelcomeViewModel) {
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            modifier = Modifier.height(50.dp).width(200.dp),
-            onClick = { welcomeViewModel.createProfile(pseudo) }
+            modifier = Modifier
+                .height(50.dp)
+                .width(200.dp),
+            onClick = {
+                welcomeViewModel.createProfile(pseudo)
+                navController.navigate(Routes.STARTER)
+            }
         ) {
             Text(
                 text = stringResource(id = R.string.continue_button),

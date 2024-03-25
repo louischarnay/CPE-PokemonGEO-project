@@ -3,28 +3,36 @@ package fr.cpe.pokemon_geo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.preference.PreferenceManager
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
+import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
+import fr.cpe.pokemon_geo.ui.layout.shouldShowBottomNavigation
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
-import fr.cpe.pokemon_geo.ui.screen.starter.Welcome
-import fr.cpe.pokemon_geo.ui.screen.starter.WelcomeViewModel
+import fr.cpe.pokemon_geo.ui.navigation.Routes
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.LOCATION_PERMISSIONS
 import fr.cpe.pokemon_geo.utils.hasLocationPermission
 import fr.cpe.pokemon_geo.utils.loadPokemonsFromResources
+import kotlinx.coroutines.runBlocking
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
@@ -36,7 +44,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var generatePokemonsUseCase: GeneratePokemonsUseCase
 
-    private val welcomeViewModel: WelcomeViewModel by viewModels()
+    @Inject
+    lateinit var repository: PokemonGeoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,26 +57,36 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val permissionState = rememberMultiplePermissionsState(permissions = LOCATION_PERMISSIONS)
 
+            val snackbarHostState = remember { SnackbarHostState() }
+
+            var startDestination by remember { mutableStateOf(Routes.PROFILE) }
+
             PokemongeoTheme(darkTheme = false) {
+
+                LaunchedEffect(Unit) {
+                    startDestination = runBlocking { getStartDestination() }
+                }
 
                 LaunchedEffect(!hasLocationPermission()) {
                     permissionState.launchMultiplePermissionRequest()
                 }
 
                 Scaffold(
-                    bottomBar = { BottomNavigationBar(navController = navController) },
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                    bottomBar = {
+                        val currentRoute = currentRoute(navController)
+                        if (shouldShowBottomNavigation(currentRoute)) {
+                            BottomNavigationBar(navController = navController)
+                        }
+                    },
                     modifier = Modifier.zIndex(1f)
                 ) { padding ->
                     AppNavigation(
                         navController = navController,
+                        startDestination = startDestination,
                         pokemons = pokemons,
                         modifier = Modifier.padding(padding)
                     )
-                }
-
-                val showWelcomeScreen by welcomeViewModel.showWelcomeSreen.collectAsState()
-                if (showWelcomeScreen) {
-                    Welcome(pokemons = pokemons, welcomeViewModel = welcomeViewModel)
                 }
             }
         }
@@ -78,4 +97,20 @@ class MainActivity : ComponentActivity() {
         mapInstance.load(this, PreferenceManager.getDefaultSharedPreferences(this))
         mapInstance.userAgentValue = this.packageName
     }
+
+    private suspend fun getStartDestination(): String {
+        val hasProfile = repository.getProfile() != null
+        val hasAtLeastOnePokemon = repository.getAllUserPokemon().isNotEmpty()
+        return when {
+            !hasProfile -> Routes.WELCOME
+            !hasAtLeastOnePokemon -> Routes.STARTER
+            else -> Routes.PROFILE
+        }
+    }
+}
+
+@Composable
+fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
 }

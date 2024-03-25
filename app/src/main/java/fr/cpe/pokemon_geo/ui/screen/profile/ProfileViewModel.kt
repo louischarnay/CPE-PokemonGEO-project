@@ -20,11 +20,7 @@ class ProfileViewModel @Inject constructor(
     private val _profile = MutableStateFlow<ProfileEntity?>(null)
     val profile: StateFlow<ProfileEntity?> = _profile
 
-    init {
-        fetchProfile()
-    }
-
-    private fun fetchProfile() {
+    fun fetchProfile() {
         viewModelScope.launch(Dispatchers.IO) {
             val profile = repository.getProfile()
 
