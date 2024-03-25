@@ -12,25 +12,26 @@ data class BottomNavigationItem(
     val label : String = "",
     val icon : ImageVector = Icons.Filled.Home,
     val route : String = ""
-) {
+)
 
-    fun bottomNavigationItems() : List<BottomNavigationItem> {
-        return listOf(
-            BottomNavigationItem(
-                label = "Profil",
-                icon = Icons.Filled.AccountCircle,
-                route = Routes.PROFILE
-            ),
-            BottomNavigationItem(
-                label = "Carte",
-                icon = Icons.Filled.LocationOn,
-                route = Routes.MAP
-            ),
-            BottomNavigationItem(
-                label = "Pokédex",
-                icon = Icons.Filled.List,
-                route = Routes.POKEDEX
-            ),
-        )
-    }
+val bottomNavigationItems = listOf(
+    BottomNavigationItem(
+        label = "Profil",
+        icon = Icons.Filled.AccountCircle,
+        route = Routes.PROFILE
+    ),
+    BottomNavigationItem(
+        label = "Carte",
+        icon = Icons.Filled.LocationOn,
+        route = Routes.MAP
+    ),
+    BottomNavigationItem(
+        label = "Pokédex",
+        icon = Icons.Filled.List,
+        route = Routes.POKEDEX
+    )
+)
+
+fun shouldShowBottomNavigation(route: String?): Boolean {
+    return bottomNavigationItems.any { it.route == route }
 }

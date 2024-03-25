@@ -12,14 +12,16 @@ import fr.cpe.pokemon_geo.ui.screen.fight.Fight
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
+import fr.cpe.pokemon_geo.ui.screen.starter.Starter
 import fr.cpe.pokemon_geo.ui.screen.user_inventory.UserInventory
 import fr.cpe.pokemon_geo.ui.screen.user_pokemon.UserPokemons
+import fr.cpe.pokemon_geo.ui.screen.welcome.Welcome
 
 @Composable
-fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifier: Modifier) {
+fun AppNavigation(navController: NavController, startDestination: String, pokemons: List<Pokemon>, modifier: Modifier) {
     NavHost(
         navController = navController as NavHostController,
-        startDestination = Routes.PROFILE,
+        startDestination = startDestination,
         modifier = modifier
     ) {
         composable(route = Routes.PROFILE) {
@@ -35,6 +37,14 @@ fun AppNavigation(navController: NavController, pokemons: List<Pokemon>, modifie
         composable(route = Routes.MAP) {
             BackHandler(true) {}
             OsmdroidMap(pokemons)
+        }
+
+        composable(route = Routes.WELCOME) {
+            Welcome(navController)
+        }
+
+        composable(route = Routes.STARTER) {
+            Starter(pokemons, navController)
         }
 
         composable(route = Routes.USER_INVENTORY) {

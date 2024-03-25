@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.profile
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,9 +22,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.ui.navigation.Routes
+import timber.log.Timber
 
 @Composable
 fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
+
+    LaunchedEffect(Unit) {
+        Log.e("Profile", "fetchProfile with launched")
+        Timber.e("fetchProfile")
+        profileViewModel.fetchProfile()
+    }
+
     val profileState by profileViewModel.profile.collectAsState()
 
     profileState?.let { profile ->
