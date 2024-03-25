@@ -98,7 +98,6 @@ class OsmdroidMapViewModel @Inject constructor(
                                 // Launch a coroutine within the existing coroutine scope
                                 viewModelScope.launch {
                                     // Call the suspending function within the coroutine
-                                    // Append 3 pokeballs to the user inventory or 1 master ball if the user has chance
                                     if (Math.random() < 0.1) {
                                         repository.appendUserInventoryQuantity(INVENTORY_ITEM.masterball.name, 1)
                                         Toast.makeText(application, "Vous avez reçu une masterball", Toast.LENGTH_SHORT).show()
@@ -106,6 +105,7 @@ class OsmdroidMapViewModel @Inject constructor(
                                         repository.appendUserInventoryQuantity(INVENTORY_ITEM.pokeball.name, 5)
                                         Toast.makeText(application, "Vous avez reçu 5 pokeball", Toast.LENGTH_SHORT).show()
                                     }
+                                    mapView.invalidate()
                                 }
                                 marker.icon = application.getDrawable(R.drawable.pokestop_empty)
                             }
