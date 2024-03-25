@@ -24,7 +24,8 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
 
             // LOCK ALL MOVEMENTS
             mapView.setMultiTouchControls(false)
-            mapView.setOnTouchListener { view, motionEvent -> true }
+            //disable movement on map
+            //mapView.setOnTouchListener { view, motionEvent -> true  }
             mapView.setOnGenericMotionListener { view, motionEvent -> true  }
             mapView.setOnKeyListener { view, i, keyEvent -> true  }
 

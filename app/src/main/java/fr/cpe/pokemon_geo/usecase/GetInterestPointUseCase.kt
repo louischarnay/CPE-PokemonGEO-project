@@ -52,7 +52,7 @@ class GetInterestPointUseCase @Inject constructor(
     }
 
     private suspend fun getPokeCenterAround(): List<InterestPoint> {
-        val url = "[out:json];\n" + "\n" + "node(around:200,${lastLatitude},${lastLongitude})[amenity=pharmacy];\n" + "\n" + "out;"
+        val url = "[out:json];\n" + "\n" + "node(around:1000,${lastLatitude},${lastLongitude})[amenity=pharmacy];\n" + "\n" + "out;"
         val response = ApiClient.apiService.getInterestPoint(url)
 
         if (response.isSuccessful) {
@@ -77,7 +77,7 @@ class GetInterestPointUseCase @Inject constructor(
     }
 
     private suspend fun getPokeStopAround(): List<InterestPoint> {
-        val url = "[out:json];\n" + "\n" + "node(around:200,${lastLatitude},${lastLongitude})[shop];\n" + "\n" + "out;"
+        val url = "[out:json];\n" + "\n" + "node(around:1000,${lastLatitude},${lastLongitude})[shop];\n" + "\n" + "out;"
         val response = ApiClient.apiService.getInterestPoint(url)
 
         if (response.isSuccessful) {

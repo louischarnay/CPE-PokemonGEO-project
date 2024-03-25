@@ -1,10 +1,12 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
@@ -24,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OsmdroidMapViewModel @Inject constructor(
     private val application: Application,
+    private val repository: PokemonGeoRepository,
     private val getLocationUseCase: GetLocationUseCase,
     private val getInterestPointUseCase: GetInterestPointUseCase,
     private val generatePokemonsUseCase: GeneratePokemonsUseCase
@@ -80,6 +83,22 @@ class OsmdroidMapViewModel @Inject constructor(
                         }
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
+
+                        marker.setOnMarkerClickListener { marker, _ ->
+                            // Handle marker click event here
+                            if (interestPoint.isPokeCenter()){
+                                // Launch a coroutine within the existing coroutine scope
+                                viewModelScope.launch {
+                                    // Call the suspending function within the coroutine
+                                    repository.healAllUserPokemons()
+                                    Toast.makeText(application, "Tout vos pokemons ont été soignés", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                Toast.makeText(application, "PokeStop Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
+                                marker.icon = application.getDrawable(R.drawable.pokestop_empty)
+                            }
+                            true // Return true to consume the event
+                        }
                         marker
                     }
                     mapView.invalidate()
@@ -107,6 +126,14 @@ class OsmdroidMapViewModel @Inject constructor(
                         marker.icon = application.getDrawable(pokemonData.getFrontResource())
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
+
+                        marker.setOnMarkerClickListener { marker, _ ->
+                            // Handle marker click event here
+                            // For example, you can show a toast with marker title
+                            Toast.makeText(application, "Marker Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
+                            true // Return true to consume the event
+                        }
+
                         marker
                     }
 
