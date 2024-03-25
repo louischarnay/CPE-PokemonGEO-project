@@ -2,20 +2,23 @@ package fr.cpe.pokemon_geo.ui.screen.fight
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.fight.Fight
 import fr.cpe.pokemon_geo.model.fight.PokemonFighter
 import javax.inject.Inject
 
 @HiltViewModel
-class FightViewModel @Inject constructor(): ViewModel() {
+class FightViewModel @Inject constructor(
+    private val repository: PokemonGeoRepository
+): ViewModel() {
 
     private lateinit var fight: Fight
 
     fun initFight(
-        myPokemon: PokemonFighter,
-        opponentPokemon: PokemonFighter
+        myPokemonId: Int,
+        opponentPokemonId: Int,
     ) {
-        fight = Fight(myPokemon, opponentPokemon)
+        //fight = Fight(myPokemon, opponentPokemon)
     }
 
     fun attack() {

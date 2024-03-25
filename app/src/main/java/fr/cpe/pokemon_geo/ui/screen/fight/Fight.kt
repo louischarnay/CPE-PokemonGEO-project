@@ -27,17 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.fight.PokemonFighter
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 @Composable
 fun Fight(
-    myPokemon: PokemonFighter,
-    opponentPokemon: PokemonFighter,
+    opponentPokemonId: Int,
     fightViewModel: FightViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        fightViewModel.initFight(myPokemon, opponentPokemon)
+        fightViewModel.initFight(0, opponentPokemonId)
     }
 
     val pokemon = Pokemon(

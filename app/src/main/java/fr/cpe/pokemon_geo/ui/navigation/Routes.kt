@@ -6,4 +6,5 @@ object Routes {
     const val MAP = "map"
     const val USER_INVENTORY = "user_inventory"
     const val USER_POKEMON = "user_pokemon"
+    const val FIGHT = "fight"
 }

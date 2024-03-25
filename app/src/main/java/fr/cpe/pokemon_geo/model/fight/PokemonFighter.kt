@@ -21,10 +21,6 @@ class PokemonFighter(
         return currentHP
     }
 
-    fun setCurrentHP(hp: Int) {
-        currentHP = hp
-    }
-
     fun increaseHP(amount: Int) {
         currentHP += amount
     }

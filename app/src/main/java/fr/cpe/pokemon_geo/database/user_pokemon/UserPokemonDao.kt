@@ -10,6 +10,9 @@ interface UserPokemonDao {
     @Query("SELECT * FROM $USER_POKEMON_TABLE_NAME")
     suspend fun getAll(): List<UserPokemonEntity>
 
+    @Query("SELECT * FROM $USER_POKEMON_TABLE_NAME WHERE id = :id")
+    suspend fun getById(id: Int): UserPokemonEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userPokemon: UserPokemonEntity)
 
