@@ -9,6 +9,7 @@ import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
+import fr.cpe.pokemon_geo.model.inventory_item.INVENTORY_ITEM
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
@@ -94,7 +95,18 @@ class OsmdroidMapViewModel @Inject constructor(
                                     Toast.makeText(application, "Tout vos pokemons ont été soignés", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
-                                Toast.makeText(application, "PokeStop Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
+                                // Launch a coroutine within the existing coroutine scope
+                                viewModelScope.launch {
+                                    // Call the suspending function within the coroutine
+                                    // Append 3 pokeballs to the user inventory or 1 master ball if the user has chance
+                                    if (Math.random() < 0.1) {
+                                        repository.appendUserInventoryQuantity(INVENTORY_ITEM.masterball.name, 1)
+                                        Toast.makeText(application, "Vous avez reçu une masterball", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        repository.appendUserInventoryQuantity(INVENTORY_ITEM.pokeball.name, 5)
+                                        Toast.makeText(application, "Vous avez reçu 5 pokeball", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
                                 marker.icon = application.getDrawable(R.drawable.pokestop_empty)
                             }
                             true // Return true to consume the event
