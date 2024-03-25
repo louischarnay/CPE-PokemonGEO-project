@@ -2,7 +2,7 @@ package fr.cpe.pokemon_geo.model.pokemon
 
 import fr.cpe.pokemon_geo.R
 
-class Pokemon(
+open class Pokemon(
     private var order: Int,
     private var name: String,
     imageName: String,

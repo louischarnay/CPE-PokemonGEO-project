@@ -1,46 +1,45 @@
 package fr.cpe.pokemon_geo.model.fight
 
-import fr.cpe.pokemon_geo.model.pokemon.Pokemon
-
 class Fight(
-    private var myPokemon: Pokemon,
-    private var opponentPokemon: Pokemon
+    private var myPokemon: PokemonFighter,
+    private var opponentPokemon: PokemonFighter
 ) {
     private var turn = 0
-    private var myPokemonCurrentHP = 100
-    private var opponentPokemonCurrentHP = 100
+    private var hasEscaped = false
 
-    fun getMyPokemon(): Pokemon {
+    fun getMyPokemon(): PokemonFighter {
         return myPokemon
     }
 
-    fun getOpponentPokemon(): Pokemon {
+    fun getOpponentPokemon(): PokemonFighter {
         return opponentPokemon
     }
 
-    fun getMyPokemonCurrentHP(): Int {
-        return myPokemonCurrentHP
-    }
-
-    fun getOpponentPokemonCurrentHP(): Int {
-        return opponentPokemonCurrentHP
-    }
-
-    fun attack(): Int {
+    fun attack() {
         val damage = (10..80).random()
-        opponentPokemonCurrentHP -= damage
-        return damage
+        opponentPokemon.decreaseHP(damage)
+        turn++
     }
 
-    fun opponentAttack(): Int {
+    fun opponentAttack() {
         val damage = (10..50).random()
-        myPokemonCurrentHP -= damage
-        return damage
+        myPokemon.decreaseHP(damage)
+        turn++
     }
 
     fun opponentEscape(): Boolean {
         if (turn < 2) return false
-        return (0..4).random() == 0
+        hasEscaped = (0..4).random() == 0
+        return hasEscaped
     }
 
+    fun isOver(): Boolean {
+        return myPokemon.getCurrentHP() <= 0 || opponentPokemon.getCurrentHP() <= 0 || hasEscaped
+    }
+
+    fun getWinner(): PokemonFighter? {
+        if (myPokemon.getCurrentHP() <= 0) return opponentPokemon
+        if (opponentPokemon.getCurrentHP() <= 0) return myPokemon
+        return null
+    }
 }

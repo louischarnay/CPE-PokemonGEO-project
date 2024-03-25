@@ -13,4 +13,7 @@ interface UserPokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userPokemon: UserPokemonEntity)
 
+    @Query("UPDATE $USER_POKEMON_TABLE_NAME SET hp_lost = 0")
+    suspend fun resetHpLost()
+
 }

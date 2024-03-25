@@ -18,6 +18,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -26,10 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.R
+import fr.cpe.pokemon_geo.model.fight.PokemonFighter
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 @Composable
-fun Fight(fightViewModel: FightViewModel = hiltViewModel()) {
+fun Fight(
+    myPokemon: PokemonFighter,
+    opponentPokemon: PokemonFighter,
+    fightViewModel: FightViewModel = hiltViewModel()
+) {
+    LaunchedEffect(Unit) {
+        fightViewModel.initFight(myPokemon, opponentPokemon)
+    }
+
     val pokemon = Pokemon(
         order = 1,
         name = "Dorian",
@@ -82,7 +92,7 @@ fun Fight(fightViewModel: FightViewModel = hiltViewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f),
-                onClick = { /*TODO*/ },
+                onClick = { fightViewModel.attack() }
             ) {
                 Text(text = "Attaque", fontSize = 40.sp)
             }
