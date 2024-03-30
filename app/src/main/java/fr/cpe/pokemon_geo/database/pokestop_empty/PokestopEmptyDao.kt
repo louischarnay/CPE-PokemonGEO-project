@@ -7,6 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface PokestopEmptyDao {
+    @Query("SELECT * FROM $POKESTOP_EMPTY_TABLE_NAME")
+    suspend fun getAll(): List<PokestopEmptyEntity>
+
     @Query("SELECT * FROM $POKESTOP_EMPTY_TABLE_NAME WHERE id = :id")
     suspend fun getById(id: String): PokestopEmptyEntity?
 
@@ -14,5 +17,5 @@ interface PokestopEmptyDao {
     suspend fun insert(pokestopEmptyEntity: PokestopEmptyEntity)
 
     @Query("DELETE FROM $POKESTOP_EMPTY_TABLE_NAME WHERE id = :id")
-    suspend fun deleteById(id: String)
+    suspend fun remove(id: String)
 }
