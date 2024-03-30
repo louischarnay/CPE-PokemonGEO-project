@@ -1,6 +1,7 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
+import fr.cpe.pokemon_geo.database.pokestop_empty.PokestopEmptyEntity
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import fr.cpe.pokemon_geo.model.inventory_item.INVENTORY_ITEM
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
@@ -80,7 +82,11 @@ class OsmdroidMapViewModel @Inject constructor(
                         if (interestPoint.isPokeCenter()){
                             marker.icon = application.getDrawable(R.drawable.pokecenter)
                         } else {
-                            marker.icon = application.getDrawable(R.drawable.pokestop)
+                            val pokestopEmpty = repository.getPokestopEmptyById(interestPoint.getName())
+                            if (pokestopEmpty != null)
+                                marker.icon = application.getDrawable(R.drawable.pokestop_empty)
+                            else
+                                marker.icon = application.getDrawable(R.drawable.pokestop)
                         }
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
@@ -105,9 +111,10 @@ class OsmdroidMapViewModel @Inject constructor(
                                         repository.appendUserInventoryQuantity(INVENTORY_ITEM.pokeball.name, 5)
                                         Toast.makeText(application, "Vous avez reçu 5 pokeball", Toast.LENGTH_SHORT).show()
                                     }
-                                    mapView.invalidate()
+                                    marker.icon = application.getDrawable(R.drawable.pokestop_empty)
+                                    repository.insertPokestopEmpty(PokestopEmptyEntity(interestPoint.getName(), interestPoint.getLatitude(), interestPoint.getLongitude(), System.currentTimeMillis()))
                                 }
-                                marker.icon = application.getDrawable(R.drawable.pokestop_empty)
+                                mapView.invalidate()
                             }
                             true // Return true to consume the event
                         }

@@ -2,6 +2,8 @@ package fr.cpe.pokemon_geo.database
 
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonDao
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
+import fr.cpe.pokemon_geo.database.pokestop_empty.PokestopEmptyDao
+import fr.cpe.pokemon_geo.database.pokestop_empty.PokestopEmptyEntity
 import fr.cpe.pokemon_geo.database.profile.ProfileDao
 import fr.cpe.pokemon_geo.database.profile.ProfileEntity
 import fr.cpe.pokemon_geo.database.user_inventory.UserInventoryDao
@@ -13,7 +15,8 @@ class PokemonGeoRepository(
     private val profileDao: ProfileDao,
     private val userInventoryDao: UserInventoryDao,
     private val userPokemonDao: UserPokemonDao,
-    private val generatedPokemonDao: GeneratedPokemonDao
+    private val generatedPokemonDao: GeneratedPokemonDao,
+    private val pokestopEmptyDao: PokestopEmptyDao,
 ) {
 
     suspend fun getProfile() = profileDao.getProfile()
@@ -28,4 +31,6 @@ class PokemonGeoRepository(
     suspend fun getAllGeneratedPokemon() = generatedPokemonDao.getAll()
     suspend fun insertGeneratedPokemon(generatedPokemonEntity: GeneratedPokemonEntity) = generatedPokemonDao.insert(generatedPokemonEntity)
     suspend fun removeGeneratedPokemon(generatedPokemonEntity: GeneratedPokemonEntity) = generatedPokemonDao.delete(generatedPokemonEntity)
+    suspend fun getPokestopEmptyById(id: String) = pokestopEmptyDao.getById(id)
+    suspend fun insertPokestopEmpty(pokestopEmptyEntity: PokestopEmptyEntity) = pokestopEmptyDao.insert(pokestopEmptyEntity)
 }
