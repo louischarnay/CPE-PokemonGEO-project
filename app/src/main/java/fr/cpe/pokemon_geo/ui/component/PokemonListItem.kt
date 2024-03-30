@@ -13,16 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.model.pokemon.PokemonType
 import timber.log.Timber
@@ -53,10 +56,14 @@ fun PokedexListItem(pokemon: Pokemon) {
                 text = pokemon.getName(),
                 fontWeight = FontWeight.Bold,
             )
-            Spacer(modifier = Modifier.height(5.dp))
-            PokemonTypes(pokemon)
+
+            if (pokemon.isUserPokemon()) PokemonStats(pokemon)
+            else {
+                Spacer(modifier = Modifier.height(5.dp))
+                PokemonTypes(pokemon)
+            }
         }
-        Text("#${pokemon.getOrder()}")
+        if(!pokemon.isUserPokemon()) Text("#${pokemon.getOrder()}")
     }
     if(showPokemonDetails) PokemonDetails(pokemon = pokemon , onClose = { setShowPokemonDetails(false) })
 }
@@ -77,6 +84,40 @@ fun PokemonTypes(pokemon: Pokemon) {
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         PokemonType(pokemon.getType1())
         PokemonType(pokemon.getType2())
+    }
+}
+
+@Composable
+fun PokemonStats(pokemon: Pokemon) {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            LinearProgressIndicator(
+                progress = { pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat() / pokemon.getHealPoint().toFloat() },
+                modifier = Modifier.weight(1f),
+                color = colorResource(id = R.color.black)
+            )
+            Text(
+                text = "HP: ${pokemon.getHealPoint() - pokemon.getHealPointLoss()}/${pokemon.getHealPoint()}",
+                fontSize = 12.sp
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            LinearProgressIndicator(
+                progress = { pokemon.getAttack().toFloat() / 100 },
+                modifier = Modifier.weight(1f),
+                color = colorResource(id = R.color.black)
+            )
+            Text(
+                text = "Attack: ${pokemon.getAttack()}",
+                fontSize = 12.sp,
+            )
+        }
     }
 }
 

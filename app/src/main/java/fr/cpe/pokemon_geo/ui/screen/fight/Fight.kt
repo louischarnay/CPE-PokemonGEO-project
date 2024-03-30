@@ -41,6 +41,7 @@ fun Fight(
     val pokemon = Pokemon(
         order = 1,
         name = "Dorian",
+        isUserPokemon = true,
         imageName = "p1",
         type1 = "Normal",
     )

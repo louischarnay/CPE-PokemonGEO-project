@@ -34,7 +34,7 @@ class UserPokemonsViewModel @Inject constructor(
             val userPokemons = repository.getAllUserPokemon()
 
             userPokemons.forEach {
-                pokemonList.add(loadPokemonFromId(application.resources.openRawResource(R.raw.pokemons), it.pokemonId))
+                pokemonList.add(loadPokemonFromId(application.resources.openRawResource(R.raw.pokemons), it.pokemonId, it.hp, it.hpLost, it.attack))
             }
 
             withContext(Dispatchers.Main) {

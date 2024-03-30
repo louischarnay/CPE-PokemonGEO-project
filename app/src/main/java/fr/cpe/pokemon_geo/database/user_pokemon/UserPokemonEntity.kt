@@ -10,6 +10,8 @@ const val USER_POKEMON_TABLE_NAME = "UserPokemon"
 data class UserPokemonEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int? = null,
     @ColumnInfo(name = "pokemon_id") val pokemonId: Int,
+    @ColumnInfo(name = "hp") val hp: Int,
     @ColumnInfo(name = "hp_lost") val hpLost: Int = 0,
+    @ColumnInfo(name = "attack") val attack: Int,
     @ColumnInfo(name = "created_at") val createdAt: Long = System.currentTimeMillis(),
 )

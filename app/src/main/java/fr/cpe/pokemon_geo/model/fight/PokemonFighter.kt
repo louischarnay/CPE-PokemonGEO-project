@@ -9,7 +9,7 @@ class PokemonFighter(
     type1: String,
     type2: String?,
     currentHP: Int,
-) : Pokemon(order, name, imageName, type1, type2) {
+) : Pokemon(order, name, true, imageName, type1, type2) {
 
     private var currentHP: Int = currentHP
         set(value) {
@@ -19,10 +19,6 @@ class PokemonFighter(
 
     fun getCurrentHP(): Int {
         return currentHP
-    }
-
-    fun increaseHP(amount: Int) {
-        currentHP += amount
     }
 
     fun decreaseHP(amount: Int) {

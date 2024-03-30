@@ -16,7 +16,7 @@ class StarterViewModel @Inject constructor(
 
     fun chooseStarter(pokemon: Pokemon) {
         viewModelScope.launch {
-            val newPokemon = UserPokemonEntity(pokemonId = pokemon.getOrder())
+            val newPokemon = UserPokemonEntity(pokemonId = pokemon.getOrder(), hp = 100, attack = 10)
             repository.insertUserPokemon(newPokemon)
         }
     }
