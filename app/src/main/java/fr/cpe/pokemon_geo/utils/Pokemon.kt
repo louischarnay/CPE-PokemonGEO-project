@@ -15,7 +15,7 @@ fun loadPokemonsFromResources(resources: InputStream): MutableList<Pokemon> {
         val name = jsonObject.getString("name")
         val image = jsonObject.getString("image")
         val type1 = jsonObject.getString("type1")
-        val type2 = jsonObject.optString("type2", null)
+        val type2 = jsonObject.optString("type2")
         val pokemon = Pokemon(id, name, false, image, type1, type2)
         pokemonList.add(pokemon)
     }
