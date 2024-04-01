@@ -11,7 +11,7 @@ import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 fun PokemonList(pokemons: List<Pokemon>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(pokemons) { _, pokemon ->
-            PokedexListItem(pokemon)
+            PokemonListItem(pokemon)
         }
     }
 }

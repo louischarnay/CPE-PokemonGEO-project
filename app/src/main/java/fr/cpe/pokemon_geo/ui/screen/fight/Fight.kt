@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.pokemon.Pokemon
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
 fun Fight(
@@ -38,11 +38,15 @@ fun Fight(
         fightViewModel.initFight(0, opponentPokemonId)
     }
 
-    val pokemon = Pokemon(
-        order = 1,
-        name = "Dorian",
-        imageName = "p1",
-        type1 = "Normal",
+    val pokemon = PokemonWithStats(
+        0,
+        "Pikachu",
+        "pikachu",
+        "Electric",
+        null,
+        100,
+        0,
+        10
     )
 
     Column(modifier = Modifier.fillMaxSize()) {
