@@ -28,10 +28,9 @@ import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.model.pokemon.PokemonType
-import timber.log.Timber
 
 @Composable
-fun PokedexListItem(pokemon: Pokemon) {
+fun PokemonListItem(pokemon: Pokemon) {
     val (showPokemonDetails, setShowPokemonDetails) = remember { mutableStateOf(false) }
 
     Row(
@@ -39,7 +38,6 @@ fun PokedexListItem(pokemon: Pokemon) {
             .fillMaxSize()
             .padding(horizontal = 15.dp, vertical = 2.dp)
             .clickable {
-                Timber.d("Pokemon clicked: ${pokemon.getName()}")
                 setShowPokemonDetails(true)
             },
         verticalAlignment = Alignment.CenterVertically,
@@ -52,16 +50,7 @@ fun PokedexListItem(pokemon: Pokemon) {
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
         ) {
-            Text(
-                text = pokemon.getName(),
-                fontWeight = FontWeight.Bold,
-            )
-
-            if (pokemon.isUserPokemon()) PokemonStats(pokemon)
-            else {
-                Spacer(modifier = Modifier.height(5.dp))
-                PokemonTypes(pokemon)
-            }
+            PokemonData(pokemon)
         }
         if(!pokemon.isUserPokemon()) Text("#${pokemon.getOrder()}")
     }
@@ -77,6 +66,40 @@ fun PokemonListImage(pokemon: Pokemon) {
             .padding(5.dp)
             .size(60.dp)
     )
+}
+
+@Composable
+fun PokemonData(pokemon: Pokemon) {
+    Text(
+        text = pokemon.getName(),
+        fontWeight = FontWeight.Bold,
+    )
+
+    if (pokemon.isUserPokemon()){
+        PokemonStats(pokemon)
+    } else {
+        Spacer(modifier = Modifier.height(5.dp))
+        PokemonTypes(pokemon)
+    }
+}
+
+@Composable
+fun PokemonType(type: PokemonType?) {
+    if (type == null) return
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Image(
+            painter = painterResource(id = type.getFrontResource()),
+            contentDescription = "Pokemon type logo",
+            modifier = Modifier.size(20.dp)
+        )
+        Text(
+            text = type.getName(),
+            fontSize = 12.sp
+        )
+    }
 }
 
 @Composable
@@ -118,25 +141,6 @@ fun PokemonStats(pokemon: Pokemon) {
                 fontSize = 12.sp,
             )
         }
-    }
-}
-
-@Composable
-fun PokemonType(type: PokemonType?) {
-    if (type == null) return
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Image(
-            painter = painterResource(id = type.getFrontResource()),
-            contentDescription = "Pokemon type logo",
-            modifier = Modifier.size(20.dp)
-        )
-        Text(
-            text = type.getName(),
-            fontSize = 12.sp
-        )
     }
 }
 

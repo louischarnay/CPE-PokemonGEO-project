@@ -25,11 +25,7 @@ fun PokemonCard(pokemon: Pokemon) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PokemonCardImage(pokemon)
-        Text(
-            text = pokemon.getName() + " #" + pokemon.getOrder(),
-            style = MaterialTheme.typography.titleMedium,
-            fontSize = 25.sp,
-        )
+        PokemonCardName(pokemon)
         Spacer(modifier = Modifier.height(10.dp))
         PokemonTypes(pokemon)
     }
@@ -41,5 +37,14 @@ fun PokemonCardImage(pokemon: Pokemon) {
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = "Pokemon image",
         modifier = Modifier.size(300.dp)
+    )
+}
+
+@Composable
+fun PokemonCardName(pokemon: Pokemon) {
+    Text(
+        text = pokemon.getName() + " #" + pokemon.getOrder(),
+        style = MaterialTheme.typography.titleMedium,
+        fontSize = 25.sp,
     )
 }
