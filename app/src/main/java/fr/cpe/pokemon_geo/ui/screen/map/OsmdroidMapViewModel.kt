@@ -52,6 +52,7 @@ class OsmdroidMapViewModel @Inject constructor(
                 withContext(Dispatchers.Main) {
                     if (userMarker == null) {
                         userMarker = Marker(mapView)
+                        userMarker?.icon = application.getDrawable(R.drawable.player)
                         userMarker?.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(userMarker)
                     }
@@ -137,7 +138,7 @@ class OsmdroidMapViewModel @Inject constructor(
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
 
-                        marker.setOnMarkerClickListener { marker, _ ->
+                        marker.setOnMarkerClickListener { _, _ ->
                             // Handle marker click event here
                             // For example, you can show a toast with marker title
                             Toast.makeText(application, "Marker Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
@@ -191,7 +192,7 @@ class OsmdroidMapViewModel @Inject constructor(
     }
 
     private suspend fun listenOnPokestopClick(marker: Marker, interestPoint: InterestPoint) {
-        marker.setOnMarkerClickListener { marker, _ ->
+        marker.setOnMarkerClickListener { _, _ ->
             // Launch a coroutine within the existing coroutine scope
             viewModelScope.launch {
                 // Call the suspending function within the coroutine
