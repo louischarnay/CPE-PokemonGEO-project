@@ -8,8 +8,7 @@ const val USER_INVENTORY_TABLE_NAME = "UserInventory"
 
 @Entity(tableName = USER_INVENTORY_TABLE_NAME)
 data class UserInventoryEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int? = null,
-    @ColumnInfo(name = "type") val type: String,
+    @PrimaryKey @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "quantity") val quantity: Int,
     @ColumnInfo(name = "created_at") val createdAt: Long = System.currentTimeMillis(),
 )
