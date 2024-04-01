@@ -19,10 +19,6 @@ class UserPokemon(
     type1 = type1,
     type2 = type2
 ) {
-    fun isUserPokemon(): Boolean {
-        return true
-    }
-
     fun getHealPoint(): Int {
         return healPoint
     }
