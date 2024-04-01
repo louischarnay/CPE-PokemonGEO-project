@@ -3,7 +3,7 @@ package fr.cpe.pokemon_geo.model.user_pokemon
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 class UserPokemon(
-    oder : Int,
+    order : Int,
     name : String,
     imageName : String,
     type1 : String,
@@ -12,7 +12,7 @@ class UserPokemon(
     private val healPointLoss : Int?,
     private val attack : Int
 ) : Pokemon(
-    order = oder,
+    order = order,
     name = name,
     isUnknownPokemon = false,
     imageName = imageName,
