@@ -16,7 +16,7 @@ class PokedexViewModel @Inject constructor(
     fun updatePokedex(pokemons: List<Pokemon>){
         viewModelScope.launch(Dispatchers.IO) {
             for (pokemon in pokemons) {
-                if (repository.getUserPokemonByPokemonId(pokemon.getOrder()) == null) {
+                if (repository.hasUserPokemon(pokemon.getOrder()) == null) {
                     pokemon.setUnknownPokemon()
                 }
             }
