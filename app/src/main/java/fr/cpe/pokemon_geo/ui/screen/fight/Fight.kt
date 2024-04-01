@@ -31,6 +31,7 @@ import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
 fun Fight(
+    userPokemonId: Int,
     opponentPokemonId: Int,
     fightViewModel: FightViewModel = hiltViewModel()
 ) {

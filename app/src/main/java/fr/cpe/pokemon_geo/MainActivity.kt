@@ -26,7 +26,7 @@ import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.layout.shouldShowBottomNavigation
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
-import fr.cpe.pokemon_geo.ui.navigation.Routes
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.LOCATION_PERMISSIONS
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
             val snackbarHostState = remember { SnackbarHostState() }
 
-            var startDestination by remember { mutableStateOf(Routes.PROFILE) }
+            var startDestination by remember { mutableStateOf<Screen?>(null) }
 
             PokemongeoTheme(darkTheme = false) {
 
@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     AppNavigation(
                         navController = navController,
-                        startDestination = startDestination,
+                        startDestination = startDestination ?: Screen.Profile,
                         pokemons = pokemons,
                         modifier = Modifier.padding(padding)
                     )
@@ -98,13 +98,13 @@ class MainActivity : ComponentActivity() {
         mapInstance.userAgentValue = this.packageName
     }
 
-    private suspend fun getStartDestination(): String {
+    private suspend fun getStartDestination(): Screen {
         val hasProfile = repository.getProfile() != null
         val hasAtLeastOnePokemon = repository.getAllUserPokemon().isNotEmpty()
         return when {
-            !hasProfile -> Routes.WELCOME
-            !hasAtLeastOnePokemon -> Routes.STARTER
-            else -> Routes.PROFILE
+            !hasProfile -> Screen.Welcome
+            !hasAtLeastOnePokemon -> Screen.Starter
+            else -> Screen.Profile
         }
     }
 }

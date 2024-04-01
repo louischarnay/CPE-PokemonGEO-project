@@ -19,6 +19,7 @@ class PokemonWithStats(
     type1 = type1,
     type2 = type2
 ) {
+
     fun getHealPoint(): Int {
         return healPoint
     }

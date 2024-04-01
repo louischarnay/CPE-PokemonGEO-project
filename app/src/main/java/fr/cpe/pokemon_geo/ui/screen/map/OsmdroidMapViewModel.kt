@@ -4,6 +4,7 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
@@ -12,6 +13,7 @@ import fr.cpe.pokemon_geo.database.pokestop_empty.PokestopEmptyEntity
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import fr.cpe.pokemon_geo.model.inventory_item.INVENTORY_ITEM
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
@@ -38,10 +40,14 @@ class OsmdroidMapViewModel @Inject constructor(
     private var interestPointMarkers: Map<InterestPoint, Marker> = emptyMap()
     private var generatedPokemonMarkers: Map<GeneratedPokemonEntity, Marker> = emptyMap()
 
-    fun fetchMapDataPeriodically(mapView: MapView, pokemons: List<Pokemon>) {
+    fun fetchMapDataPeriodically(
+        mapView: MapView,
+        navController: NavController,
+        pokemons: List<Pokemon>
+    ) {
         collectCurrentLocation(mapView)
         collectInterestPoints(mapView)
-        collectGeneratedPokemons(mapView, pokemons)
+        collectGeneratedPokemons(mapView, navController, pokemons)
     }
 
     private fun collectCurrentLocation(mapView: MapView) {
@@ -118,7 +124,11 @@ class OsmdroidMapViewModel @Inject constructor(
         }
     }
 
-    private fun collectGeneratedPokemons(mapView: MapView, pokemons: List<Pokemon>) {
+    private fun collectGeneratedPokemons(
+        mapView: MapView,
+        navController: NavController,
+        pokemons: List<Pokemon>
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             generatePokemonsUseCase.invoke(pokemons).collect { generatedPokemons ->
                 val hasSamePokemons = generatedPokemonMarkers.keys.hasSameContent(generatedPokemons)
@@ -139,9 +149,7 @@ class OsmdroidMapViewModel @Inject constructor(
                         mapView.overlays.add(marker)
 
                         marker.setOnMarkerClickListener { _, _ ->
-                            // Handle marker click event here
-                            // For example, you can show a toast with marker title
-                            Toast.makeText(application, "Marker Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.pokemonId))
                             true // Return true to consume the event
                         }
 

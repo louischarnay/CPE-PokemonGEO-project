@@ -2,9 +2,12 @@ package fr.cpe.pokemon_geo.ui.screen.fight
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.fight.Fight
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,10 +18,12 @@ class FightViewModel @Inject constructor(
     private lateinit var fight: Fight
 
     fun initFight(
-        myPokemonId: Int,
+        userPokemonId: Int,
         opponentPokemonId: Int,
     ) {
-        //fight = Fight(myPokemon, opponentPokemon)
+        viewModelScope.launch {
+            // fetch pokemons
+        }
     }
 
     fun attack() {

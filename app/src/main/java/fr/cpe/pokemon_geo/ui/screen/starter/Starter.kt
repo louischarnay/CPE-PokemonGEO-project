@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
-import fr.cpe.pokemon_geo.ui.navigation.Routes
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.utils.findPokemonById
 
 @Composable
@@ -60,7 +60,7 @@ fun StarterButton(
     Column(
         modifier = Modifier.clickable {
             starterViewModel.chooseStarter(pokemon)
-            navController.navigate(Routes.PROFILE)
+            navController.navigate(Screen.Profile.route)
 
         },
         horizontalAlignment = Alignment.CenterHorizontally,

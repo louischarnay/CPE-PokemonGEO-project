@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
@@ -13,7 +14,11 @@ import org.osmdroid.views.MapView
 
 @SuppressLint("ClickableViewAccessibility")
 @Composable
-fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()) {
+fun OsmdroidMap(
+    navController: NavController,
+    pokemons: List<Pokemon>,
+    osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()
+) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -35,7 +40,7 @@ fun OsmdroidMap(pokemons: List<Pokemon>, osmdroidMapViewModel: OsmdroidMapViewMo
             mapView.maxZoomLevel = zoomLevel
             mapView.controller.setZoom(zoomLevel)
 
-            osmdroidMapViewModel.fetchMapDataPeriodically(mapView, pokemons)
+            osmdroidMapViewModel.fetchMapDataPeriodically(mapView, navController, pokemons)
 
             mapView
         }

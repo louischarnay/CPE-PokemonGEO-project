@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.ui.navigation.Routes
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 
 @Composable
 fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
@@ -50,7 +50,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
             Spacer(modifier = Modifier.size(20.dp))
 
             Row {
-                TextButton(onClick = { navController.navigate(Routes.USER_INVENTORY) }) {
+                TextButton(onClick = { navController.navigate(Screen.UserInventory.route) }) {
                     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                         Image(
                             painter = painterResource(id = R.drawable.inventory_item),
@@ -62,7 +62,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                     }
                 }
                 Spacer(modifier = Modifier.size(10.dp))
-                TextButton(onClick = { navController.navigate(Routes.USER_POKEMON) }) {
+                TextButton(onClick = { navController.navigate(Screen.UserPokemon.route) }) {
                     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                         Image(
                             painter = painterResource(id = R.drawable.inventory_pokemon),
