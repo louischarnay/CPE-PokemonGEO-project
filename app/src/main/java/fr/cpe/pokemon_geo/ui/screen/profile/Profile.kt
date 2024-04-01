@@ -1,14 +1,15 @@
 package fr.cpe.pokemon_geo.ui.screen.profile
 
-import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,14 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.ui.navigation.Routes
-import timber.log.Timber
 
 @Composable
 fun Profile(navController: NavController, profileViewModel: ProfileViewModel = hiltViewModel()) {
 
     LaunchedEffect(Unit) {
-        Log.e("Profile", "fetchProfile with launched")
-        Timber.e("fetchProfile")
         profileViewModel.fetchProfile()
     }
 
@@ -49,12 +47,30 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
             Text(text = profile.pseudo, fontSize = 30.sp)
                 Text(text = "${profile.experience} XP", fontSize = 20.sp)
 
+            Spacer(modifier = Modifier.size(20.dp))
+
             Row {
-                Button(onClick = { navController.navigate(Routes.USER_INVENTORY) }) {
-                    Text(text = "Inventaire")
+                TextButton(onClick = { navController.navigate(Routes.USER_INVENTORY) }) {
+                    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            painter = painterResource(id = R.drawable.inventory_item),
+                            contentDescription = "Inventory icon",
+                            modifier = Modifier.size(75.dp)
+                        )
+                        Text(text = "Inventaire")
+
+                    }
                 }
-                Button(onClick = { navController.navigate(Routes.USER_POKEMON) }) {
-                    Text(text = "Pokémons")
+                Spacer(modifier = Modifier.size(10.dp))
+                TextButton(onClick = { navController.navigate(Routes.USER_POKEMON) }) {
+                    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            painter = painterResource(id = R.drawable.inventory_pokemon),
+                            contentDescription = "Pokemon icon",
+                            modifier = Modifier.size(75.dp)
+                        )
+                        Text(text = "Pokemon")
+                    }
                 }
             }
         }
