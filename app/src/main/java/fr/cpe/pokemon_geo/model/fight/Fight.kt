@@ -1,17 +1,19 @@
 package fr.cpe.pokemon_geo.model.fight
 
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
+
 class Fight(
-    private var myPokemon: PokemonFighter,
-    private var opponentPokemon: PokemonFighter
+    private var myPokemon: PokemonWithStats,
+    private var opponentPokemon: PokemonWithStats
 ) {
     private var turn = 0
     private var hasEscaped = false
 
-    fun getMyPokemon(): PokemonFighter {
+    fun getMyPokemon(): PokemonWithStats {
         return myPokemon
     }
 
-    fun getOpponentPokemon(): PokemonFighter {
+    fun getOpponentPokemon(): PokemonWithStats {
         return opponentPokemon
     }
 
@@ -37,7 +39,7 @@ class Fight(
         return myPokemon.getCurrentHP() <= 0 || opponentPokemon.getCurrentHP() <= 0 || hasEscaped
     }
 
-    fun getWinner(): PokemonFighter? {
+    fun getWinner(): PokemonWithStats? {
         if (myPokemon.getCurrentHP() <= 0) return opponentPokemon
         if (opponentPokemon.getCurrentHP() <= 0) return myPokemon
         return null

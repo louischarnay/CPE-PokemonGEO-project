@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.model.user_pokemon.UserPokemon
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
 fun Fight(
@@ -38,7 +38,7 @@ fun Fight(
         fightViewModel.initFight(0, opponentPokemonId)
     }
 
-    val pokemon = UserPokemon(
+    val pokemon = PokemonWithStats(
         0,
         "Pikachu",
         "pikachu",

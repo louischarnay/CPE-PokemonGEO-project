@@ -1,7 +1,7 @@
 package fr.cpe.pokemon_geo.utils
 
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
-import fr.cpe.pokemon_geo.model.user_pokemon.UserPokemon
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 import org.json.JSONArray
 import java.io.InputStream
 
@@ -36,7 +36,7 @@ fun loadPokemonFromId(resources: InputStream, id: Int, healPoint: Int, healPoint
             val image = jsonObject.getString("image")
             val type1 = jsonObject.getString("type1")
             val type2 = jsonObject.optString("type2", null)
-            return UserPokemon(id, name, image, type1, type2, healPoint, healPointLost, attack)
+            return PokemonWithStats(id, name, image, type1, type2, healPoint, healPointLost, attack)
         }
     }
     throw IllegalArgumentException("No pokemon with id $id")

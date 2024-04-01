@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.fight.Fight
-import fr.cpe.pokemon_geo.model.fight.PokemonFighter
 import javax.inject.Inject
 
 @HiltViewModel

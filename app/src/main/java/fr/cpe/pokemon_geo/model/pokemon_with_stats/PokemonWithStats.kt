@@ -1,15 +1,15 @@
-package fr.cpe.pokemon_geo.model.user_pokemon
+package fr.cpe.pokemon_geo.model.pokemon_with_stats
 
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
-class UserPokemon(
+class PokemonWithStats(
     order : Int,
     name : String,
     imageName : String,
     type1 : String,
     type2 : String?,
     private val healPoint : Int,
-    private val healPointLoss : Int?,
+    private var healPointLoss : Int?,
     private val attack : Int
 ) : Pokemon(
     order = order,
@@ -29,5 +29,15 @@ class UserPokemon(
 
     fun getAttack(): Int {
         return attack
+    }
+
+    fun getCurrentHP(): Int {
+        return healPoint - (healPointLoss ?: 0)
+    }
+
+    fun decreaseHP(amount: Int) {
+        healPointLoss.let {
+            healPointLoss = healPointLoss?.plus(amount)
+        }
     }
 }

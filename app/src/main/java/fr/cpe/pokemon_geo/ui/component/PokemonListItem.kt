@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.model.pokemon.PokemonType
-import fr.cpe.pokemon_geo.model.user_pokemon.UserPokemon
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
 fun PokemonListItem(pokemon: Pokemon) {
@@ -55,7 +55,7 @@ fun PokemonListItem(pokemon: Pokemon) {
         ) {
             PokemonData(pokemon)
         }
-        if(pokemon !is UserPokemon) Text("#${pokemon.getOrder()}")
+        if(pokemon !is PokemonWithStats) Text("#${pokemon.getOrder()}")
     }
     if(showPokemonDetails) PokemonDetails(pokemon = pokemon, onClose = { setShowPokemonDetails(false) })
 }
@@ -79,7 +79,7 @@ fun PokemonData(pokemon: Pokemon) {
         fontWeight = FontWeight.Bold,
     )
 
-    if (pokemon is UserPokemon) {
+    if (pokemon is PokemonWithStats) {
         PokemonStats(pokemon)
     } else {
         Spacer(modifier = Modifier.height(5.dp))
@@ -116,7 +116,7 @@ fun PokemonTypes(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonStats(pokemon: UserPokemon) {
+fun PokemonStats(pokemon: PokemonWithStats) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
