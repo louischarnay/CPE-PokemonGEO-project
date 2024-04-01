@@ -6,6 +6,7 @@ open class Pokemon(
     private var order: Int,
     private var name: String,
     private var isUserPokemon: Boolean,
+    private var isUnknownPokemon: Boolean,
     imageName: String,
     type1: String,
     type2: String? = null,
@@ -39,6 +40,14 @@ open class Pokemon(
 
     fun isUserPokemon(): Boolean {
         return isUserPokemon
+    }
+
+    fun isUnknownPokemon(): Boolean {
+        return isUnknownPokemon
+    }
+
+    fun setUnknownPokemon() {
+        isUnknownPokemon = true
     }
 
     fun getFrontResource(): Int {

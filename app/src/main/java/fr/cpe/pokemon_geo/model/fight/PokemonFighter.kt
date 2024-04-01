@@ -9,7 +9,7 @@ class PokemonFighter(
     type1: String,
     type2: String?,
     currentHP: Int,
-) : Pokemon(order, name, true, imageName, type1, type2) {
+) : Pokemon(order, name, isUserPokemon = true, isUnknownPokemon = false, imageName, type1, type2) {
 
     private var currentHP: Int = currentHP
         set(value) {

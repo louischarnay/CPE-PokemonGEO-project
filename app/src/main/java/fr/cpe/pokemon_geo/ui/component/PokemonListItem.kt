@@ -1,6 +1,7 @@
 package fr.cpe.pokemon_geo.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +57,7 @@ fun PokemonListItem(pokemon: Pokemon) {
         }
         if(!pokemon.isUserPokemon()) Text("#${pokemon.getOrder()}")
     }
-    if(showPokemonDetails) PokemonDetails(pokemon = pokemon , onClose = { setShowPokemonDetails(false) })
+    if(showPokemonDetails) PokemonDetails(pokemon = pokemon, onClose = { setShowPokemonDetails(false) })
 }
 
 @Composable
@@ -62,6 +65,7 @@ fun PokemonListImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = "Pokemon image",
+        colorFilter = if (pokemon.isUnknownPokemon()) ColorFilter.tint(Color.Black) else null,
         modifier = Modifier
             .padding(5.dp)
             .size(60.dp)
@@ -71,7 +75,7 @@ fun PokemonListImage(pokemon: Pokemon) {
 @Composable
 fun PokemonData(pokemon: Pokemon) {
     Text(
-        text = pokemon.getName(),
+        text = if (pokemon.isUnknownPokemon()) "????" else pokemon.getName(),
         fontWeight = FontWeight.Bold,
     )
 
@@ -84,7 +88,7 @@ fun PokemonData(pokemon: Pokemon) {
 }
 
 @Composable
-fun PokemonType(type: PokemonType?) {
+fun PokemonType(type: PokemonType?, unknownPokemon: Boolean) {
     if (type == null) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -93,10 +97,11 @@ fun PokemonType(type: PokemonType?) {
         Image(
             painter = painterResource(id = type.getFrontResource()),
             contentDescription = "Pokemon type logo",
+            colorFilter = if (unknownPokemon) ColorFilter.tint(Color.Black) else null,
             modifier = Modifier.size(20.dp)
         )
         Text(
-            text = type.getName(),
+            text = if (unknownPokemon) "???" else type.getName(),
             fontSize = 12.sp
         )
     }
@@ -105,8 +110,8 @@ fun PokemonType(type: PokemonType?) {
 @Composable
 fun PokemonTypes(pokemon: Pokemon) {
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        PokemonType(pokemon.getType1())
-        PokemonType(pokemon.getType2())
+        PokemonType(pokemon.getType1(), pokemon.isUnknownPokemon())
+        PokemonType(pokemon.getType2(), pokemon.isUnknownPokemon())
     }
 }
 

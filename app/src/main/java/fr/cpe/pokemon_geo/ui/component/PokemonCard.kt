@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +38,7 @@ fun PokemonCardImage(pokemon: Pokemon) {
     Image(
         painter = painterResource(id = pokemon.getFrontResource()),
         contentDescription = "Pokemon image",
+        colorFilter = if (pokemon.isUnknownPokemon()) ColorFilter.tint(Color.Black) else null,
         modifier = Modifier.size(300.dp)
     )
 }
@@ -43,7 +46,7 @@ fun PokemonCardImage(pokemon: Pokemon) {
 @Composable
 fun PokemonCardName(pokemon: Pokemon) {
     Text(
-        text = pokemon.getName() + " #" + pokemon.getOrder(),
+        text = if (pokemon.isUnknownPokemon()) "???" + " #" + pokemon.getOrder() else pokemon.getName() + " #" + pokemon.getOrder(),
         style = MaterialTheme.typography.titleMedium,
         fontSize = 25.sp,
     )

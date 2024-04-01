@@ -42,6 +42,7 @@ fun Fight(
         order = 1,
         name = "Dorian",
         isUserPokemon = true,
+        isUnknownPokemon = false,
         imageName = "p1",
         type1 = "Normal",
     )
