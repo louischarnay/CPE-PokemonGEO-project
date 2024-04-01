@@ -141,8 +141,8 @@ object SearchPokemonType {
         inefficient = listOf(Dragon, Water, Grass),
     )
 
-    fun byName(name: String): PokemonType {
-        return when (name.lowercase(Locale.ROOT)) {
+    fun byName(name: String?): PokemonType {
+        return when (name?.lowercase(Locale.ROOT)) {
             "insecte" -> bugType
             "ténèbres" -> darkType
             "dragon" -> dragonType

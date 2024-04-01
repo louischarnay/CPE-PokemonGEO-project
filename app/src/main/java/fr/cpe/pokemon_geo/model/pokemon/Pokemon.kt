@@ -23,7 +23,7 @@ open class Pokemon(
     init {
         this.frontResource = R.drawable::class.java.getField(imageName).getInt(null)
         this.type1 = SearchPokemonType.byName(type1)
-        if (type2 != null) this.type2 = SearchPokemonType.byName(type2)
+        if (type2 != "") this.type2 = SearchPokemonType.byName(type2)
         if (healPoint != null) this.healPoint = healPoint
         if (healPointLoss != null) this.healPointLoss = healPointLoss
         if (attack != null) this.attack = attack
