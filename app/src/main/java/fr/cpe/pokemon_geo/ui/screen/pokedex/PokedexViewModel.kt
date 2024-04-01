@@ -12,7 +12,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokedexViewModel @Inject constructor(
-    private val application: Application,
     private val repository: PokemonGeoRepository
 ) : ViewModel() {
     fun updatePokedex(pokemons: List<Pokemon>){
