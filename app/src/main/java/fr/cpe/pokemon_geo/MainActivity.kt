@@ -3,7 +3,6 @@ package fr.cpe.pokemon_geo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -27,7 +26,6 @@ import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.ui.layout.BottomNavigationBar
 import fr.cpe.pokemon_geo.ui.layout.shouldShowBottomNavigation
 import fr.cpe.pokemon_geo.ui.navigation.AppNavigation
-import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapViewModel
 import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.ui.theme.PokemongeoTheme
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
@@ -49,8 +47,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var repository: PokemonGeoRepository
 
-    private val osmdroidMapViewModel: OsmdroidMapViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,8 +55,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            osmdroidMapViewModel.fetchMapDataPeriodically(pokemons, navController)
-
             val permissionState = rememberMultiplePermissionsState(permissions = LOCATION_PERMISSIONS)
 
             val snackbarHostState = remember { SnackbarHostState() }
@@ -90,8 +84,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = startDestination ?: Screen.Profile,
                         pokemons = pokemons,
-                        modifier = Modifier.padding(padding),
-                        osmdroidMapViewModel = osmdroidMapViewModel,
+                        modifier = Modifier.padding(padding)
                     )
                 }
             }

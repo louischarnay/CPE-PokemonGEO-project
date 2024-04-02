@@ -40,7 +40,7 @@ fun OsmdroidMap(
             mapView.maxZoomLevel = zoomLevel
             mapView.controller.setZoom(zoomLevel)
 
-            osmdroidMapViewModel.setMapView(mapView)
+            osmdroidMapViewModel.initMap(mapView, pokemons, navController)
 
             mapView
         }

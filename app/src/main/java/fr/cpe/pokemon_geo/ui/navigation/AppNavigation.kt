@@ -12,7 +12,6 @@ import androidx.navigation.navArgument
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.ui.screen.fight.Fight
 import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMap
-import fr.cpe.pokemon_geo.ui.screen.map.OsmdroidMapViewModel
 import fr.cpe.pokemon_geo.ui.screen.pokedex.Pokedex
 import fr.cpe.pokemon_geo.ui.screen.pokemon_fighter.PokemonFighterChoice
 import fr.cpe.pokemon_geo.ui.screen.profile.Profile
@@ -27,7 +26,6 @@ fun AppNavigation(
     startDestination: Screen,
     pokemons: List<Pokemon>,
     modifier: Modifier,
-    osmdroidMapViewModel: OsmdroidMapViewModel
 ) {
     NavHost(
         navController = navController as NavHostController,
@@ -46,7 +44,7 @@ fun AppNavigation(
 
         composable(route = Screen.Map.route) {
             BackHandler(true) {}
-            OsmdroidMap(navController, pokemons, osmdroidMapViewModel)
+            OsmdroidMap(navController, pokemons)
         }
 
         composable(route = Screen.Welcome.route) {
