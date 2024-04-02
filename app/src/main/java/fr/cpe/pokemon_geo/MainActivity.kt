@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
             val permissionState = rememberMultiplePermissionsState(permissions = LOCATION_PERMISSIONS)
 
             val snackbarHostState = remember { SnackbarHostState() }
-
             var startDestination by remember { mutableStateOf<Screen?>(null) }
 
             PokemongeoTheme(darkTheme = false) {
