@@ -60,13 +60,16 @@ class OsmdroidMapViewModel @Inject constructor(
                 if (mapView == null || location == null) return@collect
 
                 withContext(Dispatchers.Main) {
-                    if (userMarker == null) {
-                        userMarker = Marker(mapView)
-                        userMarker?.icon = application.getDrawable(R.drawable.player)
-                        userMarker?.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                        mapView?.overlays?.add(userMarker)
+                    val newMarker = Marker(mapView)
+                    newMarker.icon = application.getDrawable(R.drawable.player)
+                    newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                    newMarker.position = location
+                    mapView?.overlays?.add(newMarker)
+
+                    if (userMarker != null) {
+                        mapView?.overlays?.remove(userMarker)
                     }
-                    userMarker?.position = location
+                    userMarker = newMarker
                     mapView?.invalidate()
 
                     mapView?.controller?.animateTo(location)
