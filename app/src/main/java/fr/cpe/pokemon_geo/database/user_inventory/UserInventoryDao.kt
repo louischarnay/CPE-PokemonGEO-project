@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.database.user_inventory
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,4 +16,13 @@ interface UserInventoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userInventoryEntity: UserInventoryEntity)
+    suspend fun appendQuantity(type: String, quantity: Int) {
+        val existing = getByType(type)
+
+        if (existing != null) {
+            insert(UserInventoryEntity(type = type, quantity = existing.quantity + quantity))
+        } else {
+            insert(UserInventoryEntity(type = type, quantity = quantity))
+        }
+    }
 }

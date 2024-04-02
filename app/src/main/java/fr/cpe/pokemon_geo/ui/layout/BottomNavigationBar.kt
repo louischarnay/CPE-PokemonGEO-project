@@ -19,7 +19,7 @@ fun BottomNavigationBar(navController: NavController) {
 
     NavigationBar {
         //getting the list of bottom navigation items for our data class
-        BottomNavigationItem().bottomNavigationItems().forEachIndexed { index, navigationItem ->
+        bottomNavigationItems.forEachIndexed { index, navigationItem ->
 
             //iterating all items with their respective indexes
             NavigationBarItem(

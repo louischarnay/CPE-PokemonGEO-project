@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
@@ -13,7 +14,11 @@ import org.osmdroid.views.MapView
 
 @SuppressLint("ClickableViewAccessibility")
 @Composable
-fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel) {
+fun OsmdroidMap(
+    navController: NavController,
+    pokemons: List<Pokemon>,
+    osmdroidMapViewModel: OsmdroidMapViewModel = hiltViewModel()
+) {
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -24,7 +29,8 @@ fun OsmdroidMap(osmdroidMapViewModel: OsmdroidMapViewModel) {
 
             // LOCK ALL MOVEMENTS
             mapView.setMultiTouchControls(false)
-            mapView.setOnTouchListener { view, motionEvent -> true }
+            //disable movement on map
+            //mapView.setOnTouchListener { view, motionEvent -> true  }
             mapView.setOnGenericMotionListener { view, motionEvent -> true  }
             mapView.setOnKeyListener { view, i, keyEvent -> true  }
 

@@ -1,4 +1,4 @@
-package fr.cpe.pokemon_geo.ui.screen.user_pokemon
+package fr.cpe.pokemon_geo.ui.screen.pokemon_fighter
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class UserPokemonsViewModel @Inject constructor(
+class PokemonFighterChoiceViewModel @Inject constructor(
     private val application: Application,
     private val repository: PokemonGeoRepository
 ): ViewModel(){
@@ -35,7 +35,7 @@ class UserPokemonsViewModel @Inject constructor(
 
             val resource = application.resources.openRawResource(R.raw.pokemons)
             userPokemons.forEach {
-                pokemonList.add(buildPokemonWithStatsFromOrder(resource, it.pokemonOrder, it.id ?: 0, it.hpMax, it.hpLost, it.attack))
+                pokemonList.add(buildPokemonWithStatsFromOrder(resource, it.pokemonOrder, it.id ?:0, it.hpMax, it.hpLost, it.attack))
             }
 
             withContext(Dispatchers.Main) {

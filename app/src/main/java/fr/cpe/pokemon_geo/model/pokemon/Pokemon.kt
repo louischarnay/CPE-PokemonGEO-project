@@ -2,18 +2,17 @@ package fr.cpe.pokemon_geo.model.pokemon
 
 import fr.cpe.pokemon_geo.R
 
-class Pokemon(
+open class Pokemon(
     private var order: Int,
     private var name: String,
+    private var isUnknownPokemon: Boolean = false,
     imageName: String,
     type1: String,
-    type2: String? = null
+    type2: String? = null,
 ) {
     private var frontResource = 0
     private var type1: PokemonType
     private var type2: PokemonType? = null
-    private var height = 0
-    private var weight = 0
 
     init {
         this.frontResource = R.drawable::class.java.getField(imageName).getInt(null)
@@ -27,6 +26,14 @@ class Pokemon(
 
     fun getName(): String {
         return name
+    }
+
+    fun isUnknownPokemon(): Boolean {
+        return isUnknownPokemon
+    }
+
+    fun setUnknownPokemon() {
+        isUnknownPokemon = true
     }
 
     fun getFrontResource(): Int {
