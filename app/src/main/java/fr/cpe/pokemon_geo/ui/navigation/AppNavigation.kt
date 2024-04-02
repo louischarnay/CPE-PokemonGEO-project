@@ -76,7 +76,7 @@ fun AppNavigation(navController: NavController, startDestination: Screen, pokemo
         }
 
         composable(
-            route = Screen.Fight.route,
+            route = Screen.Fight.route + "/{userPokemonId}/{opponentPokemonId}",
             arguments = listOf(
                 navArgument("userPokemonId") {
                     type = NavType.IntType
@@ -94,7 +94,7 @@ fun AppNavigation(navController: NavController, startDestination: Screen, pokemo
                 navController.popBackStack()
                 return@composable
             }
-            Fight(userPokemonId, opponentPokemonId)
+            Fight(userPokemonId, opponentPokemonId, navController)
         }
     }
 }

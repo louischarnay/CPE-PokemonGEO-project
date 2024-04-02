@@ -17,7 +17,7 @@ import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
-import fr.cpe.pokemon_geo.utils.findPokemonById
+import fr.cpe.pokemon_geo.utils.findPokemonByOrder
 import fr.cpe.pokemon_geo.utils.hasSameContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -142,14 +142,16 @@ class OsmdroidMapViewModel @Inject constructor(
                     generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
                         val marker = Marker(mapView)
                         marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
-                        val pokemonData = findPokemonById(pokemons, generatedPokemon.pokemonId)
+                        val pokemonData = findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
                         marker.title = pokemonData.getName()
                         marker.icon = application.getDrawable(pokemonData.getFrontResource())
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                         mapView.overlays.add(marker)
 
                         marker.setOnMarkerClickListener { _, _ ->
-                            navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.pokemonId))
+                            if (generatedPokemon.id != null) {
+                                navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.id))
+                            }
                             true // Return true to consume the event
                         }
 

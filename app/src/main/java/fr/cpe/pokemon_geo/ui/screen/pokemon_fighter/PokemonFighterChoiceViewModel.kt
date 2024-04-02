@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
-import fr.cpe.pokemon_geo.utils.loadPokemonFromId
+import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,8 +33,9 @@ class PokemonFighterChoiceViewModel @Inject constructor(
             val pokemonList = mutableListOf<Pokemon>()
             val userPokemons = repository.getAllUserPokemon()
 
+            val resource = application.resources.openRawResource(R.raw.pokemons)
             userPokemons.forEach {
-                pokemonList.add(loadPokemonFromId(application.resources.openRawResource(R.raw.pokemons), it.pokemonId, it.hpMax, it.hpLost, it.attack))
+                pokemonList.add(buildPokemonWithStatsFromOrder(resource, it.pokemonOrder, it.id ?:0, it.hpMax, it.hpLost, it.attack))
             }
 
             withContext(Dispatchers.Main) {

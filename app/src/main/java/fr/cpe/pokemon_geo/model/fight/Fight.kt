@@ -9,7 +9,7 @@ class Fight(
     private var turn = 0
     private var hasEscaped = false
 
-    fun getMyPokemon(): PokemonWithStats {
+    fun getUserPokemon(): PokemonWithStats {
         return myPokemon
     }
 

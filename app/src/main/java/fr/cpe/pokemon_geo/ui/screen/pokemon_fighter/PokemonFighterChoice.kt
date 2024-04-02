@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 import fr.cpe.pokemon_geo.ui.component.PokemonList
 import fr.cpe.pokemon_geo.ui.navigation.Screen
 
@@ -19,7 +20,9 @@ fun PokemonFighterChoice(
     PokemonList(
         pokemons = userPokemons,
         onClick = { pokemon ->
-            navController.navigate(Screen.Fight.withArgs(opponentPokemonId, pokemon.getOrder()))
+            if(pokemon is PokemonWithStats) {
+                navController.navigate(Screen.Fight.withArgs(pokemon.getId(), opponentPokemonId))
+            }
         }
     )
 }
