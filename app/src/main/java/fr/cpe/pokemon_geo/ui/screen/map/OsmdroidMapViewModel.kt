@@ -28,7 +28,6 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class OsmdroidMapViewModel @Inject constructor(
     private val application: Application,
