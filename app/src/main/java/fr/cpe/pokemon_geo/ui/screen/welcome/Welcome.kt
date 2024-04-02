@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
-import fr.cpe.pokemon_geo.ui.navigation.Routes
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 
 @Composable
 fun Welcome(navController: NavController, welcomeViewModel: WelcomeViewModel = hiltViewModel()) {
@@ -69,7 +69,7 @@ fun Welcome(navController: NavController, welcomeViewModel: WelcomeViewModel = h
                 .width(200.dp),
             onClick = {
                 welcomeViewModel.createProfile(pseudo)
-                navController.navigate(Routes.STARTER)
+                navController.navigate(Screen.Starter.route)
             }
         ) {
             Text(

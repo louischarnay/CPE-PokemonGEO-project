@@ -70,8 +70,10 @@ class GeneratePokemonsUseCase @Inject constructor(
 
                 val pokemonLocation = generatePokemonLocation(generatedPokemons, userLocation)
                 val generatedPokemon = GeneratedPokemonEntity(
-                    pokemonId = pokemon.getOrder(),
+                    pokemonOrder = pokemon.getOrder(),
                     level = 1,
+                    hpMax = 100,
+                    attack = 5,
                     latitude = pokemonLocation.latitude,
                     longitude = pokemonLocation.longitude,
                 )
@@ -118,17 +120,16 @@ class GeneratePokemonsUseCase @Inject constructor(
             val distance = location?.distanceToAsDouble(pokemonLocation)
 
             if (distance !== null && distance > AREA_RADIUS_IN_METERS) {
-                repository.removeGeneratedPokemon(pokemon)
-                Log.d("POKEMON", "Pokemon removed(distance): ${pokemon.pokemonId}")
+                repository.removeGeneratedPokemon(pokemon.id ?: 0)
+                Log.d("POKEMON", "Pokemon removed(distance): ${pokemon.pokemonOrder}")
             } else {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - pokemon.createdAt > DISAPPEARANCE_DELAY) {
-                    repository.removeGeneratedPokemon(pokemon)
-                    Log.d("POKEMON", "Pokemon removed(timer): ${pokemon.pokemonId}")
+                    repository.removeGeneratedPokemon(pokemon.id ?: 0)
+                    Log.d("POKEMON", "Pokemon removed(timer): ${pokemon.pokemonOrder}")
                 }
             }
         }
     }
-
 
 }

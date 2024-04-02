@@ -33,16 +33,12 @@ import fr.cpe.pokemon_geo.model.pokemon.PokemonType
 import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
-fun PokemonListItem(pokemon: Pokemon) {
-    val (showPokemonDetails, setShowPokemonDetails) = remember { mutableStateOf(false) }
-
+fun PokemonListItem(pokemon: Pokemon, onClick: (Pokemon) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 15.dp, vertical = 2.dp)
-            .clickable {
-                setShowPokemonDetails(true)
-            },
+            .clickable { onClick(pokemon) },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
@@ -57,7 +53,6 @@ fun PokemonListItem(pokemon: Pokemon) {
         }
         if(pokemon !is PokemonWithStats) Text("#${pokemon.getOrder()}")
     }
-    if(showPokemonDetails) PokemonDetails(pokemon = pokemon, onClose = { setShowPokemonDetails(false) })
 }
 
 @Composable
@@ -147,19 +142,4 @@ fun PokemonStats(pokemon: PokemonWithStats) {
             )
         }
     }
-}
-
-@Composable
-fun PokemonDetails(pokemon: Pokemon, onClose: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onClose,
-        confirmButton = {
-            Button(onClick = onClose) {
-                Text(text = "Close")
-            }
-        },
-        text = {
-            PokemonCard(pokemon)
-        }
-    )
 }

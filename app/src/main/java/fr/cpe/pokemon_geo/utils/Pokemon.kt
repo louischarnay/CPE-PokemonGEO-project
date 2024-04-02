@@ -25,23 +25,23 @@ fun loadPokemonsFromResources(resources: InputStream): MutableList<Pokemon> {
     return pokemonList
 }
 
-fun loadPokemonFromId(resources: InputStream, id: Int, healPoint: Int, healPointLost: Int, attack: Int ): Pokemon {
+fun buildPokemonWithStatsFromOrder(resources: InputStream, order: Int, id: Int, healPoint: Int, healPointLost: Int, attack: Int): PokemonWithStats {
     val jsonString = resources.bufferedReader().use { it.readText() }
     val jsonArray = JSONArray(jsonString)
 
     for (i in 0 until jsonArray.length()) {
         val jsonObject = jsonArray.getJSONObject(i)
-        if (jsonObject.getInt("id") == id) {
+        if (jsonObject.getInt("id") == order) {
             val name = jsonObject.getString("name")
             val image = jsonObject.getString("image")
             val type1 = jsonObject.getString("type1")
             val type2 = jsonObject.optString("type2", null)
-            return PokemonWithStats(id, name, image, type1, type2, healPoint, healPointLost, attack)
+            return PokemonWithStats(order, name, image, type1, type2, id, healPoint, healPointLost, attack)
         }
     }
     throw IllegalArgumentException("No pokemon with id $id")
 }
 
-fun findPokemonById(pokemons: List<Pokemon>, id: Int): Pokemon {
-    return pokemons.find { it.getOrder() == id } ?: throw IllegalArgumentException("No pokemon with id $id")
+fun findPokemonByOrder(pokemons: List<Pokemon>, order: Int): Pokemon {
+    return pokemons.find { it.getOrder() == order } ?: throw IllegalArgumentException("No pokemon with id $order")
 }

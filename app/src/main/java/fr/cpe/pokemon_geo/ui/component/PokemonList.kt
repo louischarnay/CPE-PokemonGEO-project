@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 
 @Composable
-fun PokemonList(pokemons: List<Pokemon>) {
+fun PokemonList(pokemons: List<Pokemon>, onClick: (Pokemon) -> Unit = {}) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(pokemons) { _, pokemon ->
-            PokemonListItem(pokemon)
+            PokemonListItem(pokemon, onClick)
         }
     }
 }

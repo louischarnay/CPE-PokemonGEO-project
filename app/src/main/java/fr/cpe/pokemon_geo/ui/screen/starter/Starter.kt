@@ -20,8 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
-import fr.cpe.pokemon_geo.ui.navigation.Routes
-import fr.cpe.pokemon_geo.utils.findPokemonById
+import fr.cpe.pokemon_geo.ui.navigation.Screen
+import fr.cpe.pokemon_geo.utils.findPokemonByOrder
 
 @Composable
 fun Starter(
@@ -29,9 +29,9 @@ fun Starter(
     navController: NavController,
     starterViewModel: StarterViewModel = hiltViewModel()
 ) {
-    val grassStarter = findPokemonById(pokemons, 1)
-    val fireStarter = findPokemonById(pokemons, 4)
-    val waterStart = findPokemonById(pokemons, 7)
+    val grassStarter = findPokemonByOrder(pokemons, 1)
+    val fireStarter = findPokemonByOrder(pokemons, 4)
+    val waterStart = findPokemonByOrder(pokemons, 7)
 
     Column(
         modifier = Modifier
@@ -60,7 +60,7 @@ fun StarterButton(
     Column(
         modifier = Modifier.clickable {
             starterViewModel.chooseStarter(pokemon)
-            navController.navigate(Routes.PROFILE)
+            navController.navigate(Screen.Profile.route)
 
         },
         horizontalAlignment = Alignment.CenterHorizontally,

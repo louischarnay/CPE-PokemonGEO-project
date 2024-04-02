@@ -13,8 +13,8 @@ interface UserPokemonDao {
     @Query("SELECT * FROM $USER_POKEMON_TABLE_NAME WHERE id = :id")
     suspend fun getById(id: Int): UserPokemonEntity
 
-    @Query("SELECT * FROM $USER_POKEMON_TABLE_NAME WHERE pokemon_id = :pokemonId")
-    suspend fun hasPokemon(pokemonId: Int): UserPokemonEntity?
+    @Query("SELECT * FROM $USER_POKEMON_TABLE_NAME WHERE pokemon_order = :pokemonOrder")
+    suspend fun hasPokemon(pokemonOrder: Int): UserPokemonEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userPokemon: UserPokemonEntity)

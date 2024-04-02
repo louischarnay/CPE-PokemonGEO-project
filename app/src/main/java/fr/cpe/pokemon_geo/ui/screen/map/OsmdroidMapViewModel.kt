@@ -1,9 +1,11 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
@@ -12,10 +14,11 @@ import fr.cpe.pokemon_geo.database.pokestop_empty.PokestopEmptyEntity
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import fr.cpe.pokemon_geo.model.inventory_item.INVENTORY_ITEM
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
-import fr.cpe.pokemon_geo.utils.findPokemonById
+import fr.cpe.pokemon_geo.utils.findPokemonByOrder
 import fr.cpe.pokemon_geo.utils.hasSameContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,30 +41,48 @@ class OsmdroidMapViewModel @Inject constructor(
     private var interestPointMarkers: Map<InterestPoint, Marker> = emptyMap()
     private var generatedPokemonMarkers: Map<GeneratedPokemonEntity, Marker> = emptyMap()
 
-    fun fetchMapDataPeriodically(mapView: MapView, pokemons: List<Pokemon>) {
+    fun initMap(mapView: MapView, pokemons: List<Pokemon>, navController: NavController) {
+        initCurrentLocation(mapView)
+        fetchMapDataPeriodically(mapView, pokemons, navController)
+    }
+
+    private fun fetchMapDataPeriodically(mapView: MapView, pokemons: List<Pokemon>, navController: NavController) {
         collectCurrentLocation(mapView)
         collectInterestPoints(mapView)
-        collectGeneratedPokemons(mapView, pokemons)
+        collectGeneratedPokemons(mapView, navController, pokemons)
+    }
+
+    private fun initCurrentLocation(mapView: MapView) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val location = getLocationUseCase.getCurrentLocation() ?: return@launch
+            updateMapWithCurrentLocation(mapView, location)
+        }
     }
 
     private fun collectCurrentLocation(mapView: MapView) {
         viewModelScope.launch(Dispatchers.IO) {
             getLocationUseCase.invoke().collect { location ->
                 if (location == null) return@collect
-
-                withContext(Dispatchers.Main) {
-                    if (userMarker == null) {
-                        userMarker = Marker(mapView)
-                        userMarker?.icon = application.getDrawable(R.drawable.player)
-                        userMarker?.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                        mapView.overlays.add(userMarker)
-                    }
-                    userMarker?.position = location
-                    mapView.invalidate()
-
-                    mapView.controller.animateTo(location)
-                }
+                updateMapWithCurrentLocation(mapView, location)
             }
+        }
+    }
+
+    private suspend fun updateMapWithCurrentLocation(mapView: MapView, location: GeoPoint) {
+        withContext(Dispatchers.Main) {
+            val newMarker = Marker(mapView)
+            newMarker.icon = application.getDrawable(R.drawable.player)
+            newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            newMarker.position = location
+            mapView.overlays?.add(newMarker)
+
+            if (userMarker != null) {
+                mapView.overlays?.remove(userMarker)
+            }
+            userMarker = newMarker
+            mapView.invalidate()
+
+            mapView.controller?.animateTo(location)
         }
     }
 
@@ -83,7 +104,7 @@ class OsmdroidMapViewModel @Inject constructor(
                 for (interestPoint in oldInterestPoints) {
                     val marker = interestPointMarkers[interestPoint]
                     if (marker != null) {
-                        mapView.overlays.remove(marker)
+                        mapView.overlays?.remove(marker)
                     }
                 }
 
@@ -105,20 +126,30 @@ class OsmdroidMapViewModel @Inject constructor(
                 }
 
                 // Add markers from newInterestPoints
-                for (interestPoint in newInterestPoints) {
-                    val marker = createInterestPointMarker(mapView, interestPoint)
 
-                    if (interestPoint.isPokeCenter()) {
-                        listenOnPokeCenterClick(marker)
-                    } else {
-                        listenOnPokestopClick(marker, interestPoint)
+                try {
+                    for (interestPoint in newInterestPoints) {
+                            val marker = createInterestPointMarker(mapView, interestPoint)
+
+                            if (interestPoint.isPokeCenter()) {
+                                listenOnPokeCenterClick(marker)
+                            } else {
+                                listenOnPokestopClick(marker, interestPoint)
+                            }
+                        mapView.invalidate()
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
     }
 
-    private fun collectGeneratedPokemons(mapView: MapView, pokemons: List<Pokemon>) {
+    private fun collectGeneratedPokemons(
+        mapView: MapView,
+        navController: NavController,
+        pokemons: List<Pokemon>
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             generatePokemonsUseCase.invoke(pokemons).collect { generatedPokemons ->
                 val hasSamePokemons = generatedPokemonMarkers.keys.hasSameContent(generatedPokemons)
@@ -126,27 +157,28 @@ class OsmdroidMapViewModel @Inject constructor(
 
                 withContext(Dispatchers.Main) {
                     generatedPokemonMarkers.forEach { (_, marker) ->
-                        mapView.overlays.remove(marker)
+                        mapView.overlays?.remove(marker)
                     }
 
                     generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
                         val marker = Marker(mapView)
                         marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
-                        val pokemonData = findPokemonById(pokemons, generatedPokemon.pokemonId)
+                        val pokemonData = findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
                         marker.title = pokemonData.getName()
                         marker.icon = application.getDrawable(pokemonData.getFrontResource())
                         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                        mapView.overlays.add(marker)
+                        mapView.overlays?.add(marker)
 
                         marker.setOnMarkerClickListener { _, _ ->
-                            // Handle marker click event here
-                            // For example, you can show a toast with marker title
-                            Toast.makeText(application, "Marker Clicked: ${marker.title}", Toast.LENGTH_SHORT).show()
+                            if (generatedPokemon.id != null) {
+                                navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.id))
+                            }
                             true // Return true to consume the event
                         }
 
                         marker
                     }
+
                     mapView.invalidate()
                 }
             }
@@ -169,7 +201,7 @@ class OsmdroidMapViewModel @Inject constructor(
                 application.getDrawable(R.drawable.pokestop)
         }
 
-        mapView.overlays.add(marker)
+        mapView.overlays?.add(marker)
         interestPointMarkers = interestPointMarkers + (interestPoint to marker)
 
         return marker

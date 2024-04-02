@@ -1,12 +1,13 @@
 package fr.cpe.pokemon_geo.ui.layout
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
-import fr.cpe.pokemon_geo.ui.navigation.Routes
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 
 data class BottomNavigationItem(
     val label : String = "",
@@ -18,17 +19,17 @@ val bottomNavigationItems = listOf(
     BottomNavigationItem(
         label = "Profil",
         icon = Icons.Filled.AccountCircle,
-        route = Routes.PROFILE
+        route = Screen.Profile.route
     ),
     BottomNavigationItem(
         label = "Carte",
         icon = Icons.Filled.LocationOn,
-        route = Routes.MAP
+        route = Screen.Map.route
     ),
     BottomNavigationItem(
         label = "Pokédex",
         icon = Icons.Filled.List,
-        route = Routes.POKEDEX
+        route = Screen.Pokedex.route
     )
 )
 

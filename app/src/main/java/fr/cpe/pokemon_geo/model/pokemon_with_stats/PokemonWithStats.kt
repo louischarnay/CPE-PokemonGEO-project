@@ -8,6 +8,7 @@ class PokemonWithStats(
     imageName : String,
     type1 : String,
     type2 : String?,
+    private val id : Int,
     private val healPoint : Int,
     private var healPointLoss : Int?,
     private val attack : Int
@@ -19,6 +20,11 @@ class PokemonWithStats(
     type1 = type1,
     type2 = type2
 ) {
+
+    fun getId(): Int {
+        return id
+    }
+
     fun getHealPoint(): Int {
         return healPoint
     }
