@@ -70,19 +70,23 @@ class OsmdroidMapViewModel @Inject constructor(
 
     private suspend fun updateMapWithCurrentLocation(mapView: MapView, location: GeoPoint) {
         withContext(Dispatchers.Main) {
-            val newMarker = Marker(mapView)
-            newMarker.icon = application.getDrawable(R.drawable.player)
-            newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            newMarker.position = location
-            mapView.overlays?.add(newMarker)
+            try {
+                val newMarker = Marker(mapView)
+                newMarker.icon = application.getDrawable(R.drawable.player)
+                newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                newMarker.position = location
+                mapView.overlays?.add(newMarker)
 
-            if (userMarker != null) {
-                mapView.overlays?.remove(userMarker)
+                if (userMarker != null) {
+                    mapView.overlays?.remove(userMarker)
+                }
+                userMarker = newMarker
+                mapView.invalidate()
+
+                mapView.controller?.animateTo(location)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            userMarker = newMarker
-            mapView.invalidate()
-
-            mapView.controller?.animateTo(location)
         }
     }
 
@@ -126,7 +130,6 @@ class OsmdroidMapViewModel @Inject constructor(
                 }
 
                 // Add markers from newInterestPoints
-
                 try {
                     for (interestPoint in newInterestPoints) {
                             val marker = createInterestPointMarker(mapView, interestPoint)
@@ -156,30 +159,42 @@ class OsmdroidMapViewModel @Inject constructor(
                 if (hasSamePokemons) return@collect
 
                 withContext(Dispatchers.Main) {
-                    generatedPokemonMarkers.forEach { (_, marker) ->
-                        mapView.overlays?.remove(marker)
-                    }
-
-                    generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
-                        val marker = Marker(mapView)
-                        marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
-                        val pokemonData = findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
-                        marker.title = pokemonData.getName()
-                        marker.icon = application.getDrawable(pokemonData.getFrontResource())
-                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                        mapView.overlays?.add(marker)
-
-                        marker.setOnMarkerClickListener { _, _ ->
-                            if (generatedPokemon.id != null) {
-                                navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.id))
-                            }
-                            true // Return true to consume the event
+                    try {
+                        generatedPokemonMarkers.forEach { (_, marker) ->
+                            mapView.overlays?.remove(marker)
                         }
 
-                        marker
-                    }
+                        generatedPokemonMarkers =
+                            generatedPokemons.associateWith { generatedPokemon ->
+                                val marker = Marker(mapView)
+                                marker.position =
+                                    GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
+                                val pokemonData =
+                                    findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
+                                marker.title = pokemonData.getName()
+                                marker.icon =
+                                    application.getDrawable(pokemonData.getFrontResource())
+                                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                mapView.overlays?.add(marker)
 
-                    mapView.invalidate()
+                                marker.setOnMarkerClickListener { _, _ ->
+                                    if (generatedPokemon.id != null) {
+                                        navController.navigate(
+                                            Screen.PokemonFighterChoice.withArgs(
+                                                generatedPokemon.id
+                                            )
+                                        )
+                                    }
+                                    true // Return true to consume the event
+                                }
+
+                                marker
+                            }
+
+                        mapView.invalidate()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }

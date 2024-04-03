@@ -118,7 +118,7 @@ fun PokemonStats(pokemon: PokemonWithStats) {
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             LinearProgressIndicator(
-                progress = { pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat() / pokemon.getHealPoint().toFloat() },
+                progress = { (pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat()) / pokemon.getHealPoint().toFloat() },
                 modifier = Modifier.weight(1f),
                 color = colorResource(id = R.color.black)
             )

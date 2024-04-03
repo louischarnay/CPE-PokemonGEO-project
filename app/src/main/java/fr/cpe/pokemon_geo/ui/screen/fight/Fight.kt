@@ -1,6 +1,7 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,10 +64,16 @@ fun Fight(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-            // Top right image
-            opponentPokemon?.getFrontResource()?.let { painterResource(id = it) }?.let {
+            // Top pokemon
+            opponentPokemon?.let {
+                PokemonFighterStatus(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .offset(y = (-120).dp),
+                    pokemon = opponentPokemon
+                )
                 Image(
-                    painter = it,
+                    painter = painterResource(id = it.getFrontResource()),
                     contentDescription = "Opponent pokemon",
                     modifier = Modifier
                         .size(100.dp)
@@ -71,15 +81,22 @@ fun Fight(
                         .offset(y = (-100).dp, x = 110.dp)
                 )
             }
-            // Bottom left image
-            userPokemon?.getFrontResource()?.let { painterResource(id = it) }?.let {
+
+            // Bottom pokemon
+            userPokemon?.let {
+                PokemonFighterStatus(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .offset(y = 100.dp),
+                    pokemon = userPokemon
+                )
                 Image(
-                    painter = it,
+                    painter = painterResource(id = it.getFrontResource()),
                     contentDescription = "User pokemon",
                     modifier = Modifier
                         .size(140.dp)
                         .align(Alignment.Center)
-                        .offset(y = (120).dp, x = (-100).dp)
+                        .offset(y = 120.dp, x = (-100).dp)
                 )
             }
         }
@@ -140,5 +157,24 @@ fun FightSecondaryButton(text: String, onClick: () -> Unit, modifier: Modifier =
         modifier = modifier.fillMaxHeight()
     ) {
         Text(text = text, fontSize = 15.sp)
+    }
+}
+
+@Composable
+fun PokemonFighterStatus(
+    modifier: Modifier = Modifier,
+    pokemon: PokemonWithStats,
+) {
+    Column(
+        modifier = modifier
+            .background(colorResource(id = R.color.background))
+            .width(160.dp)
+    ) {
+        Text(text = pokemon.getName(), fontSize = 16.sp, modifier = Modifier.padding(horizontal = 5.dp))
+        LinearProgressIndicator(
+            progress = { (pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat()) / pokemon.getHealPoint().toFloat() },
+            modifier = Modifier.height(10.dp).padding(horizontal = 5.dp, vertical = 2.dp),
+            color = colorResource(id = R.color.red)
+        )
     }
 }
