@@ -126,17 +126,16 @@ class OsmdroidMapViewModel @Inject constructor(
                 }
 
                 // Add markers from newInterestPoints
-
                 try {
                     for (interestPoint in newInterestPoints) {
-                            val marker = createInterestPointMarker(mapView, interestPoint)
+                        val marker = createInterestPointMarker(mapView, interestPoint)
 
-                            if (interestPoint.isPokeCenter()) {
-                                listenOnPokeCenterClick(marker)
-                            } else {
-                                listenOnPokestopClick(marker, interestPoint)
-                            }
-                        mapView.invalidate()
+                        if (interestPoint.isPokeCenter()) {
+                            listenOnPokeCenterClick(marker)
+                        } else {
+                            listenOnPokestopClick(marker, interestPoint)
+                            mapView.invalidate()
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
