@@ -18,18 +18,20 @@ class Fight(
     }
 
     fun attack() {
-        val damage = (10..80).random()
+        val attack = myPokemon.getAttack()
+        val damage = (attack * 5..attack * 15).random()
         opponentPokemon.decreaseHP(damage)
         turn++
     }
 
     fun opponentAttack() {
-        val damage = (10..50).random()
+        val attack = opponentPokemon.getAttack()
+        val damage = (attack * 5..attack * 15).random()
         myPokemon.decreaseHP(damage)
         turn++
     }
 
-    fun opponentEscape(): Boolean {
+    fun tryToEscapeAsOpponent(): Boolean {
         if (turn < 2) return false
         hasEscaped = (0..4).random() == 0
         return hasEscaped
@@ -39,9 +41,7 @@ class Fight(
         return myPokemon.getCurrentHP() <= 0 || opponentPokemon.getCurrentHP() <= 0 || hasEscaped
     }
 
-    fun getWinner(): PokemonWithStats? {
-        if (myPokemon.getCurrentHP() <= 0) return opponentPokemon
-        if (opponentPokemon.getCurrentHP() <= 0) return myPokemon
-        return null
+    fun isUserWinner(): Boolean {
+        return opponentPokemon.getCurrentHP() <= 0
     }
 }

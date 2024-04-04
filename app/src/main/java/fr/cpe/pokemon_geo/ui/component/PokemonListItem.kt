@@ -11,13 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -118,12 +114,12 @@ fun PokemonStats(pokemon: PokemonWithStats) {
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             LinearProgressIndicator(
-                progress = { (pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat()) / pokemon.getHealPoint().toFloat() },
+                progress = { pokemon.getCurrentHP() / pokemon.getMaxHealPoint().toFloat() },
                 modifier = Modifier.weight(1f),
                 color = colorResource(id = R.color.black)
             )
             Text(
-                text = "HP: ${pokemon.getHealPoint() - pokemon.getHealPointLoss()}/${pokemon.getHealPoint()}",
+                text = "HP: ${pokemon.getCurrentHP()}",
                 fontSize = 12.sp
             )
         }

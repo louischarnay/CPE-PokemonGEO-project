@@ -36,3 +36,8 @@ val bottomNavigationItems = listOf(
 fun shouldShowBottomNavigation(route: String?): Boolean {
     return bottomNavigationItems.any { it.route == route }
 }
+
+fun getItemIndexFromRoute(route: String?): Int {
+    if (!shouldShowBottomNavigation(route)) return 0
+    return bottomNavigationItems.indexOfFirst { it.route == route }
+}

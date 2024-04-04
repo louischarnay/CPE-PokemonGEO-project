@@ -26,7 +26,7 @@ class GeneratePokemonsUseCase @Inject constructor(
     companion object {
         private const val UPDATE_DELAY = 5 * ONE_SECOND_IN_MILLIS
         private const val MAX_PER_AREA = 6
-        private const val BASE_GENERATION_CHANCE = 0.1
+        private const val BASE_GENERATION_CHANCE = 0.5
         private const val AREA_RADIUS_IN_METERS = 150.0
         private const val GENERATION_COORDINATE_MULTIPLIER = 0.001 // 111 meters
         private const val MAX_DISTANCE_COORDINATE_BETWEEN_POKEMON = 0.0002 // 22 meters
@@ -65,7 +65,7 @@ class GeneratePokemonsUseCase @Inject constructor(
         if (generatedPokemonsCount < MAX_PER_AREA) {
 
             val random = Math.random()
-            if (random < BASE_GENERATION_CHANCE) {
+            if (random < (BASE_GENERATION_CHANCE / (generatedPokemonsCount * 2 + 1))) {
                 val pokemon = pokemons.random()
 
                 val pokemonLocation = generatePokemonLocation(generatedPokemons, userLocation)

@@ -12,4 +12,7 @@ interface ProfileDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(profile: ProfileEntity)
+
+    @Query("UPDATE $PROFILE_TABLE_NAME SET experience = experience + :experience")
+    suspend fun increaseExperience(experience: Long)
 }

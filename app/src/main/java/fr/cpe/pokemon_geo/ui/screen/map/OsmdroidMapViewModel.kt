@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -85,7 +86,7 @@ class OsmdroidMapViewModel @Inject constructor(
 
                 mapView.controller?.animateTo(location)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.d("Mise à jour de la carte impossible")
             }
         }
     }
@@ -142,7 +143,7 @@ class OsmdroidMapViewModel @Inject constructor(
                         mapView.invalidate()
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.d("Mise à jour de la carte impossible")
                 }
             }
         }
@@ -193,7 +194,7 @@ class OsmdroidMapViewModel @Inject constructor(
 
                         mapView.invalidate()
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Timber.d("Mise à jour de la carte impossible")
                     }
                 }
             }

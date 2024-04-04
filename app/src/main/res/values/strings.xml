@@ -6,4 +6,5 @@
     <string name="pseudo_label">Ton pseudo</string>
     <string name="continue_button">Continuer</string>
     <string name="choose_starter_title">Choisis ton premier Pokémon</string>
+    <string name="pokemon_has_no_hp">Ce Pokémon n\'a plus de points de vie</string>
 </resources>

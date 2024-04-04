@@ -9,8 +9,8 @@ class PokemonWithStats(
     type1 : String,
     type2 : String?,
     private val id : Int,
-    private val healPoint : Int,
-    private var healPointLoss : Int?,
+    private val maxHealPoint : Int,
+    private var healPointLoss : Int = 0,
     private val attack : Int
 ) : Pokemon(
     order = order,
@@ -25,12 +25,12 @@ class PokemonWithStats(
         return id
     }
 
-    fun getHealPoint(): Int {
-        return healPoint
+    fun getMaxHealPoint(): Int {
+        return maxHealPoint
     }
 
     fun getHealPointLoss(): Int {
-        return healPointLoss ?: 0
+        return healPointLoss
     }
 
     fun getAttack(): Int {
@@ -38,12 +38,13 @@ class PokemonWithStats(
     }
 
     fun getCurrentHP(): Int {
-        return healPoint - (healPointLoss ?: 0)
+        return maxHealPoint - healPointLoss
     }
 
     fun decreaseHP(amount: Int) {
-        healPointLoss.let {
-            healPointLoss = healPointLoss?.plus(amount)
+        healPointLoss += amount
+        if (healPointLoss > maxHealPoint) {
+            healPointLoss = maxHealPoint
         }
     }
 }

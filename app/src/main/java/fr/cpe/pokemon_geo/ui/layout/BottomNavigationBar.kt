@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     var navigationSelectedItem by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(getItemIndexFromRoute(navController.currentDestination?.route ?: ""))
     }
 
     NavigationBar {

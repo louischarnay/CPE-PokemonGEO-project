@@ -8,6 +8,7 @@ import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
 import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
+import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,5 +43,9 @@ class PokemonFighterChoiceViewModel @Inject constructor(
                 _userPokemons.value = pokemonList
             }
         }
+    }
+
+    fun showToast(text: String) {
+        showToast(application, text)
     }
 }

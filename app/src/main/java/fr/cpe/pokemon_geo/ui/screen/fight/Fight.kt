@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,8 +47,6 @@ fun Fight(
     }
 
     val fight by fightViewModel.fight.collectAsState()
-    val userPokemon = fight?.getUserPokemon()
-    val opponentPokemon = fight?.getOpponentPokemon()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -65,12 +62,12 @@ fun Fight(
                 modifier = Modifier.fillMaxSize()
             )
             // Top pokemon
-            opponentPokemon?.let {
+            fight?.getOpponentPokemon()?.let {
                 PokemonFighterStatus(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .offset(y = (-120).dp),
-                    pokemon = opponentPokemon
+                    pokemon = it
                 )
                 Image(
                     painter = painterResource(id = it.getFrontResource()),
@@ -83,12 +80,12 @@ fun Fight(
             }
 
             // Bottom pokemon
-            userPokemon?.let {
+            fight?.getUserPokemon()?.let {
                 PokemonFighterStatus(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(y = 100.dp),
-                    pokemon = userPokemon
+                    pokemon = it
                 )
                 Image(
                     painter = painterResource(id = it.getFrontResource()),
@@ -113,7 +110,7 @@ fun Fight(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f),
-                onClick = { fightViewModel.attack() }
+                onClick = { fightViewModel.attack(navController) }
             ) {
                 Text(text = "Attaque", fontSize = 40.sp)
             }
@@ -141,7 +138,7 @@ fun Fight(
                 Spacer(modifier = Modifier.width(12.dp))
                 FightSecondaryButton(
                     text = "Fuite",
-                    onClick = { fightViewModel.escape(navController) },
+                    onClick = { fightViewModel.end(navController) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -165,6 +162,8 @@ fun PokemonFighterStatus(
     modifier: Modifier = Modifier,
     pokemon: PokemonWithStats,
 ) {
+    val hpProgress = pokemon.getCurrentHP() / pokemon.getMaxHealPoint().toFloat()
+
     Column(
         modifier = modifier
             .background(colorResource(id = R.color.background))
@@ -172,9 +171,11 @@ fun PokemonFighterStatus(
     ) {
         Text(text = pokemon.getName(), fontSize = 16.sp, modifier = Modifier.padding(horizontal = 5.dp))
         LinearProgressIndicator(
-            progress = { (pokemon.getHealPoint().toFloat() - pokemon.getHealPointLoss().toFloat()) / pokemon.getHealPoint().toFloat() },
-            modifier = Modifier.height(10.dp).padding(horizontal = 5.dp, vertical = 2.dp),
-            color = colorResource(id = R.color.red)
+            progress = { hpProgress },
+            modifier = Modifier
+                .height(10.dp)
+                .padding(horizontal = 5.dp, vertical = 2.dp),
+            color = colorResource(id = R.color.red),
         )
     }
 }
