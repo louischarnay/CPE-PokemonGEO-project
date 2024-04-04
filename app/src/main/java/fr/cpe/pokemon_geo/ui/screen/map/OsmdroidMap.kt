@@ -29,8 +29,11 @@ fun OsmdroidMap(
 
             // LOCK ALL MOVEMENTS
             mapView.setMultiTouchControls(false)
-            //disable movement on map
-            //mapView.setOnTouchListener { view, motionEvent -> true  }
+            mapView.setOnTouchListener { view, motionEvent ->
+                // Lock if long click to disable movement
+                if (motionEvent.action == 2) return@setOnTouchListener true
+                false
+            }
             mapView.setOnGenericMotionListener { view, motionEvent -> true  }
             mapView.setOnKeyListener { view, i, keyEvent -> true  }
 
