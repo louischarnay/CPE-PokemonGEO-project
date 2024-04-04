@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -133,14 +132,14 @@ class OsmdroidMapViewModel @Inject constructor(
                 // Add markers from newInterestPoints
                 try {
                     for (interestPoint in newInterestPoints) {
-                            val marker = createInterestPointMarker(mapView, interestPoint)
+                        val marker = createInterestPointMarker(mapView, interestPoint)
 
-                            if (interestPoint.isPokeCenter()) {
-                                listenOnPokeCenterClick(marker)
-                            } else {
-                                listenOnPokestopClick(marker, interestPoint)
-                            }
-                        mapView.invalidate()
+                        if (interestPoint.isPokeCenter()) {
+                            listenOnPokeCenterClick(marker)
+                        } else {
+                            listenOnPokestopClick(marker, interestPoint)
+                            mapView.invalidate()
+                        }
                     }
                 } catch (e: Exception) {
                     Timber.d("Mise à jour de la carte impossible")
