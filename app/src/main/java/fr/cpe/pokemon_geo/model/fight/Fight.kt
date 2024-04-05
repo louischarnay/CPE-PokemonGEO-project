@@ -39,7 +39,7 @@ class Fight(
 
     private fun opponentAttack() {
         val attack = opponentPokemon.getAttack()
-        val damage = (attack * 5..attack * 15).random()
+        val damage = (attack * 2..attack * 6).random()
         val multiplier = opponentPokemon.getAttackMultiplier(userPokemon)
         userPokemon.decreaseHP((damage * multiplier).toInt())
         turn++

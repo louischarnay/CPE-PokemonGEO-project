@@ -47,7 +47,7 @@ fun Fight(
     }
 
     LaunchedEffect(Unit) {
-        fightViewModel.initFight(userPokemonId, opponentPokemonId)
+        fightViewModel.initFight(userPokemonId, opponentPokemonId, navController)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {

@@ -15,7 +15,10 @@ import fr.cpe.pokemon_geo.model.inventory_item.SearchInventoryItemType
 import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import fr.cpe.pokemon_geo.utils.showToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,28 +36,52 @@ class FightViewModel @Inject constructor(
     fun initFight(
         userPokemonId: Int,
         opponentPokemonId: Int,
+        navController: NavController
     ) {
         viewModelScope.launch {
-            val userPokemon = repository.getUserPokemonById(userPokemonId)
-            val opponentPokemon = repository.getGeneratedPokemonById(opponentPokemonId)
+            try {
+                val userPokemon = repository.getUserPokemonById(userPokemonId)
+                val opponentPokemon = repository.getGeneratedPokemonById(opponentPokemonId)
 
-            val json = application.resources.openRawResource(R.raw.pokemons).bufferedReader().readText()
-            val userPokemonData = buildPokemonWithStatsFromOrder(json, userPokemon.pokemonOrder, userPokemonId, userPokemon.hpMax, userPokemon.hpLost, userPokemon.attack)
-            val opponentPokemonData = buildPokemonWithStatsFromOrder(json, opponentPokemon.pokemonOrder, opponentPokemonId, opponentPokemon.hpMax, 0, opponentPokemon.attack)
+                val json = application.resources.openRawResource(R.raw.pokemons).bufferedReader()
+                    .readText()
+                val userPokemonData = buildPokemonWithStatsFromOrder(
+                    json,
+                    userPokemon.pokemonOrder,
+                    userPokemonId,
+                    userPokemon.hpMax,
+                    userPokemon.hpLost,
+                    userPokemon.attack
+                )
+                val opponentPokemonData = buildPokemonWithStatsFromOrder(
+                    json,
+                    opponentPokemon.pokemonOrder,
+                    opponentPokemonId,
+                    opponentPokemon.hpMax,
+                    0,
+                    opponentPokemon.attack
+                )
 
-            _fight.value = Fight(userPokemonData, opponentPokemonData)
+                _fight.value = Fight(userPokemonData, opponentPokemonData)
+            } catch (e: Exception) {
+                navController.navigate(Screen.Map.route)
+            }
         }
     }
 
     fun attack(navController: NavController) {
-        fight.value?.attack()
-        fight.value?.opponentPlay()
-
         viewModelScope.launch {
+            fight.value?.attack()
+
+            withContext(Dispatchers.Main) {
+                checkFightStatus(navController)
+            }
+
+            delay(500)
+            fight.value?.opponentPlay()
+
             fight.value?.getUserPokemon() ?.let { repository.updateUserPokemonHpLost(it.getId(), it.getHPLoss()) }
         }
-
-        checkFightStatus(navController)
     }
 
     fun showInventory(navController: NavController) {
@@ -80,7 +107,6 @@ class FightViewModel @Inject constructor(
         } else if (fight.value?.isUserWinner() == true) {
             showToast(application, application.getString(R.string.victory))
             viewModelScope.launch {  repository.increaseProfileExperience(10) }
-            return
         } else {
             showToast(application, application.getString(R.string.defeat))
         }
