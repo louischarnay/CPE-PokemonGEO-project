@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.ui.screen.pokedex
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

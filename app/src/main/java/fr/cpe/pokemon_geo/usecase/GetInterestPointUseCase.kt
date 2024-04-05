@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.usecase
 
-import android.util.Log
 import fr.cpe.pokemon_geo.api.ApiClient
 import fr.cpe.pokemon_geo.model.interest_point.InterestPoint
 import kotlinx.coroutines.CoroutineScope
@@ -11,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetInterestPointUseCase @Inject constructor(
@@ -71,7 +71,7 @@ class GetInterestPointUseCase @Inject constructor(
             }
             return interestPoints
         } else {
-            Log.e("InterestPoint", "Error: ${response.message()}")
+            Timber.e("Error: ${response.message()}")
         }
         return emptyList()
     }
@@ -85,7 +85,6 @@ class GetInterestPointUseCase @Inject constructor(
             val interestPoints = mutableListOf<InterestPoint>()
             if (elements != null) {
                 for (element in elements) {
-                    if (element.tags.name == null) continue
                     val interestPoint = InterestPoint(
                         element.tags.name,
                         element.lat,
@@ -97,7 +96,7 @@ class GetInterestPointUseCase @Inject constructor(
             }
             return interestPoints
         } else {
-            Log.e("InterestPoint", "Error: ${response.message()}")
+            Timber.e("Error: ${response.message()}")
         }
         return emptyList()
     }

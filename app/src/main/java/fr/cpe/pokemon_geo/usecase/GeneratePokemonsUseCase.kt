@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.usecase
 
-import android.util.Log
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 class GeneratePokemonsUseCase @Inject constructor(
@@ -90,7 +90,7 @@ class GeneratePokemonsUseCase @Inject constructor(
                 )
 
                 repository.insertGeneratedPokemon(generatedPokemon)
-                Log.d("POKEMON", "Pokemon generated: ${pokemon.getOrder()}-${pokemon.getName()}")
+                Timber.d("Pokemon generated: ${pokemon.getOrder()}-${pokemon.getName()}")
             }
         }
     }
@@ -132,12 +132,12 @@ class GeneratePokemonsUseCase @Inject constructor(
 
             if (distance !== null && distance > AREA_RADIUS_IN_METERS) {
                 repository.removeGeneratedPokemon(pokemon.id ?: 0)
-                Log.d("POKEMON", "Pokemon removed(distance): ${pokemon.pokemonOrder}")
+                Timber.d("Pokemon removed(distance): ${pokemon.pokemonOrder}")
             } else {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - pokemon.createdAt > DISAPPEARANCE_DELAY) {
                     repository.removeGeneratedPokemon(pokemon.id ?: 0)
-                    Log.d("POKEMON", "Pokemon removed(timer): ${pokemon.pokemonOrder}")
+                    Timber.d("Pokemon removed(timer): ${pokemon.pokemonOrder}")
                 }
             }
         }

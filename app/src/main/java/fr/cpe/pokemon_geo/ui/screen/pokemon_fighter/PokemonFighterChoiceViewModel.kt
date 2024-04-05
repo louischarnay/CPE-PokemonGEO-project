@@ -21,7 +21,7 @@ import javax.inject.Inject
 class PokemonFighterChoiceViewModel @Inject constructor(
     private val application: Application,
     private val repository: PokemonGeoRepository,
-    private val generatePokemonsUseCase: GeneratePokemonsUseCase
+    generatePokemonsUseCase: GeneratePokemonsUseCase
 ): ViewModel(){
 
     private val _userPokemons = MutableStateFlow<List<Pokemon>>(mutableListOf())
