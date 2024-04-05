@@ -1,6 +1,7 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,16 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,18 +36,19 @@ import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
 
 @Composable
 fun Fight(
+    navController: NavController,
     userPokemonId: Int,
     opponentPokemonId: Int,
-    navController: NavController,
+    pokeBallName: String?,
     fightViewModel: FightViewModel = hiltViewModel()
 ) {
+    if (!fightViewModel.hasTriedCapture.value && pokeBallName != null) {
+        fightViewModel.capture(pokeBallName, navController)
+    }
+
     LaunchedEffect(Unit) {
         fightViewModel.initFight(userPokemonId, opponentPokemonId)
     }
-
-    val fight by fightViewModel.fight.collectAsState()
-    val userPokemon = fight?.getUserPokemon()
-    val opponentPokemon = fight?.getOpponentPokemon()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -60,10 +63,16 @@ fun Fight(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-            // Top right image
-            opponentPokemon?.getFrontResource()?.let { painterResource(id = it) }?.let {
+            // Top pokemon
+            fightViewModel.fight.value?.getOpponentPokemon()?.let {
+                PokemonFighterStatus(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .offset(y = (-120).dp),
+                    pokemon = it
+                )
                 Image(
-                    painter = it,
+                    painter = painterResource(id = it.getFrontResource()),
                     contentDescription = "Opponent pokemon",
                     modifier = Modifier
                         .size(100.dp)
@@ -71,15 +80,22 @@ fun Fight(
                         .offset(y = (-100).dp, x = 110.dp)
                 )
             }
-            // Bottom left image
-            userPokemon?.getFrontResource()?.let { painterResource(id = it) }?.let {
+
+            // Bottom pokemon
+            fightViewModel.fight.value?.getUserPokemon()?.let {
+                PokemonFighterStatus(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .offset(y = 100.dp),
+                    pokemon = it
+                )
                 Image(
-                    painter = it,
+                    painter = painterResource(id = it.getFrontResource()),
                     contentDescription = "User pokemon",
                     modifier = Modifier
                         .size(140.dp)
                         .align(Alignment.Center)
-                        .offset(y = (120).dp, x = (-100).dp)
+                        .offset(y = 120.dp, x = (-100).dp)
                 )
             }
         }
@@ -96,9 +112,12 @@ fun Fight(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(2f),
-                onClick = { fightViewModel.attack() }
+                onClick = { fightViewModel.attack(navController) }
             ) {
-                Text(text = "Attaque", fontSize = 40.sp)
+                Text(
+                    text = stringResource(R.string.pokemon_attack),
+                    fontSize = 40.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -111,20 +130,14 @@ fun Fight(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 FightSecondaryButton(
-                    text = "Pokémons",
-                    onClick = { fightViewModel.showUserPokemons() },
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                FightSecondaryButton(
-                    text = "Capture",
+                    text = stringResource(R.string.capture),
                     onClick = { fightViewModel.showInventory(navController) },
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 FightSecondaryButton(
-                    text = "Fuite",
-                    onClick = { fightViewModel.escape(navController) },
+                    text = stringResource(R.string.escape),
+                    onClick = { fightViewModel.end(navController) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -140,5 +153,28 @@ fun FightSecondaryButton(text: String, onClick: () -> Unit, modifier: Modifier =
         modifier = modifier.fillMaxHeight()
     ) {
         Text(text = text, fontSize = 15.sp)
+    }
+}
+
+@Composable
+fun PokemonFighterStatus(
+    modifier: Modifier = Modifier,
+    pokemon: PokemonWithStats,
+) {
+    val hpProgress = pokemon.getCurrentHP() / pokemon.getMaxHP().toFloat()
+
+    Column(
+        modifier = modifier
+            .background(colorResource(id = R.color.background))
+            .width(160.dp)
+    ) {
+        Text(text = pokemon.getName(), fontSize = 16.sp, modifier = Modifier.padding(horizontal = 5.dp))
+        LinearProgressIndicator(
+            progress = { hpProgress },
+            modifier = Modifier
+                .height(10.dp)
+                .padding(horizontal = 5.dp, vertical = 2.dp),
+            color = colorResource(id = R.color.red),
+        )
     }
 }

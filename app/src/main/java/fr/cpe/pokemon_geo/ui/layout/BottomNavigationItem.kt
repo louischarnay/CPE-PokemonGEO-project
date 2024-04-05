@@ -1,10 +1,9 @@
 package fr.cpe.pokemon_geo.ui.layout
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
 import fr.cpe.pokemon_geo.ui.navigation.Screen
@@ -28,11 +27,16 @@ val bottomNavigationItems = listOf(
     ),
     BottomNavigationItem(
         label = "Pokédex",
-        icon = Icons.Filled.List,
+        icon = Icons.AutoMirrored.Filled.List,
         route = Screen.Pokedex.route
     )
 )
 
 fun shouldShowBottomNavigation(route: String?): Boolean {
     return bottomNavigationItems.any { it.route == route }
+}
+
+fun getItemIndexFromRoute(route: String?): Int {
+    if (!shouldShowBottomNavigation(route)) return 0
+    return bottomNavigationItems.indexOfFirst { it.route == route }
 }

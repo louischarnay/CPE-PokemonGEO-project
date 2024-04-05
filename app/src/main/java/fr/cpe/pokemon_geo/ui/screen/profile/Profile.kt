@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,7 +46,8 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                 modifier = Modifier.size(150.dp)
             )
             Text(text = profile.pseudo, fontSize = 30.sp)
-                Text(text = "${profile.experience} XP", fontSize = 20.sp)
+            val expText = String.format(stringResource(R.string.user_experience), profile.experience)
+            Text(text = expText, fontSize = 20.sp)
 
             Spacer(modifier = Modifier.size(20.dp))
 
@@ -57,7 +59,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                             contentDescription = "Inventory icon",
                             modifier = Modifier.size(75.dp)
                         )
-                        Text(text = "Inventaire")
+                        Text(text = stringResource(R.string.inventory))
 
                     }
                 }
@@ -69,7 +71,7 @@ fun Profile(navController: NavController, profileViewModel: ProfileViewModel = h
                             contentDescription = "Pokemon icon",
                             modifier = Modifier.size(75.dp)
                         )
-                        Text(text = "Pokemon")
+                        Text(text = stringResource(R.string.pokemon))
                     }
                 }
             }

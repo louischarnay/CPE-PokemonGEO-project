@@ -1,7 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -19,12 +18,14 @@ import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
 import fr.cpe.pokemon_geo.utils.findPokemonByOrder
 import fr.cpe.pokemon_geo.utils.hasSameContent
+import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,19 +70,23 @@ class OsmdroidMapViewModel @Inject constructor(
 
     private suspend fun updateMapWithCurrentLocation(mapView: MapView, location: GeoPoint) {
         withContext(Dispatchers.Main) {
-            val newMarker = Marker(mapView)
-            newMarker.icon = application.getDrawable(R.drawable.player)
-            newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            newMarker.position = location
-            mapView.overlays?.add(newMarker)
+            try {
+                val newMarker = Marker(mapView)
+                newMarker.icon = application.getDrawable(R.drawable.player)
+                newMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                newMarker.position = location
+                mapView.overlays?.add(newMarker)
 
-            if (userMarker != null) {
-                mapView.overlays?.remove(userMarker)
+                if (userMarker != null) {
+                    mapView.overlays?.remove(userMarker)
+                }
+                userMarker = newMarker
+                mapView.invalidate()
+
+                mapView.controller?.animateTo(location)
+            } catch (e: Exception) {
+                Timber.d("Mise à jour de la carte impossible")
             }
-            userMarker = newMarker
-            mapView.invalidate()
-
-            mapView.controller?.animateTo(location)
         }
     }
 
@@ -137,7 +142,7 @@ class OsmdroidMapViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.d("Mise à jour de la carte impossible")
                 }
             }
         }
@@ -154,30 +159,42 @@ class OsmdroidMapViewModel @Inject constructor(
                 if (hasSamePokemons) return@collect
 
                 withContext(Dispatchers.Main) {
-                    generatedPokemonMarkers.forEach { (_, marker) ->
-                        mapView.overlays?.remove(marker)
-                    }
-
-                    generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
-                        val marker = Marker(mapView)
-                        marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
-                        val pokemonData = findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
-                        marker.title = pokemonData.getName()
-                        marker.icon = application.getDrawable(pokemonData.getFrontResource())
-                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                        mapView.overlays?.add(marker)
-
-                        marker.setOnMarkerClickListener { _, _ ->
-                            if (generatedPokemon.id != null) {
-                                navController.navigate(Screen.PokemonFighterChoice.withArgs(generatedPokemon.id))
-                            }
-                            true // Return true to consume the event
+                    try {
+                        generatedPokemonMarkers.forEach { (_, marker) ->
+                            mapView.overlays?.remove(marker)
                         }
 
-                        marker
-                    }
+                        generatedPokemonMarkers =
+                            generatedPokemons.associateWith { generatedPokemon ->
+                                val marker = Marker(mapView)
+                                marker.position =
+                                    GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
+                                val pokemonData =
+                                    findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
+                                marker.title = pokemonData.getName()
+                                marker.icon =
+                                    application.getDrawable(pokemonData.getFrontResource())
+                                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                mapView.overlays?.add(marker)
 
-                    mapView.invalidate()
+                                marker.setOnMarkerClickListener { _, _ ->
+                                    if (generatedPokemon.id != null) {
+                                        navController.navigate(
+                                            Screen.PokemonFighterChoice.withArgs(
+                                                generatedPokemon.id.toString()
+                                            )
+                                        )
+                                    }
+                                    true // Return true to consume the event
+                                }
+
+                                marker
+                            }
+
+                        mapView.invalidate()
+                    } catch (e: Exception) {
+                        Timber.d("Mise à jour de la carte impossible")
+                    }
                 }
             }
         }
@@ -211,11 +228,7 @@ class OsmdroidMapViewModel @Inject constructor(
             viewModelScope.launch {
                 // Call the suspending function within the coroutine
                 repository.healAllUserPokemons()
-                Toast.makeText(
-                    application,
-                    "Tout vos pokemons ont été soignés",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast(application, application.getString(R.string.all_pokemons_healed))
             }
             true // Return true to consume the event
         }
@@ -227,11 +240,10 @@ class OsmdroidMapViewModel @Inject constructor(
             viewModelScope.launch {
                 // Call the suspending function within the coroutine
                 if (repository.getPokestopEmptyById(interestPoint.getName()) != null) {
-                    Toast.makeText(
+                    showToast(
                         application,
-                        "Vous avez déjà récupéré les objets de ce pokestop",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        application.getString(R.string.pokestop_items_already_taken),
+                    )
                     return@launch
                 }
 
@@ -239,11 +251,14 @@ class OsmdroidMapViewModel @Inject constructor(
                 val randomQuantity = (1..5).random()
 
                 repository.appendUserInventoryQuantity(randomItem.name, randomQuantity)
-                Toast.makeText(
+                showToast(
                     application,
-                    "Vous avez reçu $randomQuantity ${randomItem.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    String.format(
+                        application.getString(R.string.received_items),
+                        randomQuantity,
+                        randomItem.name
+                    )
+                )
 
                 marker.icon = application.getDrawable(R.drawable.pokestop_empty)
                 repository.insertPokestopEmpty(

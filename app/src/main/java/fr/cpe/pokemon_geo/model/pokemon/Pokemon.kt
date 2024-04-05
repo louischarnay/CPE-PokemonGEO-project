@@ -47,4 +47,8 @@ open class Pokemon(
     fun getType2(): PokemonType? {
         return type2
     }
+
+    fun getAttackMultiplier(opponent: Pokemon): Double {
+        return type1.attackMultiplier(opponent.getType1()) * (type2?.attackMultiplier(opponent.getType1()) ?: 1.0)
+    }
 }

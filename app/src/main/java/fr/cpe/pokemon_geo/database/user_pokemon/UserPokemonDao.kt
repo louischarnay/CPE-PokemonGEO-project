@@ -21,4 +21,7 @@ interface UserPokemonDao {
 
     @Query("UPDATE $USER_POKEMON_TABLE_NAME SET hp_lost = 0")
     suspend fun healAllPokemons()
+
+    @Query("UPDATE $USER_POKEMON_TABLE_NAME SET hp_lost = :hpLost WHERE id = :id")
+    suspend fun updateHpLost(id: Int, hpLost: Int)
 }

@@ -64,15 +64,15 @@ fun AppNavigation(
         }
 
         composable(
-            route = Screen.PokemonFighterChoice.route + "/{opponentPokemonId}",
+            route = Screen.PokemonFighterChoice.route,
             arguments = listOf(
-                navArgument("opponentPokemonId") {
+                navArgument(Screen.ARG_OPPONENT_POKEMON_ID) {
                     type = NavType.IntType
                     nullable = false
                 }
             )
         ) { entry ->
-            val opponentPokemonId = entry.arguments?.getInt("opponentPokemonId")
+            val opponentPokemonId = entry.arguments?.getInt(Screen.ARG_OPPONENT_POKEMON_ID)
             if (opponentPokemonId == null) {
                 navController.popBackStack()
                 return@composable
@@ -81,25 +81,38 @@ fun AppNavigation(
         }
 
         composable(
-            route = Screen.Fight.route + "/{userPokemonId}/{opponentPokemonId}",
+            route = Screen.Fight.route,
             arguments = listOf(
-                navArgument("userPokemonId") {
+                navArgument(Screen.ARG_USER_POKEMON_ID) {
                     type = NavType.IntType
                     nullable = false
                 },
-                navArgument("opponentPokemonId") {
+                navArgument(Screen.ARG_OPPONENT_POKEMON_ID) {
                     type = NavType.IntType
                     nullable = false
                 }
             )
-        ) { backStackEntry ->
-            val userPokemonId = backStackEntry.arguments?.getInt("userPokemonId")
-            val opponentPokemonId = backStackEntry.arguments?.getInt("opponentPokemonId")
+        ) { entry ->
+            val userPokemonId = entry.arguments?.getInt(Screen.ARG_USER_POKEMON_ID)
+            val opponentPokemonId = entry.arguments?.getInt(Screen.ARG_OPPONENT_POKEMON_ID)
+            val pokeBallName = entry.savedStateHandle.get<String>(Screen.ARG_POKE_BALL)
+
             if (opponentPokemonId == null || userPokemonId == null) {
                 navController.popBackStack()
                 return@composable
             }
-            Fight(userPokemonId, opponentPokemonId, navController)
+            Fight(navController, userPokemonId, opponentPokemonId, pokeBallName)
+        }
+
+        composable(route = Screen.FightCapture.route) {
+            UserInventory(
+                onClick = {
+                    navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(Screen.ARG_POKE_BALL, it.getType().getName())
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

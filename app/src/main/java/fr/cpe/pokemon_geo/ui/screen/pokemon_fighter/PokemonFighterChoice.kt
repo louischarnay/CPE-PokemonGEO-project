@@ -20,8 +20,12 @@ fun PokemonFighterChoice(
     PokemonList(
         pokemons = userPokemons,
         onClick = { pokemon ->
-            if(pokemon is PokemonWithStats) {
-                navController.navigate(Screen.Fight.withArgs(pokemon.getId(), opponentPokemonId))
+            if (pokemon is PokemonWithStats) {
+                if (pokemon.getCurrentHP() <= 0) {
+                    pokemonFighterChoiceViewModel.showNoHpToast()
+                    return@PokemonList
+                }
+                navController.navigate(Screen.Fight.withArgs(pokemon.getId().toString(), opponentPokemonId.toString()))
             }
         }
     )
