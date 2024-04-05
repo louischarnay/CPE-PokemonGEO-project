@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.usecase
 
-import android.util.Log
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.database.generated_pokemon.GeneratedPokemonEntity
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 class GeneratePokemonsUseCase @Inject constructor(
@@ -22,20 +22,31 @@ class GeneratePokemonsUseCase @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private var isRunning = true
 
     companion object {
         private const val UPDATE_DELAY = 5 * ONE_SECOND_IN_MILLIS
         private const val MAX_PER_AREA = 6
         private const val BASE_GENERATION_CHANCE = 0.5
-        private const val AREA_RADIUS_IN_METERS = 300.0
+        private const val AREA_RADIUS_IN_METERS = 120.0
         private const val GENERATION_COORDINATE_MULTIPLIER = 0.001 // 111 meters
         private const val MAX_DISTANCE_COORDINATE_BETWEEN_POKEMON = 0.0002 // 22 meters
-        private const val DISAPPEARANCE_DELAY = 10 * ONE_MINUTE_IN_MILLIS
+        private const val DISAPPEARANCE_DELAY = 5 * ONE_MINUTE_IN_MILLIS
+    }
+
+    fun start() {
+        isRunning = true
+    }
+
+    fun stop() {
+        isRunning = false
     }
 
     fun invoke(pokemons: List<Pokemon>): Flow<List<GeneratedPokemonEntity>> = callbackFlow {
         coroutineScope.launch {
             while (true) {
+                if (!isRunning) break
+
                 val location = getLocationUseCase.getCurrentLocation()
 
                 val generatedPokemons = repository.getAllGeneratedPokemon()
@@ -79,7 +90,7 @@ class GeneratePokemonsUseCase @Inject constructor(
                 )
 
                 repository.insertGeneratedPokemon(generatedPokemon)
-                Log.d("POKEMON", "Pokemon generated: ${pokemon.getOrder()}-${pokemon.getName()}")
+                Timber.d("Pokemon generated: ${pokemon.getOrder()}-${pokemon.getName()}")
             }
         }
     }
@@ -121,12 +132,12 @@ class GeneratePokemonsUseCase @Inject constructor(
 
             if (distance !== null && distance > AREA_RADIUS_IN_METERS) {
                 repository.removeGeneratedPokemon(pokemon.id ?: 0)
-                Log.d("POKEMON", "Pokemon removed(distance): ${pokemon.pokemonOrder}")
+                Timber.d("Pokemon removed(distance): ${pokemon.pokemonOrder}")
             } else {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - pokemon.createdAt > DISAPPEARANCE_DELAY) {
                     repository.removeGeneratedPokemon(pokemon.id ?: 0)
-                    Log.d("POKEMON", "Pokemon removed(timer): ${pokemon.pokemonOrder}")
+                    Timber.d("Pokemon removed(timer): ${pokemon.pokemonOrder}")
                 }
             }
         }
