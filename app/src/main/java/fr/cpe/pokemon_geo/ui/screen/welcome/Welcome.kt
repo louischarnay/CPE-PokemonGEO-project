@@ -68,8 +68,8 @@ fun Welcome(navController: NavController, welcomeViewModel: WelcomeViewModel = h
                 .height(50.dp)
                 .width(200.dp),
             onClick = {
-                welcomeViewModel.createProfile(pseudo)
-                navController.navigate(Screen.Starter.route)
+                if (welcomeViewModel.createProfile(pseudo))
+                    navController.navigate(Screen.Starter.route)
             }
         ) {
             Text(

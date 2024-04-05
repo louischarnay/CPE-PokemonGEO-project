@@ -16,8 +16,8 @@ class WelcomeViewModel @Inject constructor(
     private val repository: PokemonGeoRepository,
 ): ViewModel() {
 
-    fun createProfile(pseudo: String) {
-        if (pseudo.trim().isEmpty()) return
+    fun createProfile(pseudo: String): Boolean {
+        if (pseudo.trim().isEmpty()) return false
 
         val newProfile = ProfileEntity(pseudo = pseudo)
         val newUserInventory = UserInventoryEntity(type = INVENTORY_ITEM.pokeball.name, quantity = 50)
@@ -25,5 +25,6 @@ class WelcomeViewModel @Inject constructor(
             repository.insertProfile(newProfile)
             repository.insertUserInventory(newUserInventory)
         }
+        return true
     }
 }
