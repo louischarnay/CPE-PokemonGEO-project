@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.database.user_inventory
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

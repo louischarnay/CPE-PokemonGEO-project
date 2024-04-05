@@ -1,7 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -30,9 +29,6 @@ class FightViewModel @Inject constructor(
 
     private val _fight = mutableStateOf<Fight?>(null)
     val fight: State<Fight?> = _fight
-
-    private val _hasTriedCapture = mutableStateOf(false)
-    val hasTriedCapture: State<Boolean> = _hasTriedCapture
 
     fun initFight(
         userPokemonId: Int,
@@ -115,7 +111,6 @@ class FightViewModel @Inject constructor(
     }
 
     fun capture(pokeBallName: String, navController: NavController) {
-        _hasTriedCapture.value = false
         viewModelScope.launch { repository.useOneInventoryItem(pokeBallName) }
 
         val pokeBall = SearchInventoryItemType.byName(pokeBallName)

@@ -1,6 +1,5 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +45,7 @@ fun Fight(
     LaunchedEffect(Unit) {
         fightViewModel.initFight(userPokemonId, opponentPokemonId, navController)
 
-        if (!fightViewModel.hasTriedCapture.value && pokeBallName != null) {
+        if (pokeBallName != null) {
             fightViewModel.capture(pokeBallName.lowercase(), navController)
         }
     }
