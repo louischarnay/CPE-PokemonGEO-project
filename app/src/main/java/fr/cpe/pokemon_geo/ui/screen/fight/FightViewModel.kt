@@ -1,8 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
 import android.app.Application
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -17,6 +15,8 @@ import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,8 +27,14 @@ class FightViewModel @Inject constructor(
     private val repository: PokemonGeoRepository
 ): ViewModel() {
 
-    private val _fight = mutableStateOf<Fight?>(null)
-    val fight: State<Fight?> = _fight
+    private val _fight = MutableStateFlow<Fight?>(null)
+    val fight: StateFlow<Fight?> = _fight
+
+    private val _userCurrentHP = MutableStateFlow(100)
+    val userCurrentHP: StateFlow<Int> = _userCurrentHP
+
+    private val _opponentCurrentHP = MutableStateFlow(100)
+    val opponentCurrentHP: StateFlow<Int> = _opponentCurrentHP
 
     fun initFight(
         userPokemonId: Int,
@@ -40,8 +46,7 @@ class FightViewModel @Inject constructor(
                 val userPokemon = repository.getUserPokemonById(userPokemonId)
                 val opponentPokemon = repository.getGeneratedPokemonById(opponentPokemonId)
 
-                val json = application.resources.openRawResource(R.raw.pokemons).bufferedReader()
-                    .readText()
+                val json = application.resources.openRawResource(R.raw.pokemons).bufferedReader().readText()
                 val userPokemonData = buildPokemonWithStatsFromOrder(
                     json,
                     userPokemon.pokemonOrder,
@@ -60,6 +65,8 @@ class FightViewModel @Inject constructor(
                 )
 
                 _fight.value = Fight(userPokemonData, opponentPokemonData)
+                _userCurrentHP.value = fight.value?.getUserPokemon()?.getCurrentHP() ?: 0
+                _opponentCurrentHP.value = fight.value?.getOpponentPokemon()?.getCurrentHP() ?: 0
             } catch (e: Exception) {
                 navController.navigate(Screen.Map.route)
             }
@@ -69,13 +76,15 @@ class FightViewModel @Inject constructor(
     fun attack(navController: NavController) {
         viewModelScope.launch {
             fight.value?.attack()
+            decreaseOpponentPokemonHPWithDelay(fight.value?.getOpponentPokemon()?.getCurrentHP() ?: 0)
 
             withContext(Dispatchers.Main) {
                 checkFightStatus(navController)
             }
 
-            delay(500)
+            delay(1000)
             fight.value?.opponentPlay()
+            decreaseUserPokemonHPWithDelay(fight.value?.getUserPokemon()?.getCurrentHP() ?: 0)
 
             fight.value?.getUserPokemon() ?.let { repository.updateUserPokemonHpLost(it.getId(), it.getHPLoss()) }
         }
@@ -141,5 +150,19 @@ class FightViewModel @Inject constructor(
             fight.value?.getOpponentPokemon()?.getName()
         )
         showToast(application, text)
+    }
+
+    private suspend fun decreaseUserPokemonHPWithDelay(amountTarget: Int) {
+        while (_userCurrentHP.value > amountTarget) {
+            delay(5)
+            _userCurrentHP.value--
+        }
+    }
+
+    private suspend fun decreaseOpponentPokemonHPWithDelay(amountTarget: Int) {
+        while (_opponentCurrentHP.value > amountTarget) {
+            delay(5)
+            _opponentCurrentHP.value--
+        }
     }
 }

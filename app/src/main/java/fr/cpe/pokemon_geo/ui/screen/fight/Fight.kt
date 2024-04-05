@@ -1,5 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.fight
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.model.pokemon_with_stats.PokemonWithStats
+import fr.cpe.pokemon_geo.ui.navigation.Screen
 
 @Composable
 fun Fight(
@@ -42,6 +46,11 @@ fun Fight(
     pokeBallName: String?,
     fightViewModel: FightViewModel = hiltViewModel()
 ) {
+
+    BackHandler {
+        navController.navigate(Screen.Map.route)
+    }
+
     LaunchedEffect(Unit) {
         fightViewModel.initFight(userPokemonId, opponentPokemonId, navController)
 
@@ -49,6 +58,10 @@ fun Fight(
             fightViewModel.capture(pokeBallName.lowercase(), navController)
         }
     }
+
+    val fight by fightViewModel.fight.collectAsState()
+    val userCurrentHP by fightViewModel.userCurrentHP.collectAsState()
+    val opponentCurrentHP by fightViewModel.opponentCurrentHP.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -64,33 +77,33 @@ fun Fight(
                 modifier = Modifier.fillMaxSize()
             )
             // Top pokemon
-            fightViewModel.fight.value?.getOpponentPokemon()?.let {
+            fight?.let {
                 PokemonFighterStatus(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .offset(y = (-120).dp),
-                    pokemon = it
+                    pokemon = it.getOpponentPokemon(),
+                    currentHP = opponentCurrentHP,
                 )
                 Image(
-                    painter = painterResource(id = it.getFrontResource()),
+                    painter = painterResource(id = it.getOpponentPokemon().getFrontResource()),
                     contentDescription = "Opponent pokemon",
                     modifier = Modifier
                         .size(100.dp)
                         .align(Alignment.Center)
                         .offset(y = (-100).dp, x = 110.dp)
                 )
-            }
 
             // Bottom pokemon
-            fightViewModel.fight.value?.getUserPokemon()?.let {
                 PokemonFighterStatus(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(y = 100.dp),
-                    pokemon = it
+                    pokemon =  it.getUserPokemon(),
+                    currentHP = userCurrentHP,
                 )
                 Image(
-                    painter = painterResource(id = it.getFrontResource()),
+                    painter = painterResource(id = it.getUserPokemon().getFrontResource()),
                     contentDescription = "User pokemon",
                     modifier = Modifier
                         .size(140.dp)
@@ -160,8 +173,9 @@ fun FightSecondaryButton(text: String, onClick: () -> Unit, modifier: Modifier =
 fun PokemonFighterStatus(
     modifier: Modifier = Modifier,
     pokemon: PokemonWithStats,
+    currentHP: Int,
 ) {
-    val hpProgress = pokemon.getCurrentHP() / pokemon.getMaxHP().toFloat()
+    val hpProgress = currentHP / pokemon.getMaxHP().toFloat()
 
     Column(
         modifier = modifier
