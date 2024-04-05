@@ -16,6 +16,10 @@ interface UserInventoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(userInventoryEntity: UserInventoryEntity)
+
+    @Query("DELETE FROM $USER_INVENTORY_TABLE_NAME WHERE type = :type")
+    suspend fun deleteByType(type: String)
+
     suspend fun appendQuantity(type: String, quantity: Int) {
         val existing = getByType(type)
 
@@ -25,10 +29,15 @@ interface UserInventoryDao {
             insert(UserInventoryEntity(type = type, quantity = quantity))
         }
     }
+
     suspend fun useOne(type: String) {
         val existing = getByType(type)
 
         if (existing != null) {
+            if (existing.quantity == 1) {
+                deleteByType(type)
+                return
+            }
             insert(UserInventoryEntity(type = type, quantity = existing.quantity - 1))
         }
     }
