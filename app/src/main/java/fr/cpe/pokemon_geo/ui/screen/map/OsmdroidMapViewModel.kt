@@ -43,6 +43,7 @@ class OsmdroidMapViewModel @Inject constructor(
 
     fun initMap(mapView: MapView, pokemons: List<Pokemon>, navController: NavController) {
         initCurrentLocation(mapView)
+        initGeneratedPokemon(mapView, pokemons, navController)
         fetchMapDataPeriodically(mapView, pokemons, navController)
     }
 
@@ -56,6 +57,15 @@ class OsmdroidMapViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val location = getLocationUseCase.getCurrentLocation() ?: return@launch
             updateMapWithCurrentLocation(mapView, location)
+        }
+    }
+
+    private fun initGeneratedPokemon(mapView: MapView, pokemons: List<Pokemon>, navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val generatedPokemons = repository.getAllGeneratedPokemon()
+            withContext(Dispatchers.Main) {
+                updateMapWithGeneratedPokemon(mapView, generatedPokemons, pokemons, navController)
+            }
         }
     }
 
@@ -155,48 +165,53 @@ class OsmdroidMapViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             generatePokemonsUseCase.invoke(pokemons).collect { generatedPokemons ->
-                val hasSamePokemons = generatedPokemonMarkers.keys.hasSameContent(generatedPokemons)
-                if (hasSamePokemons) return@collect
-
                 withContext(Dispatchers.Main) {
-                    try {
-                        generatedPokemonMarkers.forEach { (_, marker) ->
-                            mapView.overlays?.remove(marker)
-                        }
-
-                        generatedPokemonMarkers =
-                            generatedPokemons.associateWith { generatedPokemon ->
-                                val marker = Marker(mapView)
-                                marker.position =
-                                    GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
-                                val pokemonData =
-                                    findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
-                                marker.title = pokemonData.getName()
-                                marker.icon =
-                                    application.getDrawable(pokemonData.getFrontResource())
-                                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-                                mapView.overlays?.add(marker)
-
-                                marker.setOnMarkerClickListener { _, _ ->
-                                    if (generatedPokemon.id != null) {
-                                        navController.navigate(
-                                            Screen.PokemonFighterChoice.withArgs(
-                                                generatedPokemon.id.toString()
-                                            )
-                                        )
-                                    }
-                                    true // Return true to consume the event
-                                }
-
-                                marker
-                            }
-
-                        mapView.invalidate()
-                    } catch (e: Exception) {
-                        Timber.d("Mise à jour de la carte impossible")
-                    }
+                    updateMapWithGeneratedPokemon(mapView, generatedPokemons, pokemons, navController)
                 }
             }
+        }
+    }
+
+    private fun updateMapWithGeneratedPokemon(
+        mapView: MapView,
+        generatedPokemons: List<GeneratedPokemonEntity>,
+        pokemons: List<Pokemon>,
+        navController: NavController
+    ) {
+        try {
+            val hasSamePokemons = generatedPokemonMarkers.keys.hasSameContent(generatedPokemons)
+            if (hasSamePokemons) return
+
+            generatedPokemonMarkers.forEach { (_, marker) ->
+                mapView.overlays?.remove(marker)
+            }
+
+            generatedPokemonMarkers = generatedPokemons.associateWith { generatedPokemon ->
+                val marker = Marker(mapView)
+                marker.position = GeoPoint(generatedPokemon.latitude, generatedPokemon.longitude)
+                val pokemonData = findPokemonByOrder(pokemons, generatedPokemon.pokemonOrder)
+                marker.title = pokemonData.getName()
+                marker.icon = application.getDrawable(pokemonData.getFrontResource())
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                mapView.overlays?.add(marker)
+
+                marker.setOnMarkerClickListener { _, _ ->
+                    if (generatedPokemon.id != null) {
+                        navController.navigate(
+                            Screen.PokemonFighterChoice.withArgs(
+                                generatedPokemon.id.toString()
+                            )
+                        )
+                    }
+                    true // Return true to consume the event
+                }
+
+                marker
+            }
+
+            mapView.invalidate()
+        } catch (e: Exception) {
+            Timber.d("Mise à jour de la carte impossible")
         }
     }
 
@@ -210,10 +225,9 @@ class OsmdroidMapViewModel @Inject constructor(
             marker.icon = application.getDrawable(R.drawable.pokecenter)
         } else {
             val pokestopEmpty = repository.getPokestopEmptyById(interestPoint.getName())
-            marker.icon = if (pokestopEmpty != null)
-                application.getDrawable(R.drawable.pokestop_empty)
-            else
-                application.getDrawable(R.drawable.pokestop)
+            marker.icon =
+                if (pokestopEmpty != null) application.getDrawable(R.drawable.pokestop_empty)
+                else application.getDrawable(R.drawable.pokestop)
         }
 
         mapView.overlays?.add(marker)

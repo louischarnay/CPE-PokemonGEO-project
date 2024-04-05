@@ -11,6 +11,7 @@ import fr.cpe.pokemon_geo.database.user_pokemon.UserPokemonEntity
 import fr.cpe.pokemon_geo.model.fight.Fight
 import fr.cpe.pokemon_geo.model.inventory_item.SearchInventoryItemType
 import fr.cpe.pokemon_geo.ui.navigation.Screen
+import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FightViewModel @Inject constructor(
     private val application: Application,
-    private val repository: PokemonGeoRepository
+    private val repository: PokemonGeoRepository,
+    private val generatePokemonsUseCase: GeneratePokemonsUseCase
 ): ViewModel() {
 
     private val _fight = MutableStateFlow<Fight?>(null)
@@ -99,6 +101,7 @@ class FightViewModel @Inject constructor(
             fight.value?.getOpponentPokemon()?.getId()?.let { repository.removeGeneratedPokemon(it) }
         }
         navController.navigate(Screen.Map.route)
+        generatePokemonsUseCase.start()
     }
 
     private fun checkFightStatus(navController: NavController) {

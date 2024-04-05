@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.cpe.pokemon_geo.R
 import fr.cpe.pokemon_geo.database.PokemonGeoRepository
 import fr.cpe.pokemon_geo.model.pokemon.Pokemon
+import fr.cpe.pokemon_geo.usecase.GeneratePokemonsUseCase
 import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
@@ -19,13 +20,15 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonFighterChoiceViewModel @Inject constructor(
     private val application: Application,
-    private val repository: PokemonGeoRepository
+    private val repository: PokemonGeoRepository,
+    private val generatePokemonsUseCase: GeneratePokemonsUseCase
 ): ViewModel(){
 
     private val _userPokemons = MutableStateFlow<List<Pokemon>>(mutableListOf())
     val userPokemons: StateFlow<List<Pokemon>> = _userPokemons
 
     init {
+        generatePokemonsUseCase.stop()
         fetchUserPokemons()
     }
 

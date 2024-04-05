@@ -22,20 +22,31 @@ class GeneratePokemonsUseCase @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private var isRunning = true
 
     companion object {
         private const val UPDATE_DELAY = 5 * ONE_SECOND_IN_MILLIS
         private const val MAX_PER_AREA = 6
         private const val BASE_GENERATION_CHANCE = 0.5
-        private const val AREA_RADIUS_IN_METERS = 300.0
+        private const val AREA_RADIUS_IN_METERS = 120.0
         private const val GENERATION_COORDINATE_MULTIPLIER = 0.001 // 111 meters
         private const val MAX_DISTANCE_COORDINATE_BETWEEN_POKEMON = 0.0002 // 22 meters
-        private const val DISAPPEARANCE_DELAY = 10 * ONE_MINUTE_IN_MILLIS
+        private const val DISAPPEARANCE_DELAY = 5 * ONE_MINUTE_IN_MILLIS
+    }
+
+    fun start() {
+        isRunning = true
+    }
+
+    fun stop() {
+        isRunning = false
     }
 
     fun invoke(pokemons: List<Pokemon>): Flow<List<GeneratedPokemonEntity>> = callbackFlow {
         coroutineScope.launch {
             while (true) {
+                if (!isRunning) break
+
                 val location = getLocationUseCase.getCurrentLocation()
 
                 val generatedPokemons = repository.getAllGeneratedPokemon()
