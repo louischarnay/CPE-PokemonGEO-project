@@ -16,7 +16,6 @@ import fr.cpe.pokemon_geo.ui.navigation.Screen
 import fr.cpe.pokemon_geo.utils.buildPokemonWithStatsFromOrder
 import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.launch
-import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel

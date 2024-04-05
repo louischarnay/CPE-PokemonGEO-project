@@ -18,8 +18,10 @@ fun loadPokemonsFromResources(resources: InputStream): MutableList<Pokemon> {
         val name = jsonObject.getString("name")
         val image = jsonObject.getString("image")
         val type1 = jsonObject.getString("type1")
-        val type2 = jsonObject.optString("type2", null)
-        val pokemon = Pokemon(id, name, isUnknownPokemon = false, image, type1, type2)
+        val type2 = jsonObject.optString("type2", "")
+        val pokemon =
+            if (type2 == "") Pokemon(id, name, isUnknownPokemon = false, image, type1)
+            else Pokemon(id, name, isUnknownPokemon = false, image, type1, type2)
         pokemonList.add(pokemon)
     }
     return pokemonList
@@ -34,8 +36,18 @@ fun buildPokemonWithStatsFromOrder(json: String, order: Int, id: Int, healPoint:
             val name = jsonObject.getString("name")
             val image = jsonObject.getString("image")
             val type1 = jsonObject.getString("type1")
-            val type2 = jsonObject.optString("type2", null)
-            return PokemonWithStats(order, name, image, type1, type2, id, healPoint, healPointLost, attack)
+            val type2 = jsonObject.optString("type2", "")
+            return PokemonWithStats(
+                order = order,
+                name = name,
+                imageName = image,
+                type1 = type1,
+                type2 = if (type2 == "") null else type2,
+                id = id,
+                maxHealPoint = healPoint,
+                healPointLoss = healPointLost,
+                attack = attack
+            )
         }
     }
     throw IllegalArgumentException("No pokemon with id $id")

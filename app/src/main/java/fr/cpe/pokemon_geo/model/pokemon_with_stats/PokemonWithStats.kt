@@ -7,7 +7,7 @@ class PokemonWithStats(
     name : String,
     imageName : String,
     type1 : String,
-    type2 : String?,
+    type2 : String? = null,
     private val id : Int,
     private val maxHealPoint : Int,
     private var healPointLoss : Int = 0,

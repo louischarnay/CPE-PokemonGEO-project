@@ -1,7 +1,6 @@
 package fr.cpe.pokemon_geo.ui.screen.map
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
