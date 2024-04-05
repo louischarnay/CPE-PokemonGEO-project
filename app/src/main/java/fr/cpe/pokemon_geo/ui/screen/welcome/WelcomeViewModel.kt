@@ -20,7 +20,7 @@ class WelcomeViewModel @Inject constructor(
         if (pseudo.trim().isEmpty()) return
 
         val newProfile = ProfileEntity(pseudo = pseudo)
-        val newUserInventory = UserInventoryEntity(type = INVENTORY_ITEM.pokeball.name, quantity = 5)
+        val newUserInventory = UserInventoryEntity(type = INVENTORY_ITEM.pokeball.name, quantity = 50)
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertProfile(newProfile)
             repository.insertUserInventory(newUserInventory)

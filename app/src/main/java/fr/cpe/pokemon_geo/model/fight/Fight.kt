@@ -52,7 +52,7 @@ class Fight(
 
     fun tryToCapture(inventoryItemType: InventoryItemType): Boolean {
         if (inventoryItemType.getName() == INVENTORY_ITEM.masterball.name) return true
-        val captureRate = 0.5 * opponentPokemon.getCurrentHP() * (1 - userPokemon.getCurrentHP() / userPokemon.getMaxHP())
+        val captureRate = 0.3 * opponentPokemon.getCurrentHP()
         return (0..100).random() < captureRate
     }
 
