@@ -43,7 +43,7 @@ fun Fight(
     fightViewModel: FightViewModel = hiltViewModel()
 ) {
     if (!fightViewModel.hasTriedCapture.value && pokeBallName != null) {
-        fightViewModel.capture(pokeBallName, navController)
+        fightViewModel.capture(pokeBallName.lowercase(), navController)
     }
 
     LaunchedEffect(Unit) {
