@@ -89,6 +89,7 @@ class FightViewModel @Inject constructor(
 
     fun capture(pokeBallName: String, navController: NavController) {
         _hasTriedCapture.value = true
+        viewModelScope.launch { repository.useOneInventoryItem(pokeBallName) }
 
         val pokeBall = SearchInventoryItemType.byName(pokeBallName)
         val isCaptured = fight.value?.tryToCapture(pokeBall)

@@ -115,7 +115,7 @@ fun Fight(
                 onClick = { fightViewModel.attack(navController) }
             ) {
                 Text(
-                    text = stringResource(R.string.pokemon_attack),
+                    text = stringResource(R.string.attack),
                     fontSize = 40.sp
                 )
             }

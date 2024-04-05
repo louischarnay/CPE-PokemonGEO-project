@@ -25,6 +25,7 @@ class PokemonGeoRepository(
     suspend fun getUserInventory() = userInventoryDao.getAll()
     suspend fun insertUserInventory(userInventoryEntity: UserInventoryEntity) = userInventoryDao.insert(userInventoryEntity)
     suspend fun appendUserInventoryQuantity(type: String, quantity: Int) = userInventoryDao.appendQuantity(type, quantity)
+    suspend fun useOneInventoryItem(type: String) = userInventoryDao.useOne(type)
     suspend fun getAllUserPokemon() = userPokemonDao.getAll()
     suspend fun getUserPokemonById(id: Int) = userPokemonDao.getById(id)
     suspend fun hasUserPokemon(pokemonOrder: Int) = userPokemonDao.hasPokemon(pokemonOrder)

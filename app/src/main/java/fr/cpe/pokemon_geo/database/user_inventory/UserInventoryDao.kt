@@ -25,4 +25,11 @@ interface UserInventoryDao {
             insert(UserInventoryEntity(type = type, quantity = quantity))
         }
     }
+    suspend fun useOne(type: String) {
+        val existing = getByType(type)
+
+        if (existing != null) {
+            insert(UserInventoryEntity(type = type, quantity = existing.quantity - 1))
+        }
+    }
 }
