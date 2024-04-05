@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import fr.cpe.pokemon_geo.model.inventory_item.InventoryItem
 
 @Composable
-fun InventoryList(objects: List<InventoryItem>) {
+fun InventoryList(items: List<InventoryItem>, onClick: (InventoryItem) -> Unit = {}) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        itemsIndexed(objects) { _, inventory ->
-            InventoryListItem(inventory)
+        itemsIndexed(items) { _, inventoryItem ->
+            InventoryListItem(inventoryItem, onClick)
         }
     }
 }

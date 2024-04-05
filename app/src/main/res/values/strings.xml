@@ -6,5 +6,28 @@
     <string name="pseudo_label">Ton pseudo</string>
     <string name="continue_button">Continuer</string>
     <string name="choose_starter_title">Choisis ton premier Pokémon</string>
+
     <string name="pokemon_has_no_hp">Ce Pokémon n\'a plus de points de vie</string>
+    <string name="pokemon_captured">Tu as capturé un %s !</string>
+    <string name="pokemon_not_captured">Tu n\'as pas réussi à capturer ce %s</string>
+    <string name="opponent_escaped">Le %s s\'est échappé</string>
+    <string name="victory">Tu as gagné le combat !</string>
+    <string name="defeat">Tu as perdu le combat</string>
+
+    <string name="all_pokemons_healed">Tout tes pokemons ont été soignés</string>
+    <string name="pokestop_items_already_taken">Tu as déjà récupéré les objets de ce pokestop</string>
+    <string name="received_items">Tu as reçu %d %s</string>
+
+    <string name="item_quantity">Quantité: %d</string>
+    <string name="pokemon_hp">PV: %d</string>
+    <string name="pokemon_attack">Attaque: %d</string>
+    <string name="user_experience">%d XP</string>
+
+    <string name="pokemons">Pokémons</string>
+    <string name="attack">Attaque</string>
+    <string name="capture">Capture</string>
+    <string name="escape">Fuite</string>
+    <string name="close">Fermer</string>
+    <string name="inventory">Inventaire</string>
+    <string name="pokemon">Pokémon</string>
 </resources>

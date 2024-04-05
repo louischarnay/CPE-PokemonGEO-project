@@ -14,4 +14,13 @@ class PokemonType(
     fun getFrontResource(): Int {
         return frontResource
     }
+
+    fun attackMultiplier(targetType: PokemonType): Double {
+        return when {
+            superEffective.contains(targetType.name) -> 2.0
+            inefficient.contains(targetType.name) -> 0.5
+            ineffective.contains(targetType.name) -> 0.0
+            else -> 1.0
+        }
+    }
 }

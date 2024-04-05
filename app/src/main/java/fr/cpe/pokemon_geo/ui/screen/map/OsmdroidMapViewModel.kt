@@ -19,6 +19,7 @@ import fr.cpe.pokemon_geo.usecase.GetInterestPointUseCase
 import fr.cpe.pokemon_geo.usecase.GetLocationUseCase
 import fr.cpe.pokemon_geo.utils.findPokemonByOrder
 import fr.cpe.pokemon_geo.utils.hasSameContent
+import fr.cpe.pokemon_geo.utils.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -181,7 +182,7 @@ class OsmdroidMapViewModel @Inject constructor(
                                     if (generatedPokemon.id != null) {
                                         navController.navigate(
                                             Screen.PokemonFighterChoice.withArgs(
-                                                generatedPokemon.id
+                                                generatedPokemon.id.toString()
                                             )
                                         )
                                     }
@@ -228,11 +229,7 @@ class OsmdroidMapViewModel @Inject constructor(
             viewModelScope.launch {
                 // Call the suspending function within the coroutine
                 repository.healAllUserPokemons()
-                Toast.makeText(
-                    application,
-                    "Tout vos pokemons ont été soignés",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast(application, application.getString(R.string.all_pokemons_healed))
             }
             true // Return true to consume the event
         }
@@ -244,11 +241,10 @@ class OsmdroidMapViewModel @Inject constructor(
             viewModelScope.launch {
                 // Call the suspending function within the coroutine
                 if (repository.getPokestopEmptyById(interestPoint.getName()) != null) {
-                    Toast.makeText(
+                    showToast(
                         application,
-                        "Vous avez déjà récupéré les objets de ce pokestop",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        application.getString(R.string.pokestop_items_already_taken),
+                    )
                     return@launch
                 }
 
@@ -256,11 +252,14 @@ class OsmdroidMapViewModel @Inject constructor(
                 val randomQuantity = (1..5).random()
 
                 repository.appendUserInventoryQuantity(randomItem.name, randomQuantity)
-                Toast.makeText(
+                showToast(
                     application,
-                    "Vous avez reçu $randomQuantity ${randomItem.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    String.format(
+                        application.getString(R.string.received_items),
+                        randomQuantity,
+                        randomItem.name
+                    )
+                )
 
                 marker.icon = application.getDrawable(R.drawable.pokestop_empty)
                 repository.insertPokestopEmpty(

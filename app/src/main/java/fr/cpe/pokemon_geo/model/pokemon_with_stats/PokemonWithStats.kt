@@ -25,11 +25,11 @@ class PokemonWithStats(
         return id
     }
 
-    fun getMaxHealPoint(): Int {
+    fun getMaxHP(): Int {
         return maxHealPoint
     }
 
-    fun getHealPointLoss(): Int {
+    fun getHPLoss(): Int {
         return healPointLoss
     }
 

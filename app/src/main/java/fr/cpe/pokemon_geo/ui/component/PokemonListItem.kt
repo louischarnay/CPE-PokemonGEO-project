@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -114,12 +115,12 @@ fun PokemonStats(pokemon: PokemonWithStats) {
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             LinearProgressIndicator(
-                progress = { pokemon.getCurrentHP() / pokemon.getMaxHealPoint().toFloat() },
+                progress = { pokemon.getCurrentHP() / pokemon.getMaxHP().toFloat() },
                 modifier = Modifier.weight(1f),
                 color = colorResource(id = R.color.black)
             )
             Text(
-                text = "HP: ${pokemon.getCurrentHP()}",
+                text = String.format(stringResource(R.string.pokemon_hp, pokemon.getCurrentHP())),
                 fontSize = 12.sp
             )
         }
@@ -133,7 +134,7 @@ fun PokemonStats(pokemon: PokemonWithStats) {
                 color = colorResource(id = R.color.black)
             )
             Text(
-                text = "Attack: ${pokemon.getAttack()}",
+                text = String.format(stringResource(R.string.pokemon_attack, pokemon.getAttack())),
                 fontSize = 12.sp,
             )
         }

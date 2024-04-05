@@ -25,9 +25,8 @@ fun loadPokemonsFromResources(resources: InputStream): MutableList<Pokemon> {
     return pokemonList
 }
 
-fun buildPokemonWithStatsFromOrder(resources: InputStream, order: Int, id: Int, healPoint: Int, healPointLost: Int, attack: Int): PokemonWithStats {
-    val jsonString = resources.bufferedReader().use { it.readText() }
-    val jsonArray = JSONArray(jsonString)
+fun buildPokemonWithStatsFromOrder(json: String, order: Int, id: Int, healPoint: Int, healPointLost: Int, attack: Int): PokemonWithStats {
+    val jsonArray = JSONArray(json)
 
     for (i in 0 until jsonArray.length()) {
         val jsonObject = jsonArray.getJSONObject(i)

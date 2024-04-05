@@ -18,17 +18,16 @@ fun PokemonFighterChoice(
     pokemonFighterChoiceViewModel: PokemonFighterChoiceViewModel = hiltViewModel()
 ) {
     val userPokemons by pokemonFighterChoiceViewModel.userPokemons.collectAsState()
-    val pokemonNoHpText = stringResource(R.string.pokemon_has_no_hp)
 
     PokemonList(
         pokemons = userPokemons,
         onClick = { pokemon ->
             if (pokemon is PokemonWithStats) {
                 if (pokemon.getCurrentHP() <= 0) {
-                    pokemonFighterChoiceViewModel.showToast(pokemonNoHpText)
+                    pokemonFighterChoiceViewModel.showNoHpToast()
                     return@PokemonList
                 }
-                navController.navigate(Screen.Fight.withArgs(pokemon.getId(), opponentPokemonId))
+                navController.navigate(Screen.Fight.withArgs(pokemon.getId().toString(), opponentPokemonId.toString()))
             }
         }
     )

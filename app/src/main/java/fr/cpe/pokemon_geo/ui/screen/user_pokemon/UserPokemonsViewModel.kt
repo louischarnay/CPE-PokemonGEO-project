@@ -33,9 +33,9 @@ class UserPokemonsViewModel @Inject constructor(
             val pokemonList = mutableListOf<Pokemon>()
             val userPokemons = repository.getAllUserPokemon()
 
-            val resource = application.resources.openRawResource(R.raw.pokemons)
+            val json = application.resources.openRawResource(R.raw.pokemons).bufferedReader().readText()
             userPokemons.forEach {
-                pokemonList.add(buildPokemonWithStatsFromOrder(resource, it.pokemonOrder, it.id ?: 0, it.hpMax, it.hpLost, it.attack))
+                pokemonList.add(buildPokemonWithStatsFromOrder(json, it.pokemonOrder, it.id ?: 0, it.hpMax, it.hpLost, it.attack))
             }
 
             withContext(Dispatchers.Main) {
